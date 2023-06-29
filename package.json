@@ -1,0 +1,9 @@
+{    
+    "name": "blitzkrieg",
+    "ccmodHumanName": "Blitzkrieg",
+    "version": "1.0.0",
+    "plugin": "plugin.js",
+    "ccmodDependencies": {
+        "input-api": "1.0.1"
+    }
+}
