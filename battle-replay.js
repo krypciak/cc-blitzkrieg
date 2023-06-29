@@ -54,7 +54,7 @@ export class BattleReplayManager {
                 ig.game.addons.levelLoaded.push(this);
         }
         // restore armor, lvl etc.
-        this.restoreData(sel)
+        ig.blitzkrieg.battleRecordManager.restoreData(sel)
 
         this._tmpSel = sel
         // if not changing maps continue immidietly
@@ -148,7 +148,7 @@ export class BattleReplayManager {
                 clearInterval(intervalID);
                 return
             } else {
-                TextNotification.msg("blitzkrieg", "Starting new battle in " + (counterMax - counter++), 1);
+                TextNotification.msg("blitzkrieg", "Starting new battle in " + (counterMax - counter++), 0.9);
             }
         }, 1000 / 1);
     }
