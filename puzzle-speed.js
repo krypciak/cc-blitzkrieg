@@ -1,5 +1,3 @@
-import { TextNotification } from './text-notification.js';
-
 export class PuzzleSpeedManager {
     constructor() {
         this.incStep = 0.05
@@ -17,7 +15,7 @@ export class PuzzleSpeedManager {
 
         sel.data.puzzleSpeed += val
         sc.options.set("assist-puzzle-speed", sel.data.puzzleSpeed);
-        TextNotification.msg("blitzkrieg", (val > 0 ? "Incresing" : "Decresing") + " selection puzzle speed to " + Math.round(sel.data.puzzleSpeed * 100) + "%", 1);
+        ig.blitzkrieg.msg("blitzkrieg", (val > 0 ? "Incresing" : "Decresing") + " selection puzzle speed to " + Math.round(sel.data.puzzleSpeed * 100) + "%", 1);
         ig.blitzkrieg.puzzleSelections.save()
     }
     
@@ -34,7 +32,7 @@ export class PuzzleSpeedManager {
 
         if (sc.options.get("assist-puzzle-speed") != speed) {
             sc.options.set("assist-puzzle-speed", speed) 
-            TextNotification.msg("blitzkrieg", "Setting puzzle speed to " + Math.round(speed * 100) + "%", 1);
+            ig.blitzkrieg.msg("blitzkrieg", "Setting puzzle speed to " + Math.round(speed * 100) + "%", 1);
         }
 
     }

@@ -82,7 +82,7 @@ export default class Blitzkrieg {
 
     toogleSelectionMode() {
         ig.blitzkrieg.selectionMode = ! ig.blitzkrieg.selectionMode
-        TextNotification.msg("blitzkrieg", "Switched selection mode to: " + (ig.blitzkrieg.selectionMode ? "puzzle" : "battle"), 2)
+        ig.blitzkrieg.msg("blitzkrieg", "Switched selection mode to: " + (ig.blitzkrieg.selectionMode ? "puzzle" : "battle"), 2)
     }
 
     bindingCreate() {
@@ -117,6 +117,8 @@ export default class Blitzkrieg {
         ig.blitzkrieg.selectionMode = true
 
         TextNotification.init();
+        ig.blitzkrieg.msg = TextNotification.msg
+
 
         ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()
         ig.blitzkrieg.puzzleSpeedManager = new PuzzleSpeedManager()
@@ -126,15 +128,15 @@ export default class Blitzkrieg {
             "#ff222244",
             "./assets/mods/cc-blitzkrieg/json/puzzleData.json",
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "new selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "new selection", 2)
                 ig.blitzkrieg.puzzleRecordManager.addData(sel)
             },
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "walked into selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "walked into selection", 2)
                 ig.blitzkrieg.puzzleSpeedManager.walkInEvent(sel)
             },
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "walked out of selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "walked out of selection", 2)
                 ig.blitzkrieg.puzzleSpeedManager.walkOutEvent(sel)
             },
         )
@@ -148,14 +150,14 @@ export default class Blitzkrieg {
             "#22ff2244",
             "./assets/mods/cc-blitzkrieg/json/battleData.json",
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "new selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "new selection", 2)
                 ig.blitzkrieg.battleRecordManager.addData(sel)
             },
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "walked into selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "walked into selection", 2)
             },
             function(sel) {
-                // TextNotification.msg("blitzkrieg", "walked out of selection", 2)
+                // ig.blitzkrieg.msg("blitzkrieg", "walked out of selection", 2)
             },
         )
         ig.blitzkrieg.keys = {

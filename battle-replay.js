@@ -1,5 +1,3 @@
-import { TextNotification } from './text-notification.js';
-
 export class BattleReplayManager {
     constructor() {
         this.waitForLoad = false
@@ -33,10 +31,10 @@ export class BattleReplayManager {
 
     nextBattle() {
         if (this.playBattleIndex >= this.battleQueue.length) {
-            TextNotification.msg("blitzkrieg", "Battles finished", 2);
+            ig.blitzkrieg.msg("blitzkrieg", "Battles finished", 2);
             return
         }
-        TextNotification.msg("blitzkrieg", "Next battle", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Next battle", 2);
         let sel = this.battleQueue[this.playBattleIndex++][1]
         
         // teleport manually (skips transition) to a map if not in it already
@@ -148,7 +146,7 @@ export class BattleReplayManager {
                 clearInterval(intervalID);
                 return
             } else {
-                TextNotification.msg("blitzkrieg", "Starting new battle in " + (counterMax - counter++), 0.9);
+                ig.blitzkrieg.msg("blitzkrieg", "Starting new battle in " + (counterMax - counter++), 0.9);
             }
         }, 1000 / 1);
     }

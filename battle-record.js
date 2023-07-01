@@ -1,5 +1,3 @@
-import { TextNotification } from './text-notification.js';
-
 export class BattleRecordManager {
     constructor() {
         this.recording = false
@@ -38,7 +36,7 @@ export class BattleRecordManager {
     }
 
     restoreData(sel) {
-        TextNotification.msg("blitzkrieg", "Restored battle data", 2)
+        ig.blitzkrieg.msg("blitzkrieg", "Restored battle data", 2)
         // let enemies = []
         // sel.bb.forEach(function(rect, i) {
         //     enemies = enemies.concat(ig.game.getEntitiesInRectangle(rect.x, rect.y, 0, rect.width, rect.height, 1000).filter((entity) => "aggression" in entity))
@@ -77,7 +75,7 @@ export class BattleRecordManager {
         this.gscopy = ig.copy(ig.vars.storage)
         this.loopIndex = 0
         this.recording = true
-        TextNotification.msg("blitzkrieg", "Started recording for game state changes", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Started recording for game state changes", 2);
 
         const self = this
         const intervalID = setInterval(async () => {
@@ -96,11 +94,11 @@ export class BattleRecordManager {
 
     stopRecording() {
         if (ig.blitzkrieg.battleSelections.inSelStack.length() == 0) {
-            TextNotification.msg("blitzkrieg", "Not in a battle area", 2)
+            ig.blitzkrieg.msg("blitzkrieg", "Not in a battle area", 2)
             return
         }
         this.recording = false
-        TextNotification.msg("blitzkrieg", "Stopped recording", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Stopped recording", 2);
 
         ig.blitzkrieg.battleSelections.inSelStack.peek().data["battleLog"] = this.currentRecord
         ig.blitzkrieg.battleSelections.save()
@@ -165,7 +163,7 @@ export class BattleRecordManager {
             return;
 
         if (sel.data.stateLog === undefined || sel.data.stateLog.battleLog.length == 0) {
-            TextNotification.msg("blitzkrieg", "No battle solution recorded!")
+            ig.blitzkrieg.msg("blitzkrieg", "No battle solution recorded!")
             return
         }
         
@@ -188,7 +186,7 @@ export class BattleRecordManager {
 
         }
         ig.game.varsChangedDeferred()
-        TextNotification.msg("blitzkrieg", "Solved battle")
+        ig.blitzkrieg.msg("blitzkrieg", "Solved battle")
         this.solvingPuzzle = false
     }
 
@@ -199,7 +197,7 @@ export class BattleRecordManager {
             return;
 
         if (sel.data.stateLog === undefined || sel.data.stateLog.battleLog.length == 0) {
-            TextNotification.msg("blitzkrieg", "No battle solution recorded!")
+            ig.blitzkrieg.msg("blitzkrieg", "No battle solution recorded!")
             return
         }
         
@@ -230,7 +228,7 @@ export class BattleRecordManager {
                         continue
             }
             if (_solveArrayIndex == battleLog.length) {
-                TextNotification.msg("blitzkrieg", "Solved battle")
+                ig.blitzkrieg.msg("blitzkrieg", "Solved battle")
                 clearInterval(intervalID);
                 self.solvingPuzzle = false
             }
@@ -238,6 +236,6 @@ export class BattleRecordManager {
             _solveFrame++
         }, 1000 / 10);
 
-        TextNotification.msg("blitzkrieg", "Solving battle...");
+        ig.blitzkrieg.msg("blitzkrieg", "Solving battle...");
     }
 }

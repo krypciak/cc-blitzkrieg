@@ -1,4 +1,3 @@
-import { TextNotification } from './text-notification.js';
 import { Rectangle, Stack } from './util.js'
 
 export class Selection {
@@ -105,7 +104,7 @@ export class Selections {
                 this.selectStep = -1;
 
                 if (this._width < 1 || this._height < 1) {
-                    TextNotification.msg("blitzkrieg", "Invalid selection", 2)
+                    ig.blitzkrieg.msg("blitzkrieg", "Invalid selection", 2)
                 } else {
                     this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, this._width, this._height))
                     this.selIndexes.push(-1)
@@ -196,7 +195,7 @@ export class Selections {
     }
 
     save() {
-        // TextNotification.msg("blitzkrieg", "save", 2)
+        // ig.blitzkrieg.msg("blitzkrieg", "save", 2)
         const json = JSON.stringify(this.selHashMap);
         this.fs.writeFileSync(this.jsonfile, json)
     }

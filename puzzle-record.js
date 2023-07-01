@@ -1,5 +1,3 @@
-import { TextNotification } from './text-notification.js';
-
 export class PuzzleRecordManager {
     constructor() {
         this.recording = false
@@ -21,7 +19,7 @@ export class PuzzleRecordManager {
 
 
     copyArea() {
-        TextNotification.msg("blitzkrieg", "Copying area", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Copying area", 2);
 
         let pos = { x: 0, y: 0 }
         ig.system.getMapFromScreenPos(
@@ -34,7 +32,7 @@ export class PuzzleRecordManager {
 
         const sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
         if (sel == null) {
-            TextNotification.msg("blitzkrieg", "not in puzzle area", 2);
+            ig.blitzkrieg.msg("blitzkrieg", "not in puzzle area", 2);
             return
         }
         
@@ -86,7 +84,7 @@ export class PuzzleRecordManager {
         this.gscopy = ig.copy(ig.vars.storage)
         this.loopIndex = 0
         this.recording = true
-        TextNotification.msg("blitzkrieg", "Started recording for game state changes", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Started recording for game state changes", 2);
 
         const self = this
         const intervalID = setInterval(async () => {
@@ -105,11 +103,11 @@ export class PuzzleRecordManager {
 
     stopRecording() {
         if (ig.blitzkrieg.puzzleSelections.inSelStack.length() == 0) {
-            TextNotification.msg("blitzkrieg", "Not in a puzzle area", 2)
+            ig.blitzkrieg.msg("blitzkrieg", "Not in a puzzle area", 2)
             return
         }
         this.recording = false
-        TextNotification.msg("blitzkrieg", "Stopped recording", 2);
+        ig.blitzkrieg.msg("blitzkrieg", "Stopped recording", 2);
 
         ig.blitzkrieg.puzzleSelections.inSelStack.peek().data["stateLog"] = this.currentRecord
         ig.blitzkrieg.puzzleSelections.save()
@@ -175,7 +173,7 @@ export class PuzzleRecordManager {
             return;
 
         if (sel.data.stateLog === undefined || sel.data.stateLog.puzzleLog.length == 0) {
-            TextNotification.msg("blitzkrieg", "No puzzle solution recorded!")
+            ig.blitzkrieg.msg("blitzkrieg", "No puzzle solution recorded!")
             return
         }
         
@@ -198,7 +196,7 @@ export class PuzzleRecordManager {
 
         }
         ig.game.varsChangedDeferred()
-        TextNotification.msg("blitzkrieg", "Solved puzzle")
+        ig.blitzkrieg.msg("blitzkrieg", "Solved puzzle")
         this.solvingPuzzle = false
     }
 
@@ -209,7 +207,7 @@ export class PuzzleRecordManager {
             return;
 
         if (sel.data.stateLog === undefined || sel.data.stateLog.puzzleLog.length == 0) {
-            TextNotification.msg("blitzkrieg", "No puzzle solution recorded!")
+            ig.blitzkrieg.msg("blitzkrieg", "No puzzle solution recorded!")
             return
         }
         
@@ -240,7 +238,7 @@ export class PuzzleRecordManager {
                         continue
             }
             if (_solveArrayIndex == puzzleLog.length) {
-                TextNotification.msg("blitzkrieg", "Solved puzzle")
+                ig.blitzkrieg.msg("blitzkrieg", "Solved puzzle")
                 clearInterval(intervalID);
                 self.solvingPuzzle = false
             }
@@ -248,6 +246,6 @@ export class PuzzleRecordManager {
             _solveFrame++
         }, 1000 / 10);
 
-        TextNotification.msg("blitzkrieg", "Solving puzzle...");
+        ig.blitzkrieg.msg("blitzkrieg", "Solving puzzle...");
     }
 }
