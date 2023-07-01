@@ -64,7 +64,8 @@ export class BattleRecordManager {
         sc.model.player.chapter = sel.data.chapter
         sc.model.player.setLevel(sel.data.level)
         sc.model.player.equip = sel.data.equip
-        ig.vars.storage.plot.line = sel.data.plotLine
+        if("plot" in ig.vars.storage)
+            ig.vars.storage.plot.line = sel.data.plotLine
         
         sc.model.player.updateStats()
     }
