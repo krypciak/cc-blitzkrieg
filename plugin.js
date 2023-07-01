@@ -2,6 +2,7 @@ import { PuzzleRecordManager } from './puzzle-record.js';
 import { PuzzleSpeedManager } from './puzzle-speed.js';
 import { BattleRecordManager } from './battle-record.js';
 import { BattleReplayManager } from './battle-replay.js';
+import { SelectionCopyManager } from './selection-copy.js';
 import { Selections } from './selection.js'
 import { TextNotification } from './text-notification.js';
 
@@ -142,6 +143,9 @@ export default class Blitzkrieg {
         )
 
 
+        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
+
+
         ig.blitzkrieg.battleRecordManager = new BattleRecordManager()
         ig.blitzkrieg.battleReplayManager = new BattleReplayManager()
 
@@ -188,6 +192,9 @@ export default class Blitzkrieg {
                 key: ig.KEY._0,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
             "next-battle":      { desc: "next battle", func: ig.blitzkrieg.battleReplayManager.nextBattle, 
                 key: ig.KEY._9,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
+
+            "copy-selection":   { desc: "copy selection", func: ig.blitzkrieg.selectionCopyManager.copy, 
+                key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
         }
         ig.blitzkrieg.setupTabs()
         ig.blitzkrieg.bindKeys();
