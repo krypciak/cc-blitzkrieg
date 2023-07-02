@@ -37,23 +37,43 @@ export class SelectionCopyManager {
     }
 
     createSubArray(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
-        const nArr = Array(height)
-        for (let i = 0; i < height; i++)
-            nArr[i] = Array(width).fill(0)
+        let nArr = []
+        for (let y = 0; y < height; y++) {
+            nArr[y] = []
+            for (let x = 0; x < width; x++) {
+                nArr[y][x] = 0
+            }
+        }
 
-        // make sure cords are within 0 - width or height
-        x1 = Math.min(width, Math.max(x1, 0))
-        y1 = Math.min(height, Math.max(y1, 0))
-        x2 = Math.min(width, Math.max(x2, 0))
-        y2 = Math.min(height, Math.max(y2, 0))
+        let arrWidth = arr[0].length
+        let arrHeight = arr.length
+        // make sure cords are within 0 - width or height of arr
+        x2 = Math.min(arrWidth, x2)
+        y2 = Math.min(arrHeight, y2)
 
+        // make sure cords are in bounds with baseMap
+        let xTmp = (x2 - x1 + 1) - (width - xTileOffset)
+        if (xTmp > 0) {
+            x2 -= xTmp
+        }
+        let yTmp = (y2 - y1 + 1) - (height - yTileOffset)
+        if (yTmp > 0) {
+            y2 -= yTmp
+        }
+
+        x1 = Math.min(arrWidth, Math.max(x1, 0))
+        y1 = Math.min(arrHeight, Math.max(y1, 0))
+        x2 = Math.min(arrWidth, Math.max(x2, 0))
+        y2 = Math.min(arrHeight, Math.max(y2, 0))
+        
         if (x2 < x1 || y2 < y1)
             throw new Error("invalid createSubArray inputs");
-
+        
         for (let y = y1; y < y2; y++) {
             for (let x = x1; x < x2; x++) {
-                nArr[y - y1 + yTileOffset]
-                    [x - x1 + xTileOffset] = arr[y][x]
+                let nArrX = x - x1 + xTileOffset
+                let nArrY = y - y1 + yTileOffset
+                nArr[nArrY][nArrX] = arr[y][x]
             }
         }
         return nArr;
@@ -105,10 +125,14 @@ export class SelectionCopyManager {
 
                     let xLostInFloor= rect.x - Math.floor(rect.x / tilesize)*16;
                     let yLostInFloor = rect.y - Math.floor(rect.y / tilesize)*16;
-                    newEntity.x = x1 + xLostInFloor + x
-                    newEntity.y = y1 + yLostInFloor + y
-                
-                    entities.push(newEntity)
+                    x = x1 + xLostInFloor + x
+                    y = y1 + yLostInFloor + y
+                    // check if entity doesn't clip out of the base map
+                    if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
+                        newEntity.x = x
+                        newEntity.y = y
+                        entities.push(newEntity)
+                    }
                 }
             })
         })
@@ -150,7 +174,7 @@ export class SelectionCopyManager {
                 let subArray = self.createSubArray(selLightLayer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
                 selLightLayer.data = subArray
-                lightLayer = ig.copy(selLightLayer)
+                lightLayer = selLightLayer
             } else {
                 // merge base light layer with selection light
                 sel.bb.forEach(function(rect) {
@@ -164,6 +188,8 @@ export class SelectionCopyManager {
                     self.mergeArrays(lightLayer.data, subArray)
                 })
             }
+            lightLayer.width = width
+            lightLayer.height = height 
             lightLayer.level = "light"
         }
 
@@ -200,8 +226,11 @@ export class SelectionCopyManager {
                         xTileOffset, yTileOffset, width, height)
 
                     if (! self.isArrayEmpty(subArray)) {
-                        layer.data = subArray
-                        collisionLayers[level] = ig.copy(layer)
+                        let layer1 = layer
+                        layer1.data = subArray
+                        layer1.width = width
+                        layer1.height = height 
+                        collisionLayers[level] = layer1
                     }
                 }
             })
@@ -229,25 +258,29 @@ export class SelectionCopyManager {
             selMap.layer.forEach(function(layer) {
                 let level = layer.level
                 if (layer.type != "Background" || (typeof level === 'string' && level.startsWith("object"))) { return; }
+                // console.log("level: " + level +", type: " + layer.type + ", name: " + layer.name)
 
                 if (! (level in tileLayers)) {
                     tileLayers[level] = {}
                 }
                 let tilesetName = layer.tilesetName
-                if (tilesetName in tileLayers[level])
-                if (level in tileLayers) {
+
+                if (level in tileLayers && tilesetName in tileLayers[level]) {
                     // merge
                     let layer1 = tileLayers[level][tilesetName]
-                    self.fillArray(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                    // self.fillArray(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
                     let subArray = self.createSubArray(layer.data, x1, y1, x2, y2,
                             xTileOffset, yTileOffset, width, height)
                     self.mergeArrays(layer1.data, subArray)
                 } else {
                     let subArray = self.createSubArray(layer.data, x1, y1, x2, y2,
-                            xTileOffset, yTileOffset, Math.floor(yOffset / tilesize), width, height)
+                            xTileOffset, yTileOffset, width, height)
                     if (! self.isArrayEmpty(subArray)) {
-                        layer.data = subArray
-                        tileLayers[level][tilesetName] = ig.copy(layer)
+                        let layer1 = layer
+                        layer1.data = subArray
+                        layer1.width = width
+                        layer1.height = height 
+                        tileLayers[level][tilesetName] = layer1
                     }
                 }
             })
@@ -278,8 +311,11 @@ export class SelectionCopyManager {
                     xTileOffset, yTileOffset, width, height)
 
                 if (! self.isArrayEmpty(subArray)) {
-                    layer.data = subArray
-                    objectLayers.push(layer)
+                    let layer1 = layer
+                    layer1.data = subArray
+                    layer1.width = width
+                    layer1.height = height 
+                    objectLayers.push(layer1)
                 }
             })
         })
@@ -326,11 +362,12 @@ export class SelectionCopyManager {
             })
         })
         Object.keys(collisionLayers).forEach(function(key) { 
-            let layer = collisionLayers[key]; 
+            let layer = collisionLayers[key]
             layer.id = id++; 
             allLayers.push(layer); 
         })
         objectLayers.forEach(function(layer) { 
+            layer = layer
             layer.id = id++; 
             allLayers.push(layer); 
         })
@@ -346,12 +383,12 @@ export class SelectionCopyManager {
             mapHeight: mapHeight,
             masterLevel: 0,
             attributes: { 
-                saveMode: "", 
+                saveMode: "ENABLED", 
                 bgm: "",
                 cameraInBounds: false,
                 "map-sounds": "",
                 mapStyle: "rhombus-puzzle",
-                weather: "RHOMBUS_DUNGEON",
+                weather: "AUTUMN",
                 area: "rhombus-dng" 
             },
             // ?????????????
@@ -377,12 +414,12 @@ export class SelectionCopyManager {
         }
 
         
-        let baseMapName = "rouge.room-2"
+        let baseMapName = "rouge.10emptytmp"
         if (this.copyCount++ == 0) {
-            baseMapName = "rouge.room-1"
+            baseMapName = "rouge.10empty"
         }
 
-        let newNameShort = "room-2"
+        let newNameShort = "10emptytmp"
         let newName = "rouge." + newNameShort
         let newMap = this.copySelToMap(baseMapName, sel, this.xOffset, this.yOffset, newName)
 
@@ -393,28 +430,4 @@ export class SelectionCopyManager {
         const newMapJson = JSON.stringify(newMap);
         this.fs.writeFileSync(newMapPath, newMapJson)
     }
-
-
-    createMapFromBase(base, name, aLevels, aEntities, aLayers) {
-        let map = ig.copy(base)
-        map["name"] = name
-        // map["mapWidth"] = width 
-        // map["mapHeight"] = height 
-        // map["masterLevel"] = masterLevel
-        
-        if (! ("levels" in map))
-            map["levels"] = []
-        // not sure what to do with levels
-
-        if (! ("entities" in map))
-            map["entities"] = []
-        map.entities = [...map.entities, ...aEntities]
-
-        if (! ("layer" in map))
-            map["layer"] = []
-        map.layer = [...map.layer, ...aLayers]
-
-        return map
-    }
-
 }
