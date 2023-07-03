@@ -4,6 +4,7 @@ export class Selection {
     constructor(map) {
         this.bb = []
         this.map = map
+        this.playerZ = null
         this.data = {}
     }
 }
@@ -47,6 +48,12 @@ export class Selections {
 
     create() {
         if (this.mapSels.tempSel.bb.length > 0) {
+            let playerZ = ig.game.playerEntity.coll.pos.z
+            if (playerZ % 16 != 0) {
+                ig.blitzkrieg.msg("blitzkrieg", "You must stand still on a solid level")
+                return
+            }
+            this.mapSels.tempSel.playerZ = playerZ
             this.newSelEvent(this.mapSels.tempSel)
             this.mapSels.sels.push(this.mapSels.tempSel)
         }

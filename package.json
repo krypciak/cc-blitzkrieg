@@ -1,5 +1,5 @@
 {    
-    "name": "blitzkrieg",
+    "name": "cc-blitzkrieg",
     "ccmodHumanName": "Blitzkrieg",
     "version": "1.0.0",
     "plugin": "plugin.js",
