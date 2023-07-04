@@ -1,4 +1,4 @@
-import { Stack } from './util.js';
+import { Stack, Rectangle, Util } from './util.js';
 
 export class SelectionCopyManager {
     constructor() {
@@ -23,121 +23,6 @@ export class SelectionCopyManager {
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['jungle.left.path-left-03'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['autumn-fall.path-05'].sels[1])
         
-    }
-
-    executeRecursiveAction(obj, action, args) {
-        for (let key in obj) {
-            if (typeof obj[key] === 'object') {
-                action(key, obj, args);
-                this.executeRecursiveAction(obj[key], action, args);
-            } else {
-                action(key, obj, args);
-            }
-        }
-    }
-
-    emptyArray(width, height) {
-        let arr = []
-        for (let y = 0; y < height; y++) {
-            arr[y] = []
-            for (let x = 0; x < width; x++) {
-                arr[y][x] = 0
-            }
-        }
-        return arr
-    }
-
-    fillArray(arr, value, x1, y1, x2, y2) {
-        let iteX = Math.min(x2, arr[0].length)
-        let iteY = Math.min(y2, arr.length)
-
-        for (let y = y1; y < iteY; y++) {
-            for (let x = x1; x < iteX; x++) {
-                arr[y][x] = value
-            }
-        }
-    }
-
-    mergeArrays(arr1, arr2) {
-        for (let y = 0; y < Math.min(arr1.length, arr2.length); y++) {
-            for (let x = 0; x < Math.min(arr1[y].length, arr2[0].length); x++) {
-                let val = arr2[y][x]
-                if (val != 0) {
-                    arr1[y][x] = val
-                }
-            }
-        }
-    }
-
-    createSubArray(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
-        let nArr = this.emptyArray(width, height)
-
-        let arrWidth = arr[0].length
-        let arrHeight = arr.length
-        // make sure cords are within 0 - width or height of arr
-        x2 = Math.min(arrWidth, x2)
-        y2 = Math.min(arrHeight, y2)
-
-        // make sure cords are in bounds with baseMap
-        let xTmp = (x2 - x1 + 1) - (width - xTileOffset)
-        if (xTmp > 0) {
-            x2 -= xTmp
-        }
-        let yTmp = (y2 - y1 + 1) - (height - yTileOffset)
-        if (yTmp > 0) {
-            y2 -= yTmp
-        }
-
-        x1 = Math.min(arrWidth, Math.max(x1, 0))
-        y1 = Math.min(arrHeight, Math.max(y1, 0))
-        x2 = Math.min(arrWidth, Math.max(x2, 0))
-        y2 = Math.min(arrHeight, Math.max(y2, 0))
-        
-        if (x2 < x1 || y2 < y1)
-            throw new Error("invalid createSubArray inputs");
-        
-        for (let y = y1; y < y2; y++) {
-            for (let x = x1; x < x2; x++) {
-                let nArrX = x - x1 + xTileOffset
-                let nArrY = y - y1 + yTileOffset
-                nArr[nArrY][nArrX] = arr[y][x]
-            }
-        }
-        return nArr;
-    }
-
-    isArrayEmpty(arr) {
-        for (let y = 0; y < arr.length; y++) {
-            for (let x = 0; x < arr[y].length; x++) {
-                if (arr[y][x] != 0)
-                    return false
-            }
-        }
-        return true
-    }
-
-    generateUniqueID() {
-        let tmp1 = Math.random()*1000 * Math.random()*1000
-        let tmp2 = Date.now()
-        return Math.floor((tmp1 * tmp2) % 100000000).toString()
-    }
-
-    async getMapObject(mapName) {
-        let mapPath = mapName.toPath(ig.root + "data/maps/", ".json") + ig.getCacheSuffix()
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: ig.getFilePath(mapPath),
-                dataType: "json",
-                success: function(response) {
-                    resolve(response);
-                },
-                error: function (b, c, e) {
-                    ig.system.error(Error("Loading of Map '" + a +
-                        "' failed: " + b + " / " + c + " / " + e))
-                },
-            });
-        });
     }
 
     mergeMapLevels(baseMap, selMap, sel) {
@@ -281,7 +166,7 @@ export class SelectionCopyManager {
                 level = entity.level.level
             }
             level = oldToNewLevelsMap[parseInt(level)]
-            self.executeRecursiveAction(entity, self.changeEntityRecursive, {
+            Util.executeRecursiveAction(entity, self.changeEntityRecursive, {
                 self: self,
                 level: level,
                 replacePuzzleEvents: false,
@@ -314,7 +199,7 @@ export class SelectionCopyManager {
                             level = entity.level.level
                         }
                         level = oldToNewLevelsMap[parseInt(level) + selLevelOffset]
-                        self.executeRecursiveAction(newEntity, self.changeEntityRecursive, {
+                        Util.executeRecursiveAction(newEntity, self.changeEntityRecursive, {
                             self: self,
                             level: level,
                             replacePuzzleEvents: true,
@@ -352,7 +237,7 @@ export class SelectionCopyManager {
         let xTileOffset = Math.floor(xOffset / tilesize)
         let yTileOffset = Math.floor(yOffset / tilesize)
 
-        let emptyData = this.emptyArray(width, height)
+        let emptyData = Util.emptyArray2d(width, height)
 
         // get lightLayer
         // search for base light layer
@@ -388,10 +273,10 @@ export class SelectionCopyManager {
                 let y1 = Math.floor(rect.y / tilesize);
                 let x2 = x1 + Math.ceil(rect.width / tilesize);
                 let y2 = y1 + Math.ceil(rect.height / tilesize)
-                self.fillArray(lightLayer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
-                let subArray = self.createSubArray(selLightLayer.data, x1, y1, x2, y2,
+                Util.fillArray2d(lightLayer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                let subArray = Util.createSubArray2d(selLightLayer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
-                self.mergeArrays(lightLayer.data, subArray)
+                Util.mergeArrays2d(lightLayer.data, subArray)
             })
         }
         lightLayer.width = width
@@ -441,10 +326,10 @@ export class SelectionCopyManager {
                 if (layer.type != "Collision") { return; }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
-                // self.fillArray(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
-                let subArray = self.createSubArray(layer.data, x1, y1, x2, y2,
+                // Util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                let subArray = Util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
-                self.mergeArrays(layer1.data, subArray)
+                Util.mergeArrays2d(layer1.data, subArray)
             })
         })
 
@@ -484,15 +369,15 @@ export class SelectionCopyManager {
                 if (tileLayersClear[level]) {
                     tileLayers[level].forEach(function(layer1) { 
                         if (layer1.isBase) {
-                            self.fillArray(layer1.data, 0, xTileOffset, yTileOffset,
+                            Util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset,
                                 xTileOffset + rect.width/tilesize,
                                 yTileOffset + rect.height/tilesize)
                         }
                     })
                 }
-                let subArray = self.createSubArray(layer.data, x1, y1, x2, y2,
+                let subArray = Util.createSubArray2d(layer.data, x1, y1, x2, y2,
                         xTileOffset, yTileOffset, width, height)
-                if (! self.isArrayEmpty(subArray)) {
+                if (!Util.isArrayEmpty2d(subArray)) {
                     let layer1 = layer
                     layer1.data = subArray
                     layer1.width = width
@@ -527,10 +412,10 @@ export class SelectionCopyManager {
                 if (! (layer.type == "Background" && typeof level === 'string' &&
                     level.startsWith("object"))) { return; }
 
-                let subArray = self.createSubArray(layer.data, x1, y1, x2, y2, 
+                let subArray = Util.createSubArray2d(layer.data, x1, y1, x2, y2, 
                     xTileOffset, yTileOffset, width, height)
 
-                if (! self.isArrayEmpty(subArray)) {
+                if (!Util.isArrayEmpty2d(subArray)) {
                     let layer1 = layer
                     layer1.data = subArray
                     layer1.width = width
@@ -557,10 +442,10 @@ export class SelectionCopyManager {
     async copySelToMap(baseMapName, sel, xOffset, yOffset, newName) {
         let self = this
 
-        let baseMap = await this.getMapObject(baseMapName)
-        let selMap = await this.getMapObject(sel.map)
+        let baseMap = await Util.getMapObject(baseMapName)
+        let selMap = await Util.getMapObject(sel.map)
         
-        this.uniqueId = this.generateUniqueID() 
+        this.uniqueId = Util.generateUniqueID() 
 
         let obj1 = this.mergeMapLevels(baseMap, selMap, sel)
         let levels = obj1.levels
@@ -646,7 +531,6 @@ export class SelectionCopyManager {
             }
         })
     }
-    
 
     copy() {
         let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
