@@ -9,7 +9,6 @@ import { Util } from './util.js'
 import { TextNotification } from './text-notification.js';
 
 export default class Blitzkrieg {
-
     bindKeys() {
         for (let keyName in ig.blitzkrieg.keys) {
             let key = ig.blitzkrieg.keys[keyName]
@@ -244,6 +243,8 @@ export default class Blitzkrieg {
         ig.blitzkrieg.updateKeybindingLabels();
         ig.blitzkrieg.adjustPuzzleAssistSlider();
         ig.blitzkrieg.prepareTabFonts()
+
+        ig.blitzkrieg.util.loadAllMaps()
     }
 
 

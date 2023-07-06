@@ -142,6 +142,46 @@ export class Util {
         return ig.blitzkrieg.util.getMapObjectByPath(mapPath)
     }
 
+    async loadAllMaps() {
+        if (ig.blitzkrieg.allMaps) {
+            return
+        }
+        let filePaths = []
+        let paths = [
+            "./assets/data/maps/",
+            "./assets/extension/post-game/data/maps/",
+            "./assets/extension/fish-gear/data/maps/",
+            "./assets/extension/flying-hedgehag/data/maps/",
+            "./assets/extension/scorpion-robo/data/maps/",
+            "./assets/extension/snowman-tank/data/maps/",
+        ]
+        for (let path of paths) {
+            // remove leading /
+            path = path.replace(/\/$/, '');
+            if (ig.blitzkrieg.util.dirExists(path)) {
+                filePaths = ig.blitzkrieg.util.getFilesInDir(path, filePaths)
+            }
+        }
+        
+        
+        let maps = {}
+        let promises = filePaths.map(function(path) {
+            return new Promise(async (resolve, reject) => {
+                let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
+                let mapName = mapData.name.split("/").join(".")
+                let obj = {}
+                obj[mapName] = mapData
+                resolve(obj)
+            })
+        })
+        let objArr = await Promise.all(promises)
+
+        ig.blitzkrieg.allMaps = objArr.reduce((result, currObj) => {
+            return { ...result, ...currObj };
+        }, {});
+        console.log(ig.blitzkrieg.allMaps)
+    }
+
     getEntireMapSel(mapData) {
         let sel = new Selection(mapData.name)
         sel.bb.push(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16))

@@ -6,28 +6,6 @@ export class MapArranger {
 
     }
 
-    async loadAreaMaps(area) {
-        let filePaths = []
-        let paths = [
-            "./assets/data/maps/",
-            "./assets/extension/post-game/data/maps/",
-        ]
-        for (let path of paths) {
-            path = path + area
-            // remove leading /
-            path = path.replace(/\/$/, '');
-            if (ig.blitzkrieg.util.dirExists(path)) {
-                filePaths = ig.blitzkrieg.util.getFilesInDir(path, filePaths)
-            }
-        }
-        let maps = {}
-        for (let path of filePaths) {
-            let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
-            maps[mapData.name.split("/").join(".")] = mapData
-        }
-        return maps
-    }
-
     processMap(mapName, data, positions, x, y) {
         // console.log("Processing map: " + mapName)
         let map = data[mapName]
@@ -107,8 +85,10 @@ export class MapArranger {
         return positions
     }
 
-    async arrangeArea(area) {
-        let maps = await this.loadAreaMaps(area)
+    async arrangeMaps() {
+        await ig.blitzkrieg.util.loadAllMaps()
+
+        let maps = ig.blitzkrieg.allMaps
         console.log(maps)
 
         let entitiesToKill = []
@@ -189,15 +169,6 @@ export class MapArranger {
                 }
             }
         }
-
-
-        /*for (let mapName in data) {
-            if (data[mapName].connections.length > 0) {
-                positions[mapName] = {x: 0, y: 0}
-                this.processMap(mapName, data, positions, 0, 0)
-                break
-            }
-        }*/
         
         // general
         let pos1 = this.getPositionsStartingFrom("rookie-harbor.teleporter", data)
@@ -234,7 +205,7 @@ export class MapArranger {
     async arrange() {
         ig.blitzkrieg.msg("blitzkrieg", "arrange")
 
-        let obj = await this.arrangeArea("")
+        let obj = await this.arrangeMaps()
         let obj1 = ig.copy(obj)
         console.log("size:")
         console.log(obj1.width, obj1.height)
@@ -257,6 +228,7 @@ export class MapArranger {
         // this.drawPositionsCanvas(positions, maps, data, width, height)
         
         ig.blitzkrieg.msg("blitzkrieg", "arrange done")
+        console.log("now you can run the python script at ./assets/mods/cc-blitzkrieg/json/drawArrangeMapCanvas.py")
     }
 
 
