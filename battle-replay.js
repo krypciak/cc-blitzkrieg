@@ -69,19 +69,6 @@ export class BattleReplayManager {
         }
     }
 
-    spawnBarrier(x, y, z, width, height) {
-        width = Math.floor(width/8)*8
-        height = Math.floor(height/8)*8
-        let barrierType = width == 8 ? "barrierV" : "barrierH"
-
-        return ig.game.spawnEntity("ScalableProp", x, y, z, {
-            name: '', 
-            patternOffset: {x: 0, y: 0}, 
-            blockNavMap: false, 
-            propConfig: {ends: null, name: barrierType, sheet: "dungeon-ar"},
-            size: {x: width, y: height}}
-        )
-    }
     
     nextBattle1() {
         let sel = this._tmpSel
@@ -104,10 +91,10 @@ export class BattleReplayManager {
         let barrierHeight = barrierY2 - barrierY1 + 8
         
         this.barrierList = []
-        this.barrierList.push(this.spawnBarrier(barrierX1, barrierY1, 0, barrierWidth, 8))
-        this.barrierList.push(this.spawnBarrier(barrierX1, barrierY2, 0, barrierWidth, 8))
-        this.barrierList.push(this.spawnBarrier(barrierX1, barrierY1, 0, 8, barrierHeight))
-        this.barrierList.push(this.spawnBarrier(barrierX2, barrierY1, 0, 8, barrierHeight))
+        this.barrierList.push(ig.blitzkrieg.util.spawnBarrier(barrierX1, barrierY1, 0, barrierWidth, 8))
+        this.barrierList.push(ig.blitzkrieg.util.spawnBarrier(barrierX1, barrierY2, 0, barrierWidth, 8))
+        this.barrierList.push(ig.blitzkrieg.util.spawnBarrier(barrierX1, barrierY1, 0, 8, barrierHeight))
+        this.barrierList.push(ig.blitzkrieg.util.spawnBarrier(barrierX2, barrierY1, 0, 8, barrierHeight))
 
 
         // run async loop
