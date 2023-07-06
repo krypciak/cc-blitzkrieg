@@ -3,6 +3,7 @@ import { PuzzleSpeedManager } from './puzzle-speed.js';
 import { BattleRecordManager } from './battle-record.js';
 import { BattleReplayManager } from './battle-replay.js';
 import { SelectionCopyManager } from './selection-copy.js';
+import { MapArranger } from './map-arrange.js';
 import { Selections } from './selection.js'
 import { TextNotification } from './text-notification.js';
 
@@ -144,6 +145,7 @@ export default class Blitzkrieg {
 
 
         ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
+        ig.blitzkrieg.mapArranger = new MapArranger()
 
 
         ig.blitzkrieg.battleRecordManager = new BattleRecordManager()
@@ -193,8 +195,10 @@ export default class Blitzkrieg {
             "next-battle":      { desc: "next battle", func: ig.blitzkrieg.battleReplayManager.nextBattle, 
                 key: ig.KEY._9,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
 
-            "copy-selection":   { desc: "copy selection", func: ig.blitzkrieg.selectionCopyManager.copy, 
-                key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
+            //"copy-selection":   { desc: "copy selection", func: ig.blitzkrieg.selectionCopyManager.copy, 
+            //    key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
+            "arrange-maps":     { desc: "arrange maps", func: ig.blitzkrieg.mapArranger.arrange, 
+                key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.mapArranger },
         }
         ig.blitzkrieg.setupTabs()
         ig.blitzkrieg.bindKeys();

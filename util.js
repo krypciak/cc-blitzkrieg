@@ -1,4 +1,6 @@
 import { Selection } from './selection.js';
+const fs = require("fs")
+const path = require("path")
 
 export class Rectangle {
     constructor(x, y, width, height) {
@@ -116,35 +118,68 @@ export class Util {
         return Math.floor((tmp1 * tmp2) % 100000000).toString()
     }
 
-    static async getMapObject(mapName) {
-        let mapPath = mapName.toPath(ig.root + "data/maps/", ".json") + ig.getCacheSuffix()
-
+    static async getMapObjectByPath(mapPath) {
+        if (mapPath.startsWith("assets/")) {
+            mapPath = mapPath.replace("assets/", "")
+        }
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: ig.getFilePath(mapPath),
+                url: mapPath,
                 dataType: "json",
                 success: function(response) {
                     resolve(response);
                 },
                 error: function (b, c, e) {
-                    ig.system.error(Error("Loading of Map '" + a +
+                    ig.system.error(Error("Loading of Map '" + mapPath +
                         "' failed: " + b + " / " + c + " / " + e))
                 },
             });
         });
     }
 
-    static async getEntieMapSel(mapName) {
-        let mapData = await getMapObject(mapname)
-        let sel = new Selection(mapName)
-        sel.bb.push(new Rectangle(0, 0, mapData.width, mapData.height))
-        sel.playerZ = 0
+    static async getMapObject(mapName) {
+        let mapPath = ig.getFilePath(mapName.toPath(ig.root + "data/maps/", ".json") + ig.getCacheSuffix())
+        return Util.getMapObjectByPath(mapPath)
+    }
+
+    static getEntireMapSel(mapData) {
+        let sel = new Selection(mapData.name)
+        sel.bb.push(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16))
+        sel.playerZ = mapData.levels[mapData.masterLevel].height
         return sel
     }
 
+    static getSelectionSize(sel) {
+        if (sel.bb.length == 0)
+            return { width: 0, height: 0 }
+        let minX = 100000
+        let minY = 100000
+        sel.bb.forEach(function(rect) {
+            if (rect.x < minX) { minX = rect.x; }
+            if (rect.y < minY) { minY = rect.y; }
+        })
+        let maxWidth = 0
+        let maxHeight = 0
+        sel.bb.forEach(function(rect) {
+            maxWidth = Math.max(maxWidth, minX - rect.x + rect.width)
+            maxHeight = Math.max(maxHeight, minY - rect.y + rect.height)
+        })
+        return {
+            width: maxWidth,
+            height: maxHeight,
+        }
+    }
+
+    static dirExists(path) {
+        try {
+            fs.statSync(path).isFile()
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
     static getFilesInDir(folderPath, filePaths = []) {
-        let fs = require('fs')
-        let path = require('path')
         let files = fs.readdirSync(folderPath);
 
         files.forEach((file) => {
@@ -152,7 +187,7 @@ export class Util {
             let stat = fs.statSync(filePath);
 
             if (stat.isDirectory()) {
-                getAllFilePaths(filePath, filePaths);
+                Util.getFilesInDir(filePath, filePaths);
             } else {
                 filePaths.push(filePath); // Add file path to the array
             }
