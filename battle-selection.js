@@ -64,6 +64,20 @@ export class BattleSelectionManager {
 
     async findAllSpawners() {
         await ig.blitzkrieg.util.loadAllMaps()
+        let spawners = {}
+
+        for (let mapName in ig.blitzkrieg.allMaps) {
+            let map = ig.blitzkrieg.allMaps[mapName]
+            for (let entity of map.entities) {
+                if (entity.type == "EnemySpawner") {
+                    if (! (mapName in spawners)) {
+                        spawners[mapName] = []
+                    }
+                    spawners[mapName].push(ig.copy(entity))
+                }
+            }
+        }
+        ig.blitzkrieg.allSpawners = spawners
     }
 
 }
