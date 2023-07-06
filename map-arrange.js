@@ -1,25 +1,21 @@
-const fs = require("fs")
-// const path = require("path")
+const fs = require('fs')
+// const path = require('path')
 
 export class MapArranger {
-    constructor() {
-
-    }
-
     processMap(mapName, data, positions, x, y) {
-        // console.log("Processing map: " + mapName)
+        // console.log('Processing map: ' + mapName)
         let map = data[mapName]
         // console.log(ig.copy(map))
         for (let connection of map.connections) {
             let destMapName = connection.destMap
-            let destMarker = connection.destMarker
+            // let destMarker = connection.destMarker
             let marker = connection.marker
             
             if (destMapName in positions) {
                 continue
             }
             if (!(destMapName in data)) {
-                console.log("SKIPPING: " + destMapName + " is unknown")
+                console.log('SKIPPING: ' + destMapName + ' is unknown')
                 continue
             }
 
@@ -35,7 +31,7 @@ export class MapArranger {
                 }
             }
             if (! destConnection) {
-                console.log("SKIPPING: " + mapName + " -> marker: " + marker + " is unknown")
+                console.log('SKIPPING: ' + mapName + ' -> marker: ' + marker + ' is unknown')
                 continue
             }
 
@@ -55,7 +51,7 @@ export class MapArranger {
         positions2 = ig.copy(positions2)
 
         for (let mapName in positions2) {
-            if (! (mapName in maps)) { continue; }
+            if (! (mapName in maps)) { continue }
             positions2[mapName].x += x
             positions2[mapName].y += y
         }
@@ -95,58 +91,25 @@ export class MapArranger {
         let data = {}
         for (let mapName in maps) {
             let map = maps[mapName]
-            let ignoreTeleportField = false
             for (let entity of map.entities) {
                 let destMap
                 let destMarker
                 let marker
                 let set = false
 
-                if ((entity.type == "TeleportGround" || entity.type == "Door") && entity.settings.map) {
+                if ((entity.type == 'TeleportGround' || entity.type == 'Door') && entity.settings.map) {
                     set = true
                     destMap = entity.settings.map
                     destMarker = entity.settings.marker
                     marker = entity.settings.name
                 } 
-                if ((entity.type == "TeleportField") && entity.settings.map) {
+                if ((entity.type == 'TeleportField') && entity.settings.map) {
                     destMap = entity.settings.map
                     destMarker = entity.settings.marker
                     marker = entity.settings.name
-                    if (mapName == "rhombus-sqr.central-inner" && ! destMap.startsWith("rhombus")) { continue; }
+                    if (mapName == 'rhombus-sqr.central-inner' && ! destMap.startsWith('rhombus')) { continue }
                     set = true
-                    // console.log("TeleportField")
-                    // console.log(mapName + " -> ", destMap, destMarker, marker)
-                    // console.log(entity)
                 } 
-                /*else if (entity.type == "TeleportField") {
-
-                    if (entity.settings.map) {
-                        destMap = entity.settings.map
-                        destMarker = entity.settings.marker
-                        marker = entity.settings.name
-                        set = true
-                    } else if (entity.settings.blockEvent) {
-                        // teleport rail like from bergen to maroon valey
-                        if (ignoreTeleportField) { continue; }
-                        ignoreTeleportField = true
-                        
-                        set = true
-                        let destMap
-                        let destMarker
-                        let marker = entity.settings.name
-                        
-                        function searchForMap(key, obj, args) {
-                            if (key == "map") {
-                                destMap = obj.map
-                                destMarker = obj.marker
-                            }
-                        }
-
-                        ig.blitzkrieg.util.executeRecursiveAction(entity.settings.blockEvent, searchForMap, {})
-                        debugger
-                    }
-                }
-                */
                 if (set) {
                     for (let initMapName of [mapName]) {
                         if (! (initMapName in data)) {
@@ -171,30 +134,30 @@ export class MapArranger {
         }
         
         // general
-        let pos1 = this.getPositionsStartingFrom("rookie-harbor.teleporter", data)
+        let pos1 = this.getPositionsStartingFrom('rookie-harbor.teleporter', data)
 
         // kulero temple
-        let pos2 = this.getPositionsStartingFrom("final-dng.g.outdoor-01", data)
+        let pos2 = this.getPositionsStartingFrom('final-dng.g.outdoor-01', data)
         let positions = this.mergeAreas(maps, pos2, pos1, 30000, 1000)
 
         // maroon valley
-        let pos3 = this.getPositionsStartingFrom("heat.path-00", data)
+        let pos3 = this.getPositionsStartingFrom('heat.path-00', data)
         positions = this.mergeAreas(maps, positions, pos3, 15000, 1000)
 
         // rhombus square
-        let pos4 = this.getPositionsStartingFrom("rhombus-sqr.center-ne", data)
+        let pos4 = this.getPositionsStartingFrom('rhombus-sqr.center-ne', data)
         positions = this.mergeAreas(maps, positions, pos4, 38000, 30000)
         // ship
-        let pos5 = this.getPositionsStartingFrom("cargo-ship.ship", data)
+        let pos5 = this.getPositionsStartingFrom('cargo-ship.ship', data)
         positions = this.mergeAreas(maps, positions, pos5, 60000, 34000)
         // beach
-        let pos6 = this.getPositionsStartingFrom("beach.path-01-entrance", data)
+        let pos6 = this.getPositionsStartingFrom('beach.path-01-entrance', data)
         positions = this.mergeAreas(maps, positions, pos6, 6500, 28000)
 
         let width = 0
         let height = 0
         for (let mapName in positions) {
-            if (! (mapName in maps)) { continue; }
+            if (! (mapName in maps)) { continue }
 
             width = Math.max(width, positions[mapName].x + maps[mapName].mapWidth*16)
             height = Math.max(height, positions[mapName].y + maps[mapName].mapHeight*16)
@@ -203,11 +166,11 @@ export class MapArranger {
     }
 
     async arrange() {
-        ig.blitzkrieg.msg("blitzkrieg", "arrange")
+        ig.blitzkrieg.msg('blitzkrieg', 'arrange')
 
         let obj = await this.arrangeMaps()
         let obj1 = ig.copy(obj)
-        console.log("size:")
+        console.log('size:')
         console.log(obj1.width, obj1.height)
 
         // remove unnecesery data from obj.maps
@@ -224,22 +187,22 @@ export class MapArranger {
             obj1.maps[mapName] = newMap
         }
         console.log(obj1)
-        fs.writeFileSync("./assets/mods/cc-blitzkrieg/json/position-data.json", JSON.stringify(obj1))
+        fs.writeFileSync('./assets/mods/cc-blitzkrieg/json/position-data.json', JSON.stringify(obj1))
         // this.drawPositionsCanvas(positions, maps, data, width, height)
         
-        ig.blitzkrieg.msg("blitzkrieg", "arrange done")
-        console.log("now you can run the python script at ./assets/mods/cc-blitzkrieg/json/drawArrangeMapCanvas.py")
+        ig.blitzkrieg.msg('blitzkrieg', 'arrange done')
+        console.log('now you can run the python script at ./assets/mods/cc-blitzkrieg/json/drawArrangeMapCanvas.py')
     }
 
 
     async epicMapGrid() {
-        let baseName = "rouge.300empty"
+        let baseName = 'rouge.300empty'
 
-        let newNameShort = "300emptytmp"
-        let newName = "rouge." + newNameShort
+        let newNameShort = '300emptytmp'
+        let newName = 'rouge.' + newNameShort
 
-        let filePaths = ig.blitzkrieg.util.getFilesInDir("./assets/data/maps")
-        filePaths = ig.blitzkrieg.util.getFilesInDir("./assets/extension/post-game/data/maps", filePaths)
+        let filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/data/maps')
+        filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/extension/post-game/data/maps', filePaths)
 
         let baseMap = await ig.blitzkrieg.util.getMapObject(baseName)
         let mapWidth = baseMap.mapWidth*16
@@ -250,14 +213,14 @@ export class MapArranger {
         let yOffset = 32
 
         let maxHeight = 0
-        let copyCount = 0
 
         let biggestWidth = 0
         let biggestHeight = 0
 
+        // eslint-disable-next-line
         let i = 0
         for (let mapPath of filePaths) {
-            if (mapPath.includes("maps/arena/")) {
+            if (mapPath.includes('maps/arena/')) {
                 continue
             }
             let selMapData = await ig.blitzkrieg.util.getMapObjectByPath(mapPath)
@@ -267,23 +230,23 @@ export class MapArranger {
             let selMapHeight = selMapData.mapHeight * 16
             let sel = ig.blitzkrieg.util.getEntireMapSel(selMapData)
 
-            // let xOffset_tmp = xOffset + selMapWidth + 32
-            // if (xOffset_tmp >= mapWidth) {
-            //     xOffset = xOffsetStart
-            //     xOffset_tmp = xOffsetStart
-            //     yOffset += maxHeight + 32
-            //     maxHeight = 0
-            // }
-            // if (selMapHeight > maxHeight) {
-            //     maxHeight = selMapHeight
-            // }
-            // if (yOffset + selMapHeight >= mapHeight) {
-            //     xOffset = xOffsetStart
-            //     xOffset_tmp = xOffsetStart
-            //     yOffset = 32
-            //     maxHeight = 0
-            //     console.log("ran out of space")
-            // }
+            let xOffset_tmp = xOffset + selMapWidth + 32
+            if (xOffset_tmp >= mapWidth) {
+                xOffset = xOffsetStart
+                xOffset_tmp = xOffsetStart
+                yOffset += maxHeight + 32
+                maxHeight = 0
+            }
+            if (selMapHeight > maxHeight) {
+                maxHeight = selMapHeight
+            }
+            if (yOffset + selMapHeight >= mapHeight) {
+                xOffset = xOffsetStart
+                xOffset_tmp = xOffsetStart
+                yOffset = 32
+                maxHeight = 0
+                console.log('ran out of space')
+            }
             baseMap = await ig.blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
                 xOffset, yOffset, newName, true, true)
 
@@ -294,14 +257,14 @@ export class MapArranger {
         }
 
 
-        console.log("biggest:")
+        console.log('biggest:')
         console.log(biggestWidth)
         console.log(biggestHeight)
 
-        let newMapPath = "./assets/mods/cc-rouge/assets/data/maps/rouge/" + newNameShort + ".json"
+        let newMapPath = './assets/mods/cc-rouge/assets/data/maps/rouge/' + newNameShort + '.json'
 
         // save new map to file
-        let newMapJson = JSON.stringify(baseMap);
+        let newMapJson = JSON.stringify(baseMap)
         // return
         fs.writeFileSync(newMapPath, newMapJson)
     }

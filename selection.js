@@ -28,11 +28,13 @@ export class Selections {
         this.completeColor = completeColor
         this.tempColor = tempColor
         this.drawBoxes = true
-        this.fs = require('fs');
+        this.fs = require('fs')
         this.jsonfile = jsonfile
         try {
             this.load()
-        } catch(error) {}
+        } catch(error) {
+            // file doesn't exist
+        }
         this._ready = true
     }
 
@@ -50,19 +52,19 @@ export class Selections {
         if (this.mapSels.tempSel.bb.length > 0) {
             let playerZ = ig.game.playerEntity.coll.pos.z
             if (playerZ % 16 != 0) {
-                ig.blitzkrieg.msg("blitzkrieg", "You must stand still on a solid level")
+                ig.blitzkrieg.msg('blitzkrieg', 'You must stand still on a solid level')
                 return
             }
             this.mapSels.tempSel.playerZ = playerZ
             this.newSelEvent(this.mapSels.tempSel)
             this.mapSels.sels.push(this.mapSels.tempSel)
         }
-        this.mapSels.tempSel = new Selection(ig.game.mapName);
-        this.selectStep = 0;
-        this._x = 0;
-        this._y = 0;
-        this._width = 0;
-        this._height = 0;
+        this.mapSels.tempSel = new Selection(ig.game.mapName)
+        this.selectStep = 0
+        this._x = 0
+        this._y = 0
+        this._width = 0
+        this._height = 0
         this.save()
     }
 
@@ -72,13 +74,13 @@ export class Selections {
             pos,
             sc.control.getMouseX(),
             sc.control.getMouseY()
-        );
+        )
 
         for (let i = 0; i < this.mapSels.sels.length; i++) {
             let sel = this.mapSels.sels[i]
             if (this.isSelInPos(sel, pos)) {
-                this.mapSels.sels.splice(i, 1);
-                i--;
+                this.mapSels.sels.splice(i, 1)
+                i--
             }
         }
         
@@ -90,41 +92,41 @@ export class Selections {
     select() {
         let pos = { x: 0, y: 0 }
         switch (this.selectStep) {
-            case 0:
-                ig.system.getMapFromScreenPos(
-                  pos,
-                  sc.control.getMouseX(),
-                  sc.control.getMouseY()
-                );
-                this._x = pos.x
-                this._y = pos.y
+        case 0:
+            ig.system.getMapFromScreenPos(
+                pos,
+                sc.control.getMouseX(),
+                sc.control.getMouseY()
+            )
+            this._x = pos.x
+            this._y = pos.y
 
-                break;
-            case 1:
-                ig.system.getMapFromScreenPos(
-                    pos,
-                    sc.control.getMouseX(),
-                    sc.control.getMouseY()
-                );
-                this._width = pos.x - this._x
-                this._height = pos.y - this._y
-                this.selectStep = -1;
+            break
+        case 1:
+            ig.system.getMapFromScreenPos(
+                pos,
+                sc.control.getMouseX(),
+                sc.control.getMouseY()
+            )
+            this._width = pos.x - this._x
+            this._height = pos.y - this._y
+            this.selectStep = -1
 
-                if (this._width < 1 || this._height < 1) {
-                    ig.blitzkrieg.msg("blitzkrieg", "Invalid selection", 2)
-                } else {
-                    this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, this._width, this._height))
-                    this.selIndexes.push(-1)
-                    this.save()
-                }
-                this._x = 0;
-                this._y = 0;
-                this._width = 0;
-                this._height = 0;
-                break;
+            if (this._width < 1 || this._height < 1) {
+                ig.blitzkrieg.msg('blitzkrieg', 'Invalid selection', 2)
+            } else {
+                this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, this._width, this._height))
+                this.selIndexes.push(-1)
+                this.save()
+            }
+            this._x = 0
+            this._y = 0
+            this._width = 0
+            this._height = 0
+            break
         }
 
-        this.selectStep++;
+        this.selectStep++
     }
 
     isRectInPos(rect, pos) {
@@ -148,12 +150,12 @@ export class Selections {
             if (this.selIndexes[i] == -1) {
                 this.selIndexes[i] = i
                 this.inSelStack.push(sel)
-                this.walkInEvent(sel);
+                this.walkInEvent(sel)
             }
         } else {
             if (this.selIndexes[i] != -1) {
                 this.inSelStack.shift()
-                this.walkOutEvent(sel);
+                this.walkOutEvent(sel)
             }
             this.selIndexes[i] = -1
         }
@@ -183,16 +185,16 @@ export class Selections {
         let self = this
         sel.bb.forEach((rect) => {
             self.drawBox(rect, color)
-        });
+        })
     }
 
     drawSelections() {
-        if (! this._ready || ! this.drawBoxes || ! ig.perf.gui) return;
+        if (! this._ready || ! this.drawBoxes || ! ig.perf.gui) return
 
         let self = this
         this.mapSels.sels.forEach((sel) => {
             self.drawSelBoxes(sel, self.completeColor)
-        });
+        })
 
         this.drawSelBoxes(this.mapSels.tempSel, this.tempColor)
     }
@@ -202,14 +204,14 @@ export class Selections {
     }
 
     save() {
-        // ig.blitzkrieg.msg("blitzkrieg", "save", 2)
-        const json = JSON.stringify(this.selHashMap);
+        // ig.blitzkrieg.msg('blitzkrieg', 'save', 2)
+        const json = JSON.stringify(this.selHashMap)
         this.fs.writeFileSync(this.jsonfile, json)
     }
 
     load() {
-        const json = this.fs.readFileSync(this.jsonfile, 'utf8');
-        const obj = JSON.parse(json);
+        const json = this.fs.readFileSync(this.jsonfile, 'utf8')
+        const obj = JSON.parse(json)
         this.selHashMap =  obj
     }
 }

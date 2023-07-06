@@ -1,13 +1,12 @@
-import { Stack, Rectangle } from './util.js';
-const fs = require("fs")
-const path = require("path")
+import { Stack } from './util.js'
+const fs = require('fs')
 
 export class SelectionCopyManager {
     constructor() {
-        this.xOffset = 128;
-        this.yOffset = 128;
-        // this.xOffset = 16;
-        // this.yOffset = 16;
+        this.xOffset = 128
+        this.yOffset = 128
+        // this.xOffset = 16
+        // this.yOffset = 16
         this.copyCount = 0
         this._sels = new Stack()
         this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
@@ -31,22 +30,22 @@ export class SelectionCopyManager {
         }
 
         let levelsCopy = []
-        baseLevels.forEach((level) => { levelsCopy.push(level.height); })
-        selLevels.forEach((level) => { levelsCopy.push(level.height); })
+        baseLevels.forEach((level) => { levelsCopy.push(level.height) })
+        selLevels.forEach((level) => { levelsCopy.push(level.height) })
         let selLevelOffset = baseLevels.length
 
         // sort levels
-        let levels = [...levelsCopy].sort((a, b) => a - b);
+        let levels = [...levelsCopy].sort((a, b) => a - b)
         // remove duplicates
         for (let i = 1; i < levels.length; i++) {
             if (levels[i] == levels[i-1]) {
                 levels.splice(i, 1)
-                i--;
+                i--
             }
         }
         let oldToNewLevelsMap = {}
         for (let i = 0; i < levelsCopy.length; i++) {
-          oldToNewLevelsMap[i] = levels.indexOf(levelsCopy[i]);
+            oldToNewLevelsMap[i] = levels.indexOf(levelsCopy[i])
         }
         let masterLevel = levels.indexOf(0)
         for (let i = 0; i < levels.length; i++) {
@@ -64,25 +63,25 @@ export class SelectionCopyManager {
     getUniqueConditionVariables(str) {
         let keywordList = [
             // List of JavaScript keywords and reserved words
-            "abstract", "arguments", "await", "boolean", "break", "byte",
-            "case", "catch", "char", "class", "const", "continue",
-            "debugger", "default", "delete", "do", "double", "else",
-            "enum", "eval", "export", "extends", "false", "final",
-            "finally","float", "for", "function", "goto", "if", "implements",
-            "import", "in", "instanceof", "int", "interface", "let", "long",
-            "native", "new", "null", "package", "private", "protected",
-            "public", "return", "short", "static", "super", "switch",
-            "synchronized", "this", "throw", "throws", "transient",
-            "true", "try", "typeof", "undefined", "var", "void",
-            "volatile", "while", "with", "yield",
-        ];
+            'abstract', 'arguments', 'await', 'boolean', 'break', 'byte',
+            'case', 'catch', 'char', 'class', 'const', 'continue',
+            'debugger', 'default', 'delete', 'do', 'double', 'else',
+            'enum', 'eval', 'export', 'extends', 'false', 'final',
+            'finally','float', 'for', 'function', 'goto', 'if', 'implements',
+            'import', 'in', 'instanceof', 'int', 'interface', 'let', 'long',
+            'native', 'new', 'null', 'package', 'private', 'protected',
+            'public', 'return', 'short', 'static', 'super', 'switch',
+            'synchronized', 'this', 'throw', 'throws', 'transient',
+            'true', 'try', 'typeof', 'undefined', 'var', 'void',
+            'volatile', 'while', 'with', 'yield',
+        ]
         let regex = /[a-zA-Z_$][a-zA-Z0-9_$]*(?:\.[a-zA-Z_$][a-zA-Z0-9_$]*)*/g
-        let matches = str.match(regex);
+        let matches = str.match(regex)
         let condVars = [...new Set(matches)].filter(name => 
             !keywordList.includes(name) && 
-            (name.startsWith("map") || name.startsWith("tmp")));
+            (name.startsWith('map') || name.startsWith('tmp')))
 
-        return condVars;
+        return condVars
     }
 
 
@@ -90,55 +89,59 @@ export class SelectionCopyManager {
         let value = obj[key]
         let self = args.self
         switch (key) {
-            // move entities to a correct level
-            case "level":
-                if (typeof value === "number") {
-                    obj[key] = args.level
-                }
-                return
+        // move entities to a correct level
+        case 'level':
+            if (typeof value === 'number') {
+                obj[key] = args.level
+            }
+            return
         }
         if (args.replacePuzzleEvents) {
             switch (key) {
-                // make puzzles unique
-                // replace condition variables
-                case "condition":
-                case "endCondition":
-                case "startCondition":
-                case "hideCondition":
-                case "blockEventCondition":
-                    if (value === null ||
-                        typeof value === "boolean" ||
-                        (typeof value === "string" && value.trim().length == 0)) {
-                        break
-                    }
-                    let vars = self.getUniqueConditionVariables(value)
-                    for (let varName of vars) {
-                        value = value.replace(varName, varName + "_" + self.uniqueId)
-                    }
-                    obj[key] = value
-                    break;
+            // make puzzles unique
+            // replace condition variables
+            case 'condition':
+            case 'endCondition':
+            case 'startCondition':
+            case 'hideCondition':
+            case 'blockEventCondition': {
+                if (value === null ||
+                    typeof value === 'boolean' ||
+                    (typeof value === 'string' && value.trim().length == 0)) {
+                    break
+                }
+                let vars = self.getUniqueConditionVariables(value)
+                for (let varName of vars) {
+                    value = value.replace(varName, varName + '_' + self.uniqueId)
+                }
+                obj[key] = value
+                break
+            }
 
-                // case "layer":
-                case "group":
-                case "variable":
-                    if (value === null ||
-                        typeof value === "boolean" ||
-                        (typeof value === "string" && value.trim().length == 0)) {
-                        break
-                    }
-                    obj[key] = value + "_" + self.uniqueId
+            // case 'layer':
+            case 'group':
+            case 'variable': {
+                if (value === null ||
+                    typeof value === 'boolean' ||
+                    (typeof value === 'string' && value.trim().length == 0)) {
+                    break
+                }
+                obj[key] = value + '_' + self.uniqueId
 
-                    break;
+                break
+            }
 
-                case "targetPoint":
-                    obj.targetPoint.x += args.xOffset - args.xRect
-                    obj.targetPoint.y += args.yOffset - args.yRect
-                    break;
+            case 'targetPoint': {
+                obj.targetPoint.x += args.xOffset - args.xRect
+                obj.targetPoint.y += args.yOffset - args.yRect
+                break
+            }
 
-                case "map":
-                    // console.log("map")
+            case 'map': {
+                // console.log('map')
 
-                    break;
+                break
+            }
             }
         }
     }
@@ -167,7 +170,7 @@ export class SelectionCopyManager {
                 level: level,
                 replacePuzzleEvents: false,
             })
-            if ("id" in entity && entity.id > maxEntityId) {
+            if ('id' in entity && entity.id > maxEntityId) {
                 maxEntityId = entity.id
             }
         })
@@ -184,8 +187,8 @@ export class SelectionCopyManager {
                     
                     let newEntity = ig.copy(entity)
 
-                    let xLostInFloor= rect.x - Math.floor(rect.x / tilesize)*16;
-                    let yLostInFloor = rect.y - Math.floor(rect.y / tilesize)*16;
+                    let xLostInFloor= rect.x - Math.floor(rect.x / tilesize)*16
+                    let yLostInFloor = rect.y - Math.floor(rect.y / tilesize)*16
                     let x = x1 + xLostInFloor + xInRect
                     let y = y1 + yLostInFloor + yInRect
                     // check if entity doesn't clip out of the base map
@@ -210,7 +213,7 @@ export class SelectionCopyManager {
                         newEntity.x = x
                         newEntity.y = y
                         newEntity.id = ++entityId
-                        if ("settings" in newEntity) {
+                        if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
                             entities.push(newEntity)
                         }
@@ -238,14 +241,14 @@ export class SelectionCopyManager {
         // search for base light layer
         let lightLayer = null
         baseMap.layer.forEach((layer) => {
-            if (layer.type == "Light") { lightLayer = layer; }
+            if (layer.type == 'Light') { lightLayer = layer }
         })
         if (lightLayer === null) {
             lightLayer = {
-                type: "Light",
-                name: "Light",
+                type: 'Light',
+                name: 'Light',
                 visible: 1,
-                tilesetName: "media/map/lightmap-tiles.png",
+                tilesetName: 'media/map/lightmap-tiles.png',
                 repeat: false,
                 lighter: false,
                 distance: 1,
@@ -259,14 +262,14 @@ export class SelectionCopyManager {
         // search for sel light layer
         let selLightLayer = null
         selMap.layer.forEach((layer) => {
-            if (layer.type == "Light") { selLightLayer = layer; }
+            if (layer.type == 'Light') { selLightLayer = layer }
         })
         if (selLightLayer !== null) {
             // merge base light layer with selection light
             sel.bb.forEach((rect) => {
-                let x1 = Math.floor(rect.x / tilesize);
-                let y1 = Math.floor(rect.y / tilesize);
-                let x2 = x1 + Math.ceil(rect.width / tilesize);
+                let x1 = Math.floor(rect.x / tilesize)
+                let y1 = Math.floor(rect.y / tilesize)
+                let x2 = x1 + Math.ceil(rect.width / tilesize)
                 let y2 = y1 + Math.ceil(rect.height / tilesize)
                 ig.blitzkrieg.util.fillArray2d(lightLayer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
                 let subArray = ig.blitzkrieg.util.createSubArray2d(selLightLayer.data, x1, y1, x2, y2,
@@ -276,8 +279,8 @@ export class SelectionCopyManager {
         }
         lightLayer.width = width
         lightLayer.height = height 
-        // maybe "light" insted of "last"?
-        lightLayer.level = "last"
+        // maybe 'light' insted of 'last'?
+        lightLayer.level = 'last'
         
 
 
@@ -285,13 +288,13 @@ export class SelectionCopyManager {
         let collisionLayers = []
         for (let i = 0; i < levelsLength; i++) {
             collisionLayers[i] = {
-                type: "Collision",
-                name: "Collision",
+                type: 'Collision',
+                name: 'Collision',
                 level: i,
                 width: width,
                 height: height,
                 visible: 1,
-                tilesetName: "media/map/collisiontiles-16x16.png",
+                tilesetName: 'media/map/collisiontiles-16x16.png',
                 repeat: false,
                 distance: 1,
                 yDistance: 0,
@@ -302,9 +305,10 @@ export class SelectionCopyManager {
         }
 
         // get base collision layers
+        // eslint-disable-next-line no-unused-vars
         sel.bb.forEach((rect) => {
             baseMap.layer.forEach((layer) => {
-                if (layer.type != "Collision") { return; }
+                if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level)]
                 layer = ig.copy(layer)
                 layer.level = level
@@ -313,12 +317,12 @@ export class SelectionCopyManager {
         })
         // merge collision layers with sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize);
-            let y1 = Math.floor(rect.y / tilesize);
-            let x2 = x1 + Math.ceil(rect.width / tilesize);
+            let x1 = Math.floor(rect.x / tilesize)
+            let y1 = Math.floor(rect.y / tilesize)
+            let x2 = x1 + Math.ceil(rect.width / tilesize)
             let y2 = y1 + Math.ceil(rect.height / tilesize)
             selMap.layer.forEach((layer) => {
-                if (layer.type != "Collision") { return; }
+                if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
                 // ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
@@ -331,10 +335,12 @@ export class SelectionCopyManager {
         let tileLayers = []
         let tileLayersClear = []
         // get base tile layers
+        
+        // eslint-disable-next-line no-unused-vars
         sel.bb.forEach((rect) => {
             baseMap.layer.forEach((layer) => {
-                if (layer.type != "Background" || (typeof layer.level === 'string' &&
-                    layer.level.startsWith("object"))) { return; }
+                if (layer.type != 'Background' || (typeof layer.level === 'string' &&
+                    layer.level.startsWith('object'))) { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level)]
                 if (! (level in tileLayers)) {
                     tileLayers[level] = []
@@ -353,15 +359,15 @@ export class SelectionCopyManager {
         })
         // add sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize);
-            let y1 = Math.floor(rect.y / tilesize);
-            let x2 = x1 + Math.ceil(rect.width / tilesize);
+            let x1 = Math.floor(rect.x / tilesize)
+            let y1 = Math.floor(rect.y / tilesize)
+            let x2 = x1 + Math.ceil(rect.width / tilesize)
             let y2 = y1 + Math.ceil(rect.height / tilesize)
             selMap.layer.forEach((layer) => {
-                if (layer.type != "Background" || (typeof layer.level === 'string' && 
-                    layer.level.startsWith("object"))) { return; }
+                if (layer.type != 'Background' || (typeof layer.level === 'string' && 
+                    layer.level.startsWith('object'))) { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
-                // console.log("old level: " + layer.level + "new level: " + level +", type: " + layer.type + ", name: " + layer.name)
+                // console.log('old level: ' + layer.level + 'new level: ' + level +', type: ' + layer.type + ', name: ' + layer.name)
 
                 if (! (level in tileLayers)) {
                     tileLayers[level] = []
@@ -377,7 +383,7 @@ export class SelectionCopyManager {
                     })
                 }
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
-                        xTileOffset, yTileOffset, width, height)
+                    xTileOffset, yTileOffset, width, height)
                 if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
                     if (mergeLayers) {
                         let tilesetName = layer.tilesetName
@@ -392,7 +398,7 @@ export class SelectionCopyManager {
                                 layer1.width = width
                                 layer1.height = height 
                                 layer1.level = level
-                                layer1.name = this.uniqueId + "_" + layer1.name
+                                layer1.name = this.uniqueId + '_' + layer1.name
                                 tileLayers[level][tilesetName] = layer1
                             }
 
@@ -403,7 +409,7 @@ export class SelectionCopyManager {
                         layer1.width = width
                         layer1.height = height 
                         layer1.level = level
-                        layer1.name = this.uniqueId + "_" + layer1.name
+                        layer1.name = this.uniqueId + '_' + layer1.name
                         tileLayers[level].push(layer1)
                     }
                 }
@@ -414,24 +420,25 @@ export class SelectionCopyManager {
         // handle special object layers
         let objectLayers = []
         // get base object layers
+        // eslint-disable-next-line no-unused-vars
         sel.bb.forEach((rect) => {
             baseMap.layer.forEach((layer) => {
                 let level = layer.level
-                if (! (layer.type == "Background" && typeof level === 'string' &&
-                    level.startsWith("object"))) { return; }
+                if (! (layer.type == 'Background' && typeof level === 'string' &&
+                    level.startsWith('object'))) { return }
                 objectLayers.push(layer)
             })
         })
         // merge base layers with sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize);         
-            let y1 = Math.floor(rect.y / tilesize);
-            let x2 = x1 + Math.ceil(rect.width / tilesize);
+            let x1 = Math.floor(rect.x / tilesize)
+            let y1 = Math.floor(rect.y / tilesize)
+            let x2 = x1 + Math.ceil(rect.width / tilesize)
             let y2 = y1 + Math.ceil(rect.height / tilesize)
             selMap.layer.forEach((layer) => {
                 let level = layer.level
-                if (! (layer.type == "Background" && typeof level === 'string' &&
-                    level.startsWith("object"))) { return; }
+                if (! (layer.type == 'Background' && typeof level === 'string' &&
+                    level.startsWith('object'))) { return }
 
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2, 
                     xTileOffset, yTileOffset, width, height)
@@ -441,8 +448,8 @@ export class SelectionCopyManager {
                     layer1.data = subArray
                     layer1.width = width
                     layer1.height = height 
-                    // layer1.level = layer1.level + "_" + this.uniqueId
-                    // layer1.name = this.uniqueId + "_" + layer1.level+ "_" + layer1.name + "E"
+                    // layer1.level = layer1.level + '_' + this.uniqueId
+                    // layer1.name = this.uniqueId + '_' + layer1.level+ '_' + layer1.name + 'E'
                     objectLayers.push(layer1)
                 }
             })
@@ -494,26 +501,25 @@ export class SelectionCopyManager {
                 let tilesetList = tileLayers[key]
                 Object.keys(tilesetList).forEach((key1) => { 
                     let layer = tilesetList[key1]
-                    layer.id = id++; 
-                    allLayers.push(layer); 
+                    layer.id = id++
+                    allLayers.push(layer)
                 })
             })
         } else {
             tileLayers.forEach((levelLayers) => { 
                 levelLayers.forEach((layer) => {
-                    layer.id = id++; 
-                    allLayers.push(layer); 
+                    layer.id = id++
+                    allLayers.push(layer)
                 })
             })
         }
         collisionLayers.forEach((layer) => { 
-            layer.id = id++; 
-            allLayers.push(layer); 
+            layer.id = id++
+            allLayers.push(layer)
         })
         objectLayers.forEach((layer) => { 
-            layer = layer
-            layer.id = id++; 
-            allLayers.push(layer); 
+            layer.id = id++
+            allLayers.push(layer)
         })
         if (lightLayer !== null) {
             lightLayer.id = id++
@@ -527,13 +533,13 @@ export class SelectionCopyManager {
             mapHeight: mapHeight,
             masterLevel: masterLevel,
             attributes: { 
-                saveMode: "ENABLED", 
-                bgm: "",
+                saveMode: 'ENABLED', 
+                bgm: '',
                 cameraInBounds: false,
-                "map-sounds": "",
-                mapStyle: "rhombus-puzzle",
-                weather: "AUTUMN",
-                area: "rhombus-dng" 
+                'map-sounds': '',
+                mapStyle: 'rhombus-puzzle',
+                weather: 'AUTUMN',
+                area: 'rhombus-dng' 
             },
             // screen is not used? setting just to be safe
             screen: { x: 0, y: 0 },
@@ -547,10 +553,10 @@ export class SelectionCopyManager {
 
     async copySelToMapAndWrite(baseMapName, sel, xOffset, yOffset,
         newName, newNameShort, disableEntities, mergeLayers) {
-        // ig.blitzkrieg.msg("blitzkrieg", "Copying map data", 2)
-        // ig.blitzkrieg.msg("blitzkrieg", "base: " + baseMapName, 2)
-        ig.blitzkrieg.msg("blitzkrieg", "copying sel: " + sel.map, 1)
-        //ig.blitzkrieg.msg("blitzkrieg", "new map: " + newName, 2)
+        // ig.blitzkrieg.msg('blitzkrieg', 'Copying map data', 2)
+        // ig.blitzkrieg.msg('blitzkrieg', 'base: ' + baseMapName, 2)
+        ig.blitzkrieg.msg('blitzkrieg', 'copying sel: ' + sel.map, 1)
+        //ig.blitzkrieg.msg('blitzkrieg', 'new map: ' + newName, 2)
 
         let baseMap = await ig.blitzkrieg.util.getMapObject(baseMapName)
         let selMap = await ig.blitzkrieg.util.getMapObject(sel.map)
@@ -558,11 +564,11 @@ export class SelectionCopyManager {
         let newMap = await this.copySelToMap(baseMap, selMap, sel,
             xOffset, yOffset, newName, disableEntities, mergeLayers)
 
-        let newMapPath = "./assets/mods/cc-rouge/assets/data/maps/rouge/" + newNameShort + ".json"
+        let newMapPath = './assets/mods/cc-rouge/assets/data/maps/rouge/' + newNameShort + '.json'
         
 
         // save new map to file
-        let newMapJson = JSON.stringify(newMap);
+        let newMapJson = JSON.stringify(newMap)
         // return
         fs.writeFileSync(newMapPath, newMapJson)
     }
@@ -575,27 +581,27 @@ export class SelectionCopyManager {
             if (this._sels.length() > 0) {
                 sel = this._sels.pop()
             } else {
-                return;
+                return
             }
         }
-        //let newNameShort = "room-2"
-        //let baseMapName = "rouge." + newNameShort
+        //let newNameShort = 'room-2'
+        //let baseMapName = 'rouge.' + newNameShort
         //if (this.copyCount++ == 0) {
-        //    baseMapName = "rouge.room-1"
+        //    baseMapName = 'rouge.room-1'
         //}
         
-        // let newNameShort = "10emptytmp"
-        // let baseMapName = "rouge." + newNameShort
+        // let newNameShort = '10emptytmp'
+        // let baseMapName = 'rouge.' + newNameShort
         // if (this.copyCount++ == 0) {
-        //     baseMapName = "rouge.10empty"
+        //     baseMapName = 'rouge.10empty'
         // }
-        let newNameShort = "300emptytmp"
-        let baseMapName = "rouge." + newNameShort
+        let newNameShort = '300emptytmp'
+        let baseMapName = 'rouge.' + newNameShort
         if (this.copyCount++ == 0) {
-            baseMapName = "rouge.300empty"
+            baseMapName = 'rouge.300empty'
         }
 
-        let newName = "rouge." + newNameShort
+        let newName = 'rouge.' + newNameShort
 
         this.copySelToMapAndWrite(baseMapName, sel,
             this.xOffset, this.yOffset, newName, newNameShort, false, false)

@@ -10,14 +10,14 @@ export class BattleReplayManager {
         let enemies = []
         for (let rect of sel.bb) {
             enemies = enemies.concat(ig.game.getEntitiesInRectangle(rect.x, rect.y, 0, rect.width, rect.height, 1000)
-                .filter((entity) => "aggression" in entity))
+                .filter((entity) => 'aggression' in entity))
         }
         return enemies
     }
 
     prepareBattles() {
         this.waitTerminate = true
-        this.playBattleIndex = 0;
+        this.playBattleIndex = 0
 
         // make a battle queue
         let battles = []
@@ -26,31 +26,31 @@ export class BattleReplayManager {
         }
         // sort by battleIndex
         this.battleQueue = Object.entries(battles).sort(([, a], [, b]) => {
-          return a.data.index - b.data.index;
-        });
+            return a.data.index - b.data.index
+        })
     }
 
     nextBattle() {
         if (this.playBattleIndex >= this.battleQueue.length) {
-            ig.blitzkrieg.msg("blitzkrieg", "Battles finished", 2);
+            ig.blitzkrieg.msg('blitzkrieg', 'Battles finished', 2)
             return
         }
-        ig.blitzkrieg.msg("blitzkrieg", "Next battle", 2);
+        ig.blitzkrieg.msg('blitzkrieg', 'Next battle', 2)
         let sel = this.battleQueue[this.playBattleIndex++][1]
         
         // teleport manually (skips transition) to a map if not in it already
         if (ig.game.mapName != sel.map) {
-            ig.game.previousMap = ig.game.mapName;
-            ig.game.mapName = sel.map;
-            ig.game.events.clearQueue();
+            ig.game.previousMap = ig.game.mapName
+            ig.game.mapName = sel.map
+            ig.game.events.clearQueue()
             for (let c = 0; c < ig.game.addons.teleport.length; ++c)
-              ig.game.addons.teleport[c].onTeleport(ig.game.mapName);
-            ig.game.preloadLevel(sel.map);
+                ig.game.addons.teleport[c].onTeleport(ig.game.mapName)
+            ig.game.preloadLevel(sel.map)
             
             // wait for level to be loaded in order to continue
             this.waitForLoad = true
             if (! ig.game.addons.levelLoaded.includes(this))
-                ig.game.addons.levelLoaded.push(this);
+                ig.game.addons.levelLoaded.push(this)
         }
         // restore armor, lvl etc.
         ig.blitzkrieg.battleRecordManager.restoreData(sel)
@@ -107,15 +107,15 @@ export class BattleReplayManager {
         const self = this
         const intervalID = setInterval(async () => {
             if (self.waitTerminate) {
-                clearInterval(intervalID);
+                clearInterval(intervalID)
                 return
             }
             if (self.getEnemiesInSel(sel).length == 0) {
-                clearInterval(intervalID);
+                clearInterval(intervalID)
                 self.battleEnd()
                 this.waitTerminate = true
             }
-        }, 1000 / 5);
+        }, 1000 / 5)
     }
 
     battleEnd() {
@@ -131,12 +131,12 @@ export class BattleReplayManager {
                 }
                 this.barrierList = []
                 self.nextBattle()
-                clearInterval(intervalID);
+                clearInterval(intervalID)
                 return
             } else {
-                ig.blitzkrieg.msg("blitzkrieg", "Starting new battle in " + (counterMax - counter++), 0.9);
+                ig.blitzkrieg.msg('blitzkrieg', 'Starting new battle in ' + (counterMax - counter++), 0.9)
             }
-        }, 1000 / 1);
+        }, 1000 / 1)
     }
 
 }

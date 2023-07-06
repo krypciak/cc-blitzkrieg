@@ -1,33 +1,33 @@
-import { Selection } from './selection.js';
-const fs = require("fs")
-const path = require("path")
+import { Selection } from './selection.js'
+const fs = require('fs')
+const path = require('path')
 
 export class Rectangle {
     constructor(x, y, width, height) {
-        this.x = Math.floor(x);
-        this.y = Math.floor(y);
-        this.height = Math.floor(height);
-        this.width = Math.floor(width);
+        this.x = Math.floor(x)
+        this.y = Math.floor(y)
+        this.height = Math.floor(height)
+        this.width = Math.floor(width)
     }
 }
 
 export class Stack {
-  constructor() { this.items = []; }
-  push(element) { this.items.push(element); }
-  pop() { return this.items.pop(); }
-  peek() { return this.items[this.items.length - 1]; }
-  shift() { return this.items.shift(); }
-  length() { return this.items.length; }
+    constructor() { this.items = [] }
+    push(element) { this.items.push(element) }
+    pop() { return this.items.pop() }
+    peek() { return this.items[this.items.length - 1] }
+    shift() { return this.items.shift() }
+    length() { return this.items.length }
 }
 
 export class Util {
     executeRecursiveAction(obj, action, args) {
         for (let key in obj) {
             if (typeof obj[key] === 'object') {
-                action(key, obj, args);
-                this.executeRecursiveAction(obj[key], action, args);
+                action(key, obj, args)
+                this.executeRecursiveAction(obj[key], action, args)
             } else {
-                action(key, obj, args);
+                action(key, obj, args)
             }
         }
     }
@@ -90,7 +90,7 @@ export class Util {
         y2 = Math.min(arrHeight, Math.max(y2, 0))
         
         if (x2 < x1 || y2 < y1)
-            throw new Error("invalid createSubArray inputs");
+            throw new Error('invalid createSubArray inputs')
         
         for (let y = y1; y < y2; y++) {
             for (let x = x1; x < x2; x++) {
@@ -99,7 +99,7 @@ export class Util {
                 nArr[nArrY][nArrX] = arr[y][x]
             }
         }
-        return nArr;
+        return nArr
     }
 
     isArrayEmpty2d(arr) {
@@ -119,26 +119,27 @@ export class Util {
     }
 
     async getMapObjectByPath(mapPath) {
-        if (mapPath.startsWith("assets/")) {
-            mapPath = mapPath.replace("assets/", "")
+        if (mapPath.startsWith('assets/')) {
+            mapPath = mapPath.replace('assets/', '')
         }
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: mapPath,
-                dataType: "json",
+                dataType: 'json',
                 success: function(response) {
-                    resolve(response);
+                    resolve(response)
                 },
                 error: function (b, c, e) {
-                    ig.system.error(Error("Loading of Map '" + mapPath +
-                        "' failed: " + b + " / " + c + " / " + e))
+                    ig.system.error(Error('Loading of Map \'' + mapPath +
+                        '\' failed: ' + b + ' / ' + c + ' / ' + e))
+                    reject()
                 },
-            });
-        });
+            })
+        })
     }
 
     async getMapObject(mapName) {
-        let mapPath = ig.getFilePath(mapName.toPath(ig.root + "data/maps/", ".json") + ig.getCacheSuffix())
+        let mapPath = ig.getFilePath(mapName.toPath(ig.root + 'data/maps/', '.json') + ig.getCacheSuffix())
         return ig.blitzkrieg.util.getMapObjectByPath(mapPath)
     }
 
@@ -148,27 +149,27 @@ export class Util {
         }
         let filePaths = []
         let paths = [
-            "./assets/data/maps/",
-            "./assets/extension/post-game/data/maps/",
-            "./assets/extension/fish-gear/data/maps/",
-            "./assets/extension/flying-hedgehag/data/maps/",
-            "./assets/extension/scorpion-robo/data/maps/",
-            "./assets/extension/snowman-tank/data/maps/",
+            './assets/data/maps/',
+            './assets/extension/post-game/data/maps/',
+            './assets/extension/fish-gear/data/maps/',
+            './assets/extension/flying-hedgehag/data/maps/',
+            './assets/extension/scorpion-robo/data/maps/',
+            './assets/extension/snowman-tank/data/maps/',
         ]
         for (let path of paths) {
             // remove leading /
-            path = path.replace(/\/$/, '');
+            path = path.replace(/\/$/, '')
             if (ig.blitzkrieg.util.dirExists(path)) {
                 filePaths = ig.blitzkrieg.util.getFilesInDir(path, filePaths)
             }
         }
         
         
-        let maps = {}
         let promises = filePaths.map((path) => {
-            return new Promise(async (resolve, reject) => {
+            // eslint-disable-next-line no-async-promise-executor
+            return new Promise(async (resolve) => {
                 let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
-                let mapName = mapData.name.split("/").join(".")
+                let mapName = mapData.name.split('/').join('.')
                 let obj = {}
                 obj[mapName] = mapData
                 resolve(obj)
@@ -177,8 +178,8 @@ export class Util {
         let objArr = await Promise.all(promises)
 
         ig.blitzkrieg.allMaps = objArr.reduce((result, currObj) => {
-            return { ...result, ...currObj };
-        }, {});
+            return { ...result, ...currObj }
+        }, {})
         console.log(ig.blitzkrieg.allMaps)
     }
 
@@ -195,8 +196,8 @@ export class Util {
         let minX = 100000
         let minY = 100000
         sel.bb.forEach((rect) => {
-            if (rect.x < minX) { minX = rect.x; }
-            if (rect.y < minY) { minY = rect.y; }
+            if (rect.x < minX) { minX = rect.x }
+            if (rect.y < minY) { minY = rect.y }
         })
         let maxWidth = 0
         let maxHeight = 0
@@ -213,39 +214,39 @@ export class Util {
     dirExists(path) {
         try {
             fs.statSync(path).isFile()
-            return true;
+            return true
         } catch (err) {
-            return false;
+            return false
         }
     }
 
     getFilesInDir(folderPath, filePaths = []) {
-        let files = fs.readdirSync(folderPath);
+        let files = fs.readdirSync(folderPath)
 
         files.forEach((file) => {
-            let filePath = path.join(folderPath, file);
-            let stat = fs.statSync(filePath);
+            let filePath = path.join(folderPath, file)
+            let stat = fs.statSync(filePath)
 
             if (stat.isDirectory()) {
-                ig.blitzkrieg.util.getFilesInDir(filePath, filePaths);
+                ig.blitzkrieg.util.getFilesInDir(filePath, filePaths)
             } else {
-                filePaths.push(filePath); // Add file path to the array
+                filePaths.push(filePath)
             }
-        });
+        })
 
-        return filePaths;
+        return filePaths
     }
 
     spawnBarrier(x, y, z, width, height) {
         width = Math.floor(width/8)*8
         height = Math.floor(height/8)*8
-        let barrierType = width == 8 ? "barrierV" : "barrierH"
+        let barrierType = width == 8 ? 'barrierV' : 'barrierH'
 
-        return ig.game.spawnEntity("ScalableProp", x, y, z, {
+        return ig.game.spawnEntity('ScalableProp', x, y, z, {
             name: '', 
             patternOffset: {x: 0, y: 0}, 
             blockNavMap: false, 
-            propConfig: {ends: null, name: barrierType, sheet: "dungeon-ar"},
+            propConfig: {ends: null, name: barrierType, sheet: 'dungeon-ar'},
             size: {x: width, y: height}}
         )
     }
