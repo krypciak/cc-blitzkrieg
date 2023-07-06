@@ -21,7 +21,7 @@ export class Stack {
 }
 
 export class Util {
-    static executeRecursiveAction(obj, action, args) {
+    executeRecursiveAction(obj, action, args) {
         for (let key in obj) {
             if (typeof obj[key] === 'object') {
                 action(key, obj, args);
@@ -32,7 +32,7 @@ export class Util {
         }
     }
 
-    static emptyArray2d(width, height) {
+    emptyArray2d(width, height) {
         let arr = []
         for (let y = 0; y < height; y++) {
             arr[y] = []
@@ -43,7 +43,7 @@ export class Util {
         return arr
     }
 
-    static fillArray2d(arr, value, x1, y1, x2, y2) {
+    fillArray2d(arr, value, x1, y1, x2, y2) {
         let iteX = Math.min(x2, arr[0].length)
         let iteY = Math.min(y2, arr.length)
 
@@ -54,7 +54,7 @@ export class Util {
         }
     }
 
-    static mergeArrays2d(arr1, arr2) {
+    mergeArrays2d(arr1, arr2) {
         for (let y = 0; y < Math.min(arr1.length, arr2.length); y++) {
             for (let x = 0; x < Math.min(arr1[y].length, arr2[0].length); x++) {
                 let val = arr2[y][x]
@@ -65,8 +65,8 @@ export class Util {
         }
     }
 
-    static createSubArray2d(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
-        let nArr = Util.emptyArray2d(width, height)
+    createSubArray2d(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
+        let nArr = ig.blitzkrieg.util.emptyArray2d(width, height)
 
         let arrWidth = arr[0].length
         let arrHeight = arr.length
@@ -102,7 +102,7 @@ export class Util {
         return nArr;
     }
 
-    static isArrayEmpty2d(arr) {
+    isArrayEmpty2d(arr) {
         for (let y = 0; y < arr.length; y++) {
             for (let x = 0; x < arr[y].length; x++) {
                 if (arr[y][x] != 0)
@@ -112,13 +112,13 @@ export class Util {
         return true
     }
 
-    static generateUniqueID() {
+    generateUniqueID() {
         let tmp1 = Math.random()*1000 * Math.random()*1000
         let tmp2 = Date.now()
         return Math.floor((tmp1 * tmp2) % 100000000).toString()
     }
 
-    static async getMapObjectByPath(mapPath) {
+    async getMapObjectByPath(mapPath) {
         if (mapPath.startsWith("assets/")) {
             mapPath = mapPath.replace("assets/", "")
         }
@@ -137,19 +137,19 @@ export class Util {
         });
     }
 
-    static async getMapObject(mapName) {
+    async getMapObject(mapName) {
         let mapPath = ig.getFilePath(mapName.toPath(ig.root + "data/maps/", ".json") + ig.getCacheSuffix())
-        return Util.getMapObjectByPath(mapPath)
+        return ig.blitzkrieg.util.getMapObjectByPath(mapPath)
     }
 
-    static getEntireMapSel(mapData) {
+    getEntireMapSel(mapData) {
         let sel = new Selection(mapData.name)
         sel.bb.push(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16))
         sel.playerZ = mapData.levels[mapData.masterLevel].height
         return sel
     }
 
-    static getSelectionSize(sel) {
+    getSelectionSize(sel) {
         if (sel.bb.length == 0)
             return { width: 0, height: 0 }
         let minX = 100000
@@ -170,7 +170,7 @@ export class Util {
         }
     }
 
-    static dirExists(path) {
+    dirExists(path) {
         try {
             fs.statSync(path).isFile()
             return true;
@@ -179,7 +179,7 @@ export class Util {
         }
     }
 
-    static getFilesInDir(folderPath, filePaths = []) {
+    getFilesInDir(folderPath, filePaths = []) {
         let files = fs.readdirSync(folderPath);
 
         files.forEach((file) => {
@@ -187,7 +187,7 @@ export class Util {
             let stat = fs.statSync(filePath);
 
             if (stat.isDirectory()) {
-                Util.getFilesInDir(filePath, filePaths);
+                ig.blitzkrieg.util.getFilesInDir(filePath, filePaths);
             } else {
                 filePaths.push(filePath); // Add file path to the array
             }

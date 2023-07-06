@@ -5,6 +5,7 @@ import { BattleReplayManager } from './battle-replay.js';
 import { SelectionCopyManager } from './selection-copy.js';
 import { MapArranger } from './map-arrange.js';
 import { Selections } from './selection.js'
+import { Util } from './util.js'
 import { TextNotification } from './text-notification.js';
 
 export default class Blitzkrieg {
@@ -120,6 +121,7 @@ export default class Blitzkrieg {
 
         TextNotification.init();
         ig.blitzkrieg.msg = TextNotification.msg
+        ig.blitzkrieg.util = new Util()
 
 
         ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()

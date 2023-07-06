@@ -1,4 +1,3 @@
-import { Util } from './util.js';
 const fs = require("fs")
 // const path = require("path")
 
@@ -17,13 +16,13 @@ export class MapArranger {
             path = path + area
             // remove leading /
             path = path.replace(/\/$/, '');
-            if (Util.dirExists(path)) {
-                filePaths = Util.getFilesInDir(path, filePaths)
+            if (ig.blitzkrieg.util.dirExists(path)) {
+                filePaths = ig.blitzkrieg.util.getFilesInDir(path, filePaths)
             }
         }
         let maps = {}
         for (let path of filePaths) {
-            let mapData = await Util.getMapObjectByPath(path)
+            let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
             maps[mapData.name.split("/").join(".")] = mapData
         }
         return maps
@@ -163,7 +162,7 @@ export class MapArranger {
                             }
                         }
 
-                        Util.executeRecursiveAction(entity.settings.blockEvent, searchForMap, {})
+                        ig.blitzkrieg.util.executeRecursiveAction(entity.settings.blockEvent, searchForMap, {})
                         debugger
                     }
                 }
@@ -267,10 +266,10 @@ export class MapArranger {
         let newNameShort = "300emptytmp"
         let newName = "rouge." + newNameShort
 
-        let filePaths = Util.getFilesInDir("./assets/data/maps")
-        filePaths = Util.getFilesInDir("./assets/extension/post-game/data/maps", filePaths)
+        let filePaths = ig.blitzkrieg.util.getFilesInDir("./assets/data/maps")
+        filePaths = ig.blitzkrieg.util.getFilesInDir("./assets/extension/post-game/data/maps", filePaths)
 
-        let baseMap = await Util.getMapObject(baseName)
+        let baseMap = await ig.blitzkrieg.util.getMapObject(baseName)
         let mapWidth = baseMap.mapWidth*16
         let mapHeight = baseMap.mapHeight*16
 
@@ -289,12 +288,12 @@ export class MapArranger {
             if (mapPath.includes("maps/arena/")) {
                 continue
             }
-            let selMapData = await Util.getMapObjectByPath(mapPath)
+            let selMapData = await ig.blitzkrieg.util.getMapObjectByPath(mapPath)
             biggestWidth = Math.max(biggestWidth, selMapData.mapWidth)
             biggestHeight = Math.max(biggestHeight, selMapData.mapHeight)
             let selMapWidth = selMapData.mapWidth * 16
             let selMapHeight = selMapData.mapHeight * 16
-            let sel = Util.getEntireMapSel(selMapData)
+            let sel = ig.blitzkrieg.util.getEntireMapSel(selMapData)
 
             // let xOffset_tmp = xOffset + selMapWidth + 32
             // if (xOffset_tmp >= mapWidth) {
