@@ -19,9 +19,9 @@ export class Selections {
             sels: [],
             tempSel: new Selection(null),
         }
-        this.newSelEvent = newSelEvent !== undefined ? newSelEvent : function() {}
-        this.walkInEvent = walkInEvent !== undefined ? walkInEvent : function() {}
-        this.walkOutEvent = walkOutEvent !== undefined ? walkOutEvent : function() {}
+        this.newSelEvent = newSelEvent !== undefined ? newSelEvent : () => {}
+        this.walkInEvent = walkInEvent !== undefined ? walkInEvent : () => {}
+        this.walkOutEvent = walkOutEvent !== undefined ? walkOutEvent : () => {}
         this.selIndexes = [-1]
         this.inSelStack = new Stack()
 
@@ -181,7 +181,7 @@ export class Selections {
 
     drawSelBoxes(sel, color) {
         let self = this
-        sel.bb.forEach(function(rect) {
+        sel.bb.forEach((rect) => {
             self.drawBox(rect, color)
         });
     }
@@ -190,7 +190,7 @@ export class Selections {
         if (! this._ready || ! this.drawBoxes || ! ig.perf.gui) return;
 
         let self = this
-        this.mapSels.sels.forEach(function(sel) {
+        this.mapSels.sels.forEach((sel) => {
             self.drawSelBoxes(sel, self.completeColor)
         });
 

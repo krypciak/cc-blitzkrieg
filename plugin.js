@@ -1,6 +1,6 @@
 import { PuzzleRecordManager } from './puzzle-record.js';
 import { PuzzleSpeedManager } from './puzzle-speed.js';
-import { BattleRecordManager } from './battle-record.js';
+import { BattleSelectionManager } from './battle-selection.js';
 import { BattleReplayManager } from './battle-replay.js';
 import { SelectionCopyManager } from './selection-copy.js';
 import { MapArranger } from './map-arrange.js';
@@ -97,13 +97,13 @@ export default class Blitzkrieg {
         (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleSelections : ig.blitzkrieg.battleSelections).delete();
     }
     bindingRecord() {
-        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleRecordManager : ig.blitzkrieg.battleRecordManager).toogleRecording();
+        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleRecordManager : ig.blitzkrieg.battleSelectionManager).toogleRecording();
     }
     bindingSolveFast() {
         if (ig.blitzkrieg.selectionMode) {
             ig.blitzkrieg.puzzleRecordManager.solveFast()
         } else {
-            ig.blitzkrieg.battleRecordManager.restoreData(ig.blitzkrieg.battleSelections.inSelStack.peek());
+            ig.blitzkrieg.battleSelectionManager.restoreData(ig.blitzkrieg.battleSelections.inSelStack.peek());
         }
     }
     bindingToogleRender() {
@@ -149,7 +149,7 @@ export default class Blitzkrieg {
         ig.blitzkrieg.mapArranger = new MapArranger()
 
 
-        ig.blitzkrieg.battleRecordManager = new BattleRecordManager()
+        ig.blitzkrieg.battleSelectionManager = new BattleSelectionManager()
         ig.blitzkrieg.battleReplayManager = new BattleReplayManager()
 
         ig.blitzkrieg.battleSelections = new Selections(
@@ -158,7 +158,7 @@ export default class Blitzkrieg {
             "./assets/mods/cc-blitzkrieg/json/battleData.json",
             function(sel) {
                 // ig.blitzkrieg.msg("blitzkrieg", "new selection", 2)
-                ig.blitzkrieg.battleRecordManager.addData(sel)
+                ig.blitzkrieg.battleSelectionManager.addData(sel)
             },
             function(sel) {
                 // ig.blitzkrieg.msg("blitzkrieg", "walked into selection", 2)
@@ -196,10 +196,10 @@ export default class Blitzkrieg {
             "next-battle":      { desc: "next battle", func: ig.blitzkrieg.battleReplayManager.nextBattle, 
                 key: ig.KEY._9,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
 
-            //"copy-selection":   { desc: "copy selection", func: ig.blitzkrieg.selectionCopyManager.copy, 
-            //    key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
-            "arrange-maps":     { desc: "arrange maps", func: ig.blitzkrieg.mapArranger.arrange, 
-                key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.mapArranger },
+            "copy-selection":   { desc: "copy selection", func: ig.blitzkrieg.selectionCopyManager.copy, 
+                key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
+            //"arrange-maps":     { desc: "arrange maps", func: ig.blitzkrieg.mapArranger.arrange, 
+            //    key: ig.KEY._5,            header: "blitzkrieg-keybindings", hasDivider: false, parent: ig.blitzkrieg.mapArranger },
         }
         ig.blitzkrieg.setupTabs()
         ig.blitzkrieg.bindKeys();
@@ -243,8 +243,6 @@ export default class Blitzkrieg {
         ig.blitzkrieg.updateKeybindingLabels();
         ig.blitzkrieg.adjustPuzzleAssistSlider();
         ig.blitzkrieg.prepareTabFonts()
-
-        ig.blitzkrieg.util.loadAllMaps()
     }
 
 

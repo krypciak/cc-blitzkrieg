@@ -44,9 +44,9 @@ export class PuzzleRecordManager {
 
         let layers = obj.layer
 
-        sel.bb.forEach(function(rect) {
+        sel.bb.forEach((rect) => {
             console.log(rect)
-            layers.forEach(function(layer, i) {
+            layers.forEach((layer, i) => {
                 let level = layer.level
                 let tilesize = layer.tilesize
                 console.log("layer: " + i)

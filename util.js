@@ -165,7 +165,7 @@ export class Util {
         
         
         let maps = {}
-        let promises = filePaths.map(function(path) {
+        let promises = filePaths.map((path) => {
             return new Promise(async (resolve, reject) => {
                 let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
                 let mapName = mapData.name.split("/").join(".")
@@ -194,13 +194,13 @@ export class Util {
             return { width: 0, height: 0 }
         let minX = 100000
         let minY = 100000
-        sel.bb.forEach(function(rect) {
+        sel.bb.forEach((rect) => {
             if (rect.x < minX) { minX = rect.x; }
             if (rect.y < minY) { minY = rect.y; }
         })
         let maxWidth = 0
         let maxHeight = 0
-        sel.bb.forEach(function(rect) {
+        sel.bb.forEach((rect) => {
             maxWidth = Math.max(maxWidth, minX - rect.x + rect.width)
             maxHeight = Math.max(maxHeight, minY - rect.y + rect.height)
         })
@@ -235,4 +235,6 @@ export class Util {
 
         return filePaths;
     }
+
 }
+

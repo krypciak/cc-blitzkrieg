@@ -8,9 +8,10 @@ export class BattleReplayManager {
     
     getEnemiesInSel(sel) {
         let enemies = []
-        sel.bb.forEach(function(rect, i) {
-            enemies = enemies.concat(ig.game.getEntitiesInRectangle(rect.x, rect.y, 0, rect.width, rect.height, 1000).filter((entity) => "aggression" in entity))
-        });
+        for (let rect of sel.bb) {
+            enemies = enemies.concat(ig.game.getEntitiesInRectangle(rect.x, rect.y, 0, rect.width, rect.height, 1000)
+                .filter((entity) => "aggression" in entity))
+        }
         return enemies
     }
 
@@ -137,10 +138,10 @@ export class BattleReplayManager {
         const intervalID = setInterval(async () => {
             if (counter >= counterMax) {
                 // kill all barriers
-                this.barrierList.forEach(function(entity) {
+                for (let entity of this.barrierList) {
                     entity.skyBlockEntity.kill()
                     entity.kill()
-                })
+                }
                 this.barrierList = []
                 self.nextBattle()
                 clearInterval(intervalID);
