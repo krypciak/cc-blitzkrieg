@@ -185,9 +185,9 @@ export default class Blitzkrieg {
                 key: ig.KEY.SINGLE_QUOTE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
             // 'puzzle-solve':              { desc: 'Solve puzzle',                   func: ig.blitzkrieg.puzzleRecordManager.solve,
-            //     key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleRecordManager },
-            // 'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolveFast,
-            //     key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
+            //     key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleRecordManager },
+            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolveFast,
+                key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
             // 'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: ig.blitzkrieg.puzzleSpeedManager.inc, 
             //     key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSpeedManager },

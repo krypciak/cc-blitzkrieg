@@ -180,7 +180,6 @@ export class Util {
         ig.blitzkrieg.allMaps = objArr.reduce((result, currObj) => {
             return { ...result, ...currObj }
         }, {})
-        console.log(ig.blitzkrieg.allMaps)
     }
 
     getEntireMapSel(mapData) {

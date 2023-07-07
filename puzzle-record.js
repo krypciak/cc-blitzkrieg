@@ -126,7 +126,7 @@ export class PuzzleRecordManager {
             splittedPath.shift()
             let value = ig.vars.storage
             for (let i = 0; i < splittedPath.length - 1; i++) {
-                if (!value.hadOwnProperty(splittedPath[i])) {
+                if (! value.hasOwnProperty(splittedPath[i])) {
                     value[splittedPath[i]] = {}
                 }
                 value = value[splittedPath[i]]
