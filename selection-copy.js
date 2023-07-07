@@ -507,11 +507,11 @@ export class SelectionCopyManager {
                 })
             })
         } else {
-            // prevent layers from merging by adding a tiny bit of moveSpeed
+            // prevent paralaxes that have different distance from merging
+            // and looking weird by adding a tiny bit of moveSpeed
             let lastLayerDistance = 1
             let lastLayerSpeed = { x: -10000000, y: -10000000 }
             let speedInc = 5e-10
-            //             "moveSpeed": { "x": 1, "y": 0 },
             tileLayers.forEach((levelLayers) => { 
                 levelLayers.forEach((layer) => {
                     if (id > 0 && lastLayerDistance != layer.distance) {
@@ -529,10 +529,32 @@ export class SelectionCopyManager {
                 })
             })
         }
-        collisionLayers.forEach((layer) => { 
+
+        // fill down the water from layers higher
+        // this makes kill pits work
+        for (let i = collisionLayers.length - 1; i >= 1; i--) {
+            let upLayer = collisionLayers[i]
+            let downLayer = collisionLayers[i-1]
+
+            for (let y = 0; y < Math.min(upLayer.data.length, downLayer.data.length); y++) {
+                for (let x = 0; x < Math.min(upLayer.data[y].length, downLayer.data[y].length); x++) {
+                    // check if is water or corner water
+                    let upV = upLayer.data[y][x]
+                    let downV = downLayer.data[y][x]
+
+                    let isWater = (upV == 1 || (upV >= 3 && upV <= 6) || (upV >= 15 && upV <= 18) || (upV >= 23 && upV <= 24))
+
+                    if (isWater && downV == 0) {
+                        downLayer.data[y][x] = upV
+                    }
+                }
+            }
+        }
+        collisionLayers.forEach((layer) => {
             layer.id = id++
             allLayers.push(layer)
         })
+
         objectLayers.forEach((layer) => { 
             layer.id = id++
             allLayers.push(layer)
