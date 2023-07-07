@@ -358,7 +358,6 @@ export class SelectionCopyManager {
                 }
                 layer = ig.copy(layer)
                 layer.level = level
-                layer.distance = 1
                 layer.isBase = true
                 if (mergeLayers) {
                     let tilesetName = layer.tilesetName
@@ -410,7 +409,6 @@ export class SelectionCopyManager {
                                 layer1.width = width
                                 layer1.height = height 
                                 layer1.level = level
-                                layer1.distance = 1
                                 layer1.name = this.uniqueId + '_' + layer1.name
                                 tileLayers[level][tilesetName] = layer1
                             }
@@ -422,7 +420,6 @@ export class SelectionCopyManager {
                         layer1.width = width
                         layer1.height = height 
                         layer1.level = level
-                        layer1.distance = 1
                         layer1.name = this.uniqueId + '_' + layer1.name
                         tileLayers[level].push(layer1)
                     }
@@ -510,8 +507,23 @@ export class SelectionCopyManager {
                 })
             })
         } else {
+            // prevent layers from merging by adding a tiny bit of moveSpeed
+            let lastLayerDistance = 1
+            let lastLayerSpeed = { x: -10000000, y: -10000000 }
+            let speedInc = 5e-10
+            //             "moveSpeed": { "x": 1, "y": 0 },
             tileLayers.forEach((levelLayers) => { 
                 levelLayers.forEach((layer) => {
+                    if (id > 0 && lastLayerDistance != layer.distance) {
+                        layer.moveSpeed.x += speedInc
+                        if (layer.moveSpeed.x == lastLayerSpeed.x &&
+                            layer.moveSpeed.y == lastLayerSpeed.y) {
+
+                            layer.moveSpeed.x += speedInc
+                        }
+                    }
+                    lastLayerSpeed = ig.copy(layer.moveSpeed)
+                    lastLayerDistance = layer.distance
                     layer.id = id++
                     allLayers.push(layer)
                 })
