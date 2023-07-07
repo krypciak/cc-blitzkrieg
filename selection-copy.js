@@ -100,10 +100,10 @@ export class SelectionCopyManager {
         switch (key) {
         case 'level': {
             if (typeof value === 'number') {
-                let oldLevel = parseInt(obj[key])
+                let oldLevel = parseInt(value)
                 let newLevel = args.oldToNewLevelsMap[oldLevel + (args.replacePuzzleEvents ? args.selLevelOffset : 0)]
 
-                obj[key] = newLevel
+                obj.level = newLevel
             }
             break
         }
@@ -210,7 +210,6 @@ export class SelectionCopyManager {
                     let { x, y } = this.getOffsetEntityPos(rect, newEntity, xOffset, yOffset)
                     // check if entity doesn't clip out of the base map
                     if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
-                        console.log(ig.copy(entity))
                         ig.blitzkrieg.util.executeRecursiveAction(newEntity, this.changeEntityRecursive, {
                             self: this,
                             oldToNewLevelsMap,
@@ -323,6 +322,7 @@ export class SelectionCopyManager {
                 let level = oldToNewLevelsMap[parseInt(layer.level)]
                 layer = ig.copy(layer)
                 layer.level = level
+                layer.tilesetName = 'media/map/collisiontiles-16x16.png'
                 collisionLayers[level] = layer
             })
         })
@@ -358,6 +358,7 @@ export class SelectionCopyManager {
                 }
                 layer = ig.copy(layer)
                 layer.level = level
+                layer.distance = 1
                 layer.isBase = true
                 if (mergeLayers) {
                     let tilesetName = layer.tilesetName
@@ -409,6 +410,7 @@ export class SelectionCopyManager {
                                 layer1.width = width
                                 layer1.height = height 
                                 layer1.level = level
+                                layer1.distance = 1
                                 layer1.name = this.uniqueId + '_' + layer1.name
                                 tileLayers[level][tilesetName] = layer1
                             }
@@ -420,6 +422,7 @@ export class SelectionCopyManager {
                         layer1.width = width
                         layer1.height = height 
                         layer1.level = level
+                        layer1.distance = 1
                         layer1.name = this.uniqueId + '_' + layer1.name
                         tileLayers[level].push(layer1)
                     }
