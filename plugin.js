@@ -198,8 +198,8 @@ export default class Blitzkrieg {
             // 'next-battle':      { desc: 'next battle', func: ig.blitzkrieg.battleReplayManager.nextBattle, 
             //     key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
 
-            // 'copy-selection':   { desc: 'copy selection', func: ig.blitzkrieg.selectionCopyManager.copy, 
-            //     key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
+            'copy-selection':   { desc: 'copy selection', func: ig.blitzkrieg.selectionCopyManager.copy, 
+                key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
             //'arrange-maps':     { desc: 'arrange maps', func: ig.blitzkrieg.mapArranger.arrange, 
             //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.mapArranger },
         }
