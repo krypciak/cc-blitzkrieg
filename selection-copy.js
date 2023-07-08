@@ -386,7 +386,6 @@ export class SelectionCopyManager {
         // maybe 'light' insted of 'last'?
         lightLayer.level = 'last'
         
-        
         // generate all collision tiles to keep the
         // master level from ruining my day
         this.processCollisionLayers(baseMap)
@@ -418,6 +417,7 @@ export class SelectionCopyManager {
             layer = ig.copy(layer)
             layer.level = level
             layer.tilesetName = 'media/map/collisiontiles-16x16.png'
+            layer.isBase = true
             collisionLayers[level] = layer
         })
         // merge collision layers with sel layers
@@ -426,11 +426,16 @@ export class SelectionCopyManager {
             let y1 = Math.floor(rect.y / tilesize)
             let x2 = x1 + Math.ceil(rect.width / tilesize)
             let y2 = y1 + Math.ceil(rect.height / tilesize)
+            for (let layer of collisionLayers) {
+                if (layer.isBase) {
+                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                }
+            }
             selMap.layer.forEach((layer) => {
                 if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
-                ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                // ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
                 
@@ -548,8 +553,6 @@ export class SelectionCopyManager {
                     layer1.data = subArray
                     layer1.width = width
                     layer1.height = height 
-                    // layer1.level = layer1.level + '_' + this.uniqueId
-                    // layer1.name = this.uniqueId + '_' + layer1.level+ '_' + layer1.name + 'E'
                     objectLayers.push(layer1)
                 }
             })
@@ -625,25 +628,19 @@ export class SelectionCopyManager {
 
         // fill down the water from layers higher
         // this makes kill pits work
-        for (let i = 0; i < collisionLayers.length; i++) {
-            for (let h = i + 2; h < collisionLayers.length; h++) {
-                let l1 = collisionLayers[i]
-                let l2 = collisionLayers[h]
-                for (let y = 0; y < Math.min(l1.data.length, l2.data.length); y++) {
-                    for (let x = 0; x < Math.min(l1.data[y].length, l2.data[y].length); x++) {
-                        // check if is water or corner water
-                        let l1nv = l1.data[y][x]
-                        let l2nv = l2.data[y][x]
+        for (let i = collisionLayers.length - 1 ; i >= 1; i--) {
+            let l1 = collisionLayers[i]
+            let l2 = collisionLayers[i - 1]
+            for (let y = 0; y < l1.data.length; y++) {
+                for (let x = 0; x < l1.data[y].length; x++) {
+                    // check if is water or corner water
+                    let l1nv = l1.data[y][x]
+                    let l2nv = l2.data[y][x]
 
-                        let l1IsWater = (l1nv == 1 || (l1nv >= 3 && l1nv <= 6) || (l1nv >= 15 && l1nv <= 18) || (l1nv >= 23 && l1nv <= 24))
-                        let l2IsWater = (l2nv == 1 || (l2nv >= 3 && l2nv <= 6) || (l2nv >= 15 && l2nv <= 18) || (l2nv >= 23 && l2nv <= 24))
+                    let l1IsWater = (l1nv == 1 || (l1nv >= 3 && l1nv <= 6) || (l1nv >= 15 && l1nv <= 18) || (l1nv >= 23 && l1nv <= 24))
 
-                        if (l1IsWater && l2IsWater) {
-                            for (let v = i + 1; v < h; v++) {
-                                if (collisionLayers[v].data[y][x] != 0) { break }
-                                collisionLayers[v].data[y][x] = l2nv
-                            }
-                        }
+                    if (l1IsWater && l2nv == 0) {
+                        l2.data[y][x] = l1nv
                     }
                 }
             }
