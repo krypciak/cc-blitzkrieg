@@ -239,12 +239,17 @@ export class SelectionCopyManager {
                 // check if entity is in rect bounds
                 let xInRect = entity.x - rect.x
                 let yInRect = entity.y - rect.y
-                if (xInRect >= 0 && xInRect <= rect.width &&
-                    yInRect >= 0 && yInRect <= rect.height) {
+                if (entity.type == 'EventTrigger' ||
+                    (xInRect >= 0 && xInRect <= rect.width &&
+                     yInRect >= 0 && yInRect <= rect.height)) {
                     
                     let newEntity = ig.copy(entity)
 
                     let { x, y } = this.getOffsetEntityPos(rect, newEntity, xOffset, yOffset)
+                    if (entity.type == 'EventTrigger') {
+                        x = xOffset
+                        y = yOffset
+                    }
                     // check if entity doesn't clip out of the base map
                     if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
                         ig.blitzkrieg.util.executeRecursiveAction(newEntity, this.changeEntityRecursive, {
