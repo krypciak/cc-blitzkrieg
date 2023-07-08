@@ -623,7 +623,7 @@ export class SelectionCopyManager {
                 cameraInBounds: false,
                 'map-sounds': '',
                 mapStyle: 'rhombus-puzzle',
-                weather: 'AUTUMN',
+                weather: '',
                 area: 'rhombus-dng' 
             },
             // screen is not used? setting just to be safe
