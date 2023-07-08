@@ -155,6 +155,7 @@ export class SelectionCopyManager {
             case 'endCondition':
             case 'startCondition':
             case 'hideCondition':
+            case 'pauseCondition':
             case 'blockEventCondition': {
                 if (value === null ||
                     typeof value === 'boolean' ||
