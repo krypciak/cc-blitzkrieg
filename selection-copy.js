@@ -3,37 +3,15 @@ const fs = require('fs')
 
 export class SelectionCopyManager {
     constructor() {
-        this.unsupportedMaps = new Set([
-            'autumn-fall.raid.raid-01',
-            'bergen.bergen2',
-            'bergen-trail.path-6-1',
-            'cargo-ship.boss',
-            'cargo-ship.bridge-floor',
-            'cargo-ship.bridge',
-            'cargo-ship.cabins1',
-            'cargo-ship.cabins2',
-            'cargo-ship.christmas',
-            'cargo-ship.ground',
-            'cargo-ship.ship',
-            'cliff-mod',
-            'jungle-city.center',
-            'rhombus-sqr.central',
-            'rookie-harbor.inner-tala',
-            'rookie-harbor.special.quest-ocean-1',
-            'rookie-harbor.special.quest-ocean-2a',
-            'rookie-harbor.special.quest-ocean-2b-boss',
-            'arena.faction-dlc.fight2-ocean',
-        ])
-
         this.xOffset = 128
         this.yOffset = 128
         // this.xOffset = 16
         // this.yOffset = 16
         this.copyCount = 0
         this._sels = new Stack()
-        this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
@@ -45,17 +23,13 @@ export class SelectionCopyManager {
         // this._sels.push(ig.blitzkrieg.util.['autumn-fall.path-05'].sels[1])
     }
 
-    mergeMapLevels(baseMap, selMap) {
+    mergeMapLevels(baseMap, selMap, sel) {
         let baseLevels = baseMap.levels
         let selLevels = ig.copy(selMap.levels)
 
-        // let baseMasterHeight = baseLevels[baseMap.masterLevel].height
-        // let selMasterHeight = selLevels[selMap.masterLevel].height
-        // let heightDiff = baseMasterHeight - selMasterHeight
-
-        // for (let i = 0; i < baseLevels.length; i++) {
-        //     baseLevels[i].height -= heightDiff
-        // }
+        for (let i = 0; i < selLevels.length; i++) {
+            selLevels[i].height -= sel.playerZ
+        }
 
         let levelsCopy = []
         baseLevels.forEach((level) => { levelsCopy.push(level.height) })
@@ -204,7 +178,6 @@ export class SelectionCopyManager {
             }
             }
         }
-
     }
 
     mergeMapEntities(baseMap, selMap, sel, xOffset, yOffset,
@@ -266,7 +239,7 @@ export class SelectionCopyManager {
 
                         newEntity.x = x
                         newEntity.y = y
-                        // newEntity.y -= sel.playerZ
+                        newEntity.y -= sel.playerZ
                         newEntity.id = ++entityId
                         if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
@@ -277,6 +250,82 @@ export class SelectionCopyManager {
             })
         })
         return entities
+    }
+
+
+    processCollisionLayers(mapData) {
+        let width = mapData.mapWidth
+        let height = mapData.mapHeight
+        let emptyData = ig.blitzkrieg.util.emptyArray2d(width, height)
+        let levels = mapData.levels
+
+        let collisionLayers = []
+        for (let i = 0; i < levels.length + 1; i++) {
+            collisionLayers[i] = {
+                type: 'Collision',
+                name: 'Collision',
+                level: i,
+                width: width,
+                height: height,
+                visible: 1,
+                tilesetName: 'media/map/collisiontiles-16x16.png',
+                repeat: false,
+                distance: 1,
+                yDistance: 0,
+                tilesize: mapData.tilesize,
+                moveSpeed: { x: 0, y: 0 },
+                data: ig.copy(emptyData),
+            }
+        }
+        for (let i = 0; i < mapData.layer.length; i++) {
+            let layer = mapData.layer[i]
+            if (layer.type != 'Collision') { continue }
+            collisionLayers[layer.level] = ig.copy(layer)
+        }
+        
+        this._processCollisionLayers(collisionLayers, mapData.masterLevel, mapData.levels)
+
+        for (let i = 0; i < mapData.layer.length; i++) {
+            let layer = mapData.layer[i]
+            if (layer.type != 'Collision') { continue }
+            mapData.layer[i] = collisionLayers[layer.level]
+        }
+    }
+
+    _processCollisionLayers(collisions, masterLevel, heights) {
+        let maxLevel = -1
+        for (let layer of collisions) {
+            if (layer.level > maxLevel) {
+                maxLevel = layer.level
+            }
+        }
+        let tmpLayer = null
+        let masterLayer = collisions[masterLevel]
+        if (masterLayer) {
+            this._processCollisionLayer(masterLayer, tmpLayer, null)
+            tmpLayer = masterLayer
+        }
+
+        for (let i = masterLevel + 1; i < maxLevel; i++) {
+            this._processCollisionLayer(collisions[i], tmpLayer, tmpLayer ? (heights[i].height - heights[i - 1].height) / 16 : 0)
+            tmpLayer = collisions[i]
+        }
+        tmpLayer = masterLayer ? masterLayer : null
+
+        for (let i = masterLevel - 1; i >= 0; i--) {
+            this._processCollisionLayer(collisions[i], tmpLayer, tmpLayer ? (heights[i].height - heights[i + 1].height) / 16 : 0)
+            tmpLayer = collisions[i]
+        }
+    }
+
+    _processCollisionLayer(layer, tmpLayer, yDiff) {
+        for (let y = 0; y < layer.height; y++) {
+            for (let x = 0; x < layer.width; x++) {
+                let g
+                tmpLayer && (g = tmpLayer.data[y + yDiff] ? tmpLayer.data[y + yDiff][x] % 32 : 2)
+                layer.data[y][x] = ig.CollMapTools.prepareSingleTile(x, y, layer.data[y][x], g, yDiff)
+            }
+        }
     }
 
     mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, 
@@ -337,8 +386,11 @@ export class SelectionCopyManager {
         // maybe 'light' insted of 'last'?
         lightLayer.level = 'last'
         
-
-
+        
+        // generate all collision tiles to keep the
+        // master level from ruining my day
+        this.processCollisionLayers(baseMap)
+        this.processCollisionLayers(selMap)
 
         let collisionLayers = []
         for (let i = 0; i < levelsLength; i++) {
@@ -378,7 +430,7 @@ export class SelectionCopyManager {
                 if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
-                // ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
                 
@@ -518,19 +570,13 @@ export class SelectionCopyManager {
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
         disableEntities, mergeLayers) {
 
-        if (this.unsupportedMaps.has(baseMap.name) || 
-            this.unsupportedMaps.has(selMap.name)) {
-
-            ig.blitzkrieg.msg('blitzkrieg', 'tried to copy unsupported map')
-            throw new Error('blitzkrieg: tried to copy unsupported map')
-        }
-
         this.uniqueId = ig.blitzkrieg.util.generateUniqueID() 
 
-        let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap)
+        let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap, sel)
 
-        let { lightLayer, collisionLayers, tileLayers, objectLayers, mapWidth, mapHeight } = this.mergeMapLayers(baseMap, selMap, sel,
-            xOffset, yOffset, oldToNewLevelsMap, selLevelOffset, levels.length, mergeLayers)
+        let { lightLayer, collisionLayers, tileLayers, objectLayers, mapWidth, mapHeight } =
+            this.mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, oldToNewLevelsMap,
+                selLevelOffset, levels.length, mergeLayers)
         
         let entities = []
         if (! disableEntities) {
