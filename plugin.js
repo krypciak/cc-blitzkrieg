@@ -1,5 +1,5 @@
 import { PuzzleRecordManager } from './puzzle-record.js'
-import { PuzzleSpeedManager } from './puzzle-speed.js'
+import { PuzzleSelectionManager } from './puzzle-selection.js'
 import { BattleSelectionManager } from './battle-selection.js'
 import { BattleReplayManager } from './battle-replay.js'
 import { SelectionCopyManager } from './selection-copy.js'
@@ -124,28 +124,19 @@ export default class Blitzkrieg {
 
 
         ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()
-        ig.blitzkrieg.puzzleSpeedManager = new PuzzleSpeedManager()
+        ig.blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
+        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
 
         ig.blitzkrieg.puzzleSelections = new Selections(
             '#77000044',
             '#ff222244',
             './assets/mods/cc-blitzkrieg/json/puzzleData.json',
-            function(sel) {
-                // ig.blitzkrieg.msg('blitzkrieg', 'new selection', 2)
-                ig.blitzkrieg.puzzleRecordManager.addData(sel)
-            },
-            function(sel) {
-                // ig.blitzkrieg.msg('blitzkrieg', 'walked into selection', 2)
-                ig.blitzkrieg.puzzleSpeedManager.walkInEvent(sel)
-            },
-            function(sel) {
-                // ig.blitzkrieg.msg('blitzkrieg', 'walked out of selection', 2)
-                ig.blitzkrieg.puzzleSpeedManager.walkOutEvent(sel)
-            },
+            ig.blitzkrieg.puzzleSelectionManager.newSelEvent,
+            ig.blitzkrieg.puzzleSelectionManager.walkInEvent,
+            ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
         )
 
 
-        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
         ig.blitzkrieg.mapArranger = new MapArranger()
 
 
@@ -160,12 +151,10 @@ export default class Blitzkrieg {
                 // ig.blitzkrieg.msg('blitzkrieg', 'new selection', 2)
                 ig.blitzkrieg.battleSelectionManager.addData(sel)
             },
-            // eslint-disable-next-line
-            (sel) => {
+            () => {
                 // ig.blitzkrieg.msg('blitzkrieg', 'walked into selection', 2)
             },
-            // eslint-disable-next-line
-            (sel) => {
+            () => {
                 // ig.blitzkrieg.msg('blitzkrieg', 'walked out of selection', 2)
             },
         )

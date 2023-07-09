@@ -1,4 +1,4 @@
-export class PuzzleSpeedManager {
+export class PuzzleSelectionManager {
     constructor() {
         this.incStep = 0.05
     }
@@ -19,11 +19,11 @@ export class PuzzleSpeedManager {
         ig.blitzkrieg.puzzleSelections.save()
     }
     
-    inc() {
+    incSpeed() {
         this._increse_speed(this.incStep)
     }
 
-    dec() {
+    decSpeed() {
         this._increse_speed(-this.incStep)
     }
 
@@ -40,5 +40,32 @@ export class PuzzleSpeedManager {
     // eslint-disable-next-line no-unused-vars
     walkOutEvent(sel) {
         this.walkInEvent(ig.blitzkrieg.puzzleSelections.inSelStack.peek())
+    }
+
+
+    async newSelEvent(sel) {
+        await ig.blitzkrieg.puzzleSelectionManager.finalizeSel(sel)
+    }
+
+    
+    async finalizeSel(sel) {
+        sel.data['elements'] = [
+            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
+            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
+            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
+            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
+        ]
+
+        let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        let puzzleDiff = await ig.blitzkrieg.util.syncDialog('select puzzle difficulty', scale)
+        let puzzleLen = await ig.blitzkrieg.util.syncDialog('select puzzle length', scale)
+
+        sel.data.difficulty = puzzleDiff
+        sel.data.timeLength = puzzleLen
+
+        ig.blitzkrieg.msg('blitzkrieg', 'Starting position', 3)
+        sel.data.startPos = await ig.blitzkrieg.util.waitForPositionKey()
+        ig.blitzkrieg.msg('blitzkrieg', 'Ending position', 3)
+        sel.data.endPos = await ig.blitzkrieg.util.waitForPositionKey()
     }
 }

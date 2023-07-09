@@ -8,15 +8,6 @@ export class PuzzleRecordManager {
         ])
     }
 
-    addData(sel) {
-        sel.data['elements'] = [
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
-        ]
-    }
-
     startRecording() {
         this.currentRecord = {
             puzzleLog: [],

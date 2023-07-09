@@ -28,7 +28,7 @@ export class SelectionCopyManager {
         let selLevels = ig.copy(selMap.levels)
 
         for (let i = 0; i < selLevels.length; i++) {
-            selLevels[i].height -= sel.playerZ
+            selLevels[i].height -= sel.data.startPos.z
         }
 
         let levelsCopy = []
@@ -239,7 +239,7 @@ export class SelectionCopyManager {
 
                         newEntity.x = x
                         newEntity.y = y
-                        newEntity.y -= sel.playerZ
+                        newEntity.y -= sel.data.startPos.z
                         newEntity.id = ++entityId
                         if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
@@ -435,7 +435,6 @@ export class SelectionCopyManager {
                 if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
-                // ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     xTileOffset, yTileOffset, width, height)
                 

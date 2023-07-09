@@ -185,7 +185,9 @@ export class Util {
     getEntireMapSel(mapData) {
         let sel = new Selection(mapData.name)
         sel.bb.push(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16))
-        sel.playerZ = mapData.levels[mapData.masterLevel].height
+        sel.data = {}
+        sel.data.startPos = {}
+        sel.data.startPos.z = mapData.levels[mapData.masterLevel].height
         return sel
     }
 
@@ -248,6 +250,33 @@ export class Util {
             propConfig: {ends: null, name: barrierType, sheet: 'dungeon-ar'},
             size: {x: width, y: height}}
         )
+    }
+
+    async syncDialog(text, buttons) {
+        sc.BUTTON_TYPE.SMALL.valueOf = () => {
+            return sc.BUTTON_TYPE.SMALL.height
+        }
+        return new Promise((resolve) => {
+            let popup = new sc.ModalButtonInteract(text, null, buttons, (button) => {
+                resolve(button.text)
+            })
+            ig.gui.addGuiElement(popup)
+            popup.show()
+        })
+    }
+
+    async waitForPositionKey() {
+        ig.blitzkrieg.msg('blitzkrieg', 'Waiting for position key')
+        return new Promise((resolve) => {
+            ig.blitzkrieg.util.waitingForPos = true
+            let intervalId = setInterval(function() {
+                if (ig.blitzkrieg.util.waitingForPos == false) {
+                    clearInterval(intervalId)
+                    resolve(ig.copy(ig.game.playerEntity.coll.pos))
+                }
+            })
+
+        })
     }
 }
 
