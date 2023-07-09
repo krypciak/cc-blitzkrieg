@@ -53,6 +53,8 @@ export class Selections {
             return
         }
         if (this.mapSels.tempSel.bb.length > 0) {
+            this.mapSels.tempSel.bb = ig.blitzkrieg.util.reduceRectArr(this.mapSels.tempSel.bb)
+
             await this.newSelEvent(this.mapSels.tempSel)
             this.mapSels.sels.push(this.mapSels.tempSel)
         }
@@ -87,40 +89,37 @@ export class Selections {
     }
 
     select() {
+        let tilesize = 16
         let pos = { x: 0, y: 0 }
         switch (this.selectStep) {
-        case 0:
-            ig.system.getMapFromScreenPos(
-                pos,
-                sc.control.getMouseX(),
-                sc.control.getMouseY()
-            )
-            this._x = pos.x
+        case 0: {
+            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+            pos.x = Math.floor(pos.x / tilesize) * tilesize
+            pos.y = Math.floor(pos.y / tilesize) * tilesize
+            this._x = pos.x 
             this._y = pos.y
 
             break
-        case 1:
-            ig.system.getMapFromScreenPos(
-                pos,
-                sc.control.getMouseX(),
-                sc.control.getMouseY()
-            )
-            this._width = pos.x - this._x
-            this._height = pos.y - this._y
+        }
+        case 1: {
+            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+            pos.x = Math.floor(pos.x / tilesize) * tilesize
+            pos.y = Math.floor(pos.y / tilesize) * tilesize
+            let width = pos.x - this._x
+            let height = pos.y - this._y
             this.selectStep = -1
 
-            if (this._width < 1 || this._height < 1) {
+            if (width < 1 || height < 1) {
                 ig.blitzkrieg.msg('blitzkrieg', 'Invalid selection', 2)
             } else {
-                this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, this._width, this._height))
+                this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, width, height))
                 this.selIndexes.push(-1)
                 this.save()
             }
             this._x = 0
             this._y = 0
-            this._width = 0
-            this._height = 0
             break
+        }
         }
 
         this.selectStep++
@@ -194,6 +193,9 @@ export class Selections {
         })
 
         this.drawSelBoxes(this.mapSels.tempSel, this.tempColor)
+        if (this.selectStep == 1) {
+            this.drawBox(new Rectangle(this._x, this._y, 10, 10), this.tempColor)
+        }
     }
 
     toogleDrawing() {
