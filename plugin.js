@@ -111,6 +111,13 @@ export default class Blitzkrieg {
         ig.blitzkrieg.battleSelections.toogleDrawing()
     }
 
+    async reloadLevel() {
+        let pos = ig.copy(ig.game.playerEntity.coll.pos)
+        let map = ig.game.mapName
+        ig.game.loadLevel(await ig.blitzkrieg.util.getMapObject(map), false, false)
+        ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
+
+    }
     
     async prestart() {
         ig.blitzkrieg = this
@@ -125,7 +132,6 @@ export default class Blitzkrieg {
 
         ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()
         ig.blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
-        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
 
         ig.blitzkrieg.puzzleSelections = new Selections(
             '#77000044',
@@ -136,6 +142,7 @@ export default class Blitzkrieg {
             ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
         )
 
+        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
 
         ig.blitzkrieg.mapArranger = new MapArranger()
 
@@ -191,6 +198,9 @@ export default class Blitzkrieg {
                 key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
             //'arrange-maps':     { desc: 'arrange maps', func: ig.blitzkrieg.mapArranger.arrange, 
             //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.mapArranger },
+            
+            'reload-level':     { desc: 'Reload level',   func: ig.blitzkrieg.reloadLevel, 
+                key: ig.KEY.BACKSPACE,     header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
         }
         ig.blitzkrieg.setupTabs()
         ig.blitzkrieg.bindKeys(ig.blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)

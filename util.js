@@ -191,7 +191,10 @@ export class Util {
             }
         }
 
-        return newRects
+        return {
+            rects: newRects,
+            size: new Rectangle(minX*tilesize, minY*tilesize, width*tilesize, height*tilesize)
+        }
     }
 
     generateUniqueID() {
@@ -266,32 +269,17 @@ export class Util {
 
     getEntireMapSel(mapData) {
         let sel = new Selection(mapData.name)
-        sel.bb.push(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16))
+        let sizeRect = new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16)
+        sel.bb.push(sizeRect)
+        sel.size = sizeRect
         sel.data = {}
-        sel.data.startPos = {}
-        sel.data.startPos.z = mapData.levels[mapData.masterLevel].height
-        return sel
-    }
-
-    getSelectionSize(sel) {
-        if (sel.bb.length == 0)
-            return { width: 0, height: 0 }
-        let minX = 100000
-        let minY = 100000
-        sel.bb.forEach((rect) => {
-            if (rect.x < minX) { minX = rect.x }
-            if (rect.y < minY) { minY = rect.y }
-        })
-        let maxWidth = 0
-        let maxHeight = 0
-        sel.bb.forEach((rect) => {
-            maxWidth = Math.max(maxWidth, minX - rect.x + rect.width)
-            maxHeight = Math.max(maxHeight, minY - rect.y + rect.height)
-        })
-        return {
-            width: maxWidth,
-            height: maxHeight,
+        sel.data.startPos = {
+            x: 100,
+            y: 100,
+            z: mapData.levels[mapData.masterLevel].height
         }
+        sel.data.endPos = sel.data.startPos
+        return sel
     }
 
     dirExists(path) {

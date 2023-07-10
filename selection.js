@@ -52,14 +52,21 @@ export class Selections {
             ig.blitzkrieg.util.waitingForPos = false
             return
         }
+        let setStep = true
         if (this.mapSels.tempSel.bb.length > 0) {
-            this.mapSels.tempSel.bb = ig.blitzkrieg.util.reduceRectArr(this.mapSels.tempSel.bb)
+            let { rects, size } = ig.blitzkrieg.util.reduceRectArr(this.mapSels.tempSel.bb)
+            this.mapSels.tempSel.bb = rects
+            this.mapSels.tempSel.size = size
 
             await this.newSelEvent(this.mapSels.tempSel)
             this.mapSels.sels.push(this.mapSels.tempSel)
+            this.selectStep = -1
+            setStep = false
         }
         this.mapSels.tempSel = new Selection(ig.game.mapName)
-        this.selectStep = 0
+        if (setStep) {
+            this.selectStep = 0
+        }
         this._x = 0
         this._y = 0
         this._width = 0
@@ -89,6 +96,7 @@ export class Selections {
     }
 
     select() {
+        if (this.selectStep == -1) { return }
         let tilesize = 16
         let pos = { x: 0, y: 0 }
         switch (this.selectStep) {
@@ -109,13 +117,17 @@ export class Selections {
             let height = pos.y - this._y
             this.selectStep = -1
 
-            if (width < 1 || height < 1) {
-                ig.blitzkrieg.msg('blitzkrieg', 'Invalid selection', 2)
-            } else {
-                this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, width, height))
-                this.selIndexes.push(-1)
-                this.save()
+            if (width < 0) {
+                this._x += width
+                width *= -1
             }
+            if (height < 0) {
+                this._y += height
+                height *= -1
+            }
+            this.mapSels.tempSel.bb.push(new Rectangle(this._x, this._y, width, height))
+            this.selIndexes.push(-1)
+            this.save()
             this._x = 0
             this._y = 0
             break
@@ -186,15 +198,25 @@ export class Selections {
 
     drawSelections() {
         if (! this._ready || ! this.drawBoxes || ! ig.perf.gui) return
+        let tilesize = 16
 
-        let self = this
-        this.mapSels.sels.forEach((sel) => {
-            self.drawSelBoxes(sel, self.completeColor)
-        })
+        for (let sel of this.mapSels.sels) {
+            this.drawSelBoxes(sel, this.completeColor)
+        }
 
         this.drawSelBoxes(this.mapSels.tempSel, this.tempColor)
-        if (this.selectStep == 1) {
-            this.drawBox(new Rectangle(this._x, this._y, 10, 10), this.tempColor)
+        if (this.selectStep == 0) {
+            let pos = { x: 0, y: 0 }
+            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+            pos.x = Math.floor(pos.x / tilesize) * tilesize
+            pos.y = Math.floor(pos.y / tilesize) * tilesize
+            this.drawBox(new Rectangle(pos.x, pos.y, tilesize, tilesize), this.tempColor)
+        } else if (this.selectStep == 1) {
+            let pos = { x: 0, y: 0 }
+            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+            let width = (Math.floor(pos.x / tilesize) * tilesize) - this._x
+            let height = (Math.floor(pos.y / tilesize) * tilesize) - this._y
+            this.drawBox(new Rectangle(this._x, this._y, width, height), this.tempColor)
         }
     }
 

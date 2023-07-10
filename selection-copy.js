@@ -3,10 +3,8 @@ const fs = require('fs')
 
 export class SelectionCopyManager {
     constructor() {
-        this.xOffset = 128
-        this.yOffset = 128
-        // this.xOffset = 16
-        // this.yOffset = 16
+        this.xOffset = 64
+        this.yOffset = 64
         this.copyCount = 0
         this._sels = new Stack()
         //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
@@ -87,11 +85,11 @@ export class SelectionCopyManager {
         return condVars
     }
 
-    getOffsetEntityPos(rect, entity, xOffset, yOffset) {
+    getOffsetEntityPos(rect, entity, xOffset, yOffset, sel) {
         let tilesize = 16
         return {
-            x: Math.floor(xOffset/tilesize)*16 - Math.floor(rect.x/tilesize)*16 + entity.x,
-            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y
+            x: Math.floor(xOffset/tilesize)*16 - Math.floor(rect.x/tilesize)*16 + entity.x + rect.x - sel.size.x,
+            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y + rect.y - sel.size.y,
         }
     }
 
@@ -163,14 +161,14 @@ export class SelectionCopyManager {
             switch (key) {
             case 'newPos': {
                 if ('x' in value && 'y' in value) {
-                    let { x, y } = self.getOffsetEntityPos(args.rect, obj.newPos, args.xOffset, args.yOffset)
+                    let { x, y } = self.getOffsetEntityPos(args.rect, obj.newPos, args.xOffset, args.yOffset, args.sel)
                     obj.newPos.x = x
                     obj.newPos.y = y
                 }
                 return
             }
             case 'targetPoint': {
-                let { x, y } = self.getOffsetEntityPos(args.rect, obj.targetPoint, args.xOffset, args.yOffset)
+                let { x, y } = self.getOffsetEntityPos(args.rect, obj.targetPoint, args.xOffset, args.yOffset, args.sel)
                 obj.targetPoint.x = x
                 obj.targetPoint.y = y
                 
@@ -199,6 +197,7 @@ export class SelectionCopyManager {
                 isSel: false,
                 selLevelOffset,
                 oldToNewLevelsMap,
+                sel,
             })
             if ('id' in entity && entity.id > maxEntityId) {
                 maxEntityId = entity.id
@@ -218,7 +217,7 @@ export class SelectionCopyManager {
                     
                     let newEntity = ig.copy(entity)
 
-                    let { x, y } = this.getOffsetEntityPos(rect, newEntity, xOffset, yOffset)
+                    let { x, y } = this.getOffsetEntityPos(rect, newEntity, xOffset, yOffset, sel)
                     if (entity.type == 'EventTrigger') {
                         x = xOffset
                         y = yOffset
@@ -235,6 +234,7 @@ export class SelectionCopyManager {
                             xOffset: xOffset,
                             yOffset: yOffset,
                             rect,
+                            sel,
                         })
 
                         newEntity.x = x
@@ -328,6 +328,23 @@ export class SelectionCopyManager {
         }
     }
 
+    getMapLayerCords(rect, xTileOffset, yTileOffset, sel, tilesize) {
+        let x1 = Math.floor(rect.x / tilesize)
+        let y1 = Math.floor(rect.y / tilesize)
+        let x2 = x1 + rect.width / tilesize
+        let y2 = y1 + rect.height / tilesize
+        let x3 = xTileOffset + (rect.x - sel.size.x) / tilesize
+        let y3 = yTileOffset + (rect.y - sel.size.y) / tilesize
+        let x4 = x3 + rect.width / tilesize
+        let y4 = y3 + rect.height / tilesize
+        return {
+            x1, y1,
+            x2, y2,
+            x3, y3,
+            x4, y4
+        }
+    }
+
     mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, 
         oldToNewLevelsMap, selLevelOffset, levelsLength, mergeLayers = false) {
 
@@ -371,13 +388,11 @@ export class SelectionCopyManager {
         if (selLightLayer !== null) {
             // merge base light layer with selection light
             sel.bb.forEach((rect) => {
-                let x1 = Math.floor(rect.x / tilesize)
-                let y1 = Math.floor(rect.y / tilesize)
-                let x2 = x1 + Math.ceil(rect.width / tilesize)
-                let y2 = y1 + Math.ceil(rect.height / tilesize)
-                ig.blitzkrieg.util.fillArray2d(lightLayer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                    this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel, tilesize)
+                ig.blitzkrieg.util.fillArray2d(lightLayer.data, 0, x3, y3, x4, y4)
                 let subArray = ig.blitzkrieg.util.createSubArray2d(selLightLayer.data, x1, y1, x2, y2,
-                    xTileOffset, yTileOffset, width, height)
+                    x3, y3, width, height)
                 ig.blitzkrieg.util.mergeArrays2d(lightLayer.data, subArray)
             })
         }
@@ -422,21 +437,20 @@ export class SelectionCopyManager {
         })
         // merge collision layers with sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize)
-            let y1 = Math.floor(rect.y / tilesize)
-            let x2 = x1 + Math.ceil(rect.width / tilesize)
-            let y2 = y1 + Math.ceil(rect.height / tilesize)
+            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel, tilesize)
             for (let layer of collisionLayers) {
                 if (layer.isBase) {
-                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, xTileOffset, yTileOffset, xTileOffset + rect.width/tilesize, yTileOffset + rect.height/tilesize)
+                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
                 }
             }
             selMap.layer.forEach((layer) => {
                 if (layer.type != 'Collision') { return }
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
+
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
-                    xTileOffset, yTileOffset, width, height)
+                    x3, y3, width, height)
                 
                 ig.blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
             })
@@ -466,10 +480,8 @@ export class SelectionCopyManager {
         })
         // add sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize)
-            let y1 = Math.floor(rect.y / tilesize)
-            let x2 = x1 + Math.ceil(rect.width / tilesize)
-            let y2 = y1 + Math.ceil(rect.height / tilesize)
+            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel, tilesize)
             selMap.layer.forEach((layer) => {
                 if (layer.type != 'Background' || (typeof layer.level === 'string' && 
                     layer.level.startsWith('object'))) { return }
@@ -483,14 +495,12 @@ export class SelectionCopyManager {
                 if (! mergeLayers && tileLayersClear[level]) {
                     tileLayers[level].forEach((layer1) => { 
                         if (layer1.isBase) {
-                            ig.blitzkrieg.util.fillArray2d(layer1.data, 0, xTileOffset, yTileOffset,
-                                xTileOffset + rect.width/tilesize,
-                                yTileOffset + rect.height/tilesize)
+                            ig.blitzkrieg.util.fillArray2d(layer1.data, 0, x3, y3, x4, y4)
                         }
                     })
                 }
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
-                    xTileOffset, yTileOffset, width, height)
+                    x3, y3, width, height)
                 if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
                     if (mergeLayers) {
                         let tilesetName = layer.tilesetName
@@ -535,17 +545,16 @@ export class SelectionCopyManager {
         })
         // merge base layers with sel layers
         sel.bb.forEach((rect) => {
-            let x1 = Math.floor(rect.x / tilesize)
-            let y1 = Math.floor(rect.y / tilesize)
-            let x2 = x1 + Math.ceil(rect.width / tilesize)
-            let y2 = y1 + Math.ceil(rect.height / tilesize)
+            // eslint-disable-next-line no-unused-vars
+            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel, tilesize)
             selMap.layer.forEach((layer) => {
                 let level = layer.level
                 if (! (layer.type == 'Background' && typeof level === 'string' &&
                     level.startsWith('object'))) { return }
 
-                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2, 
-                    xTileOffset, yTileOffset, width, height)
+                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                    x3, y3, width, height)
 
                 if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
                     let layer1 = layer
@@ -706,7 +715,7 @@ export class SelectionCopyManager {
     }
 
 
-    copy() {
+    async copy() {
         let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
         // let sel = null
         if (sel == null) {
@@ -737,7 +746,6 @@ export class SelectionCopyManager {
 
         this.copySelToMapAndWrite(baseMapName, sel,
             this.xOffset, this.yOffset, newName, newNameShort, false, false)
-        let selSize = ig.blitzkrieg.util.getSelectionSize(sel)
-        this.xOffset += selSize.width + 32
+        this.xOffset += sel.size.width + 32
     }
 }
