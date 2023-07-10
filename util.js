@@ -1,6 +1,7 @@
 import { Selection } from './selection.js'
 const fs = require('fs')
 const path = require('path')
+let tilesize = ig.blitzkrieg.tilesize
 
 export class Rectangle {
     constructor(x, y, width, height) {
@@ -112,10 +113,39 @@ export class Util {
         return true
     }
 
-    
-    reduceRectArr(rects) {
-        let tilesize = 16
+    setToClosestRectSide(pos, rect) {
+        function distanceToLine(pointX, pointY, lineX1, lineY1, lineX2, lineY2) {
+            let A = lineY2 - lineY1
+            let B = lineX1 - lineX2
+            let C = lineX2 * lineY1 - lineX1 * lineY2
+        
+            let distance = Math.abs((A * pointX + B * pointY + C) / Math.sqrt(A * A + B * B))
+            return distance
+        }
+        let { x, y } = pos
+        let { x: x1, y: y1, width, height } = rect
+        
+        let x2 = x1 + width
+        let y2 = y1 + height
 
+        let distances = [
+            distanceToLine(x, y, x1, y1, x2, y1),
+            distanceToLine(x, y, x2, y1, x2, y2),
+            distanceToLine(x, y, x1, y2, x2, y2),
+            distanceToLine(x, y, x1, y1, x1, y2),
+        ]
+        let minDistance = Math.min(...distances)
+        let closestSideIndex = distances.indexOf(minDistance)
+        switch (closestSideIndex) {
+        case 0: pos.y = y1; break // Top side
+        case 1: pos.x = x2; break // Right side
+        case 2: pos.y = y2; break // Bottom side
+        case 3: pos.x = x1; break // Left side
+        }
+        return closestSideIndex
+    }
+
+    reduceRectArr(rects) {
         let minX = 10000
         let minY = 10000
         let maxWidth = -1

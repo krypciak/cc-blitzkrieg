@@ -128,6 +128,7 @@ export default class Blitzkrieg {
         TextNotification.init()
         ig.blitzkrieg.msg = TextNotification.msg
         ig.blitzkrieg.util = new Util()
+        ig.blitzkrieg.tilesize = 16
 
 
         ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()

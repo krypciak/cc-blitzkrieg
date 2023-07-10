@@ -1,4 +1,5 @@
 import { Rectangle, Stack } from './util.js'
+let tilesize = ig.blitzkrieg.tilesize
 
 export class Selection {
     constructor(map) {
@@ -97,7 +98,6 @@ export class Selections {
 
     select() {
         if (this.selectStep == -1) { return }
-        let tilesize = 16
         let pos = { x: 0, y: 0 }
         switch (this.selectStep) {
         case 0: {
@@ -198,7 +198,6 @@ export class Selections {
 
     drawSelections() {
         if (! this._ready || ! this.drawBoxes || ! ig.perf.gui) return
-        let tilesize = 16
 
         for (let sel of this.mapSels.sels) {
             this.drawSelBoxes(sel, this.completeColor)
