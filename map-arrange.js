@@ -247,8 +247,9 @@ export class MapArranger {
                 maxHeight = 0
                 console.log('ran out of space')
             }
-            baseMap = await ig.blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
+            let obj = await ig.blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
                 xOffset, yOffset, newName, true, true)
+            baseMap = obj.map
 
             // xOffset = xOffset_tmp
             // if (++i >= 100) {

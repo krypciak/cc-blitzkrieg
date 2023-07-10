@@ -312,7 +312,7 @@ export class Util {
         width = Math.floor(width/8)*8
         height = Math.floor(height/8)*8
         let barrierType = width == 8 ? 'barrierV' : 'barrierH'
-
+        
         return ig.game.spawnEntity('ScalableProp', x, y, z, {
             name: '', 
             patternOffset: {x: 0, y: 0}, 

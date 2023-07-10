@@ -179,4 +179,27 @@ export class PuzzleRecordManager {
 
         ig.blitzkrieg.msg('blitzkrieg', 'Solving puzzle...')
     }
+
+    getPuzzleSolveCondition(sel) {
+        if (sel.data.stateLog === undefined || sel.data.stateLog.puzzleLog.length == 0) {
+            ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+            return
+        }
+
+        let puzzleLog = sel.data.stateLog.puzzleLog
+        for (let i = puzzleLog.length - 1; i >= 0; i--) {
+            let action = puzzleLog[i]
+            // let frame = action[0]
+            let path = action[1]
+            let value = action[2]
+            if (path.startsWith('.maps')) { continue }
+            if (path.toLowerCase().includes('solved') && value == true) {
+                return path.substring(1)
+            }
+
+        }
+
+        ig.blitzkrieg.msg('blitzkrieg', 'solution not found')
+        return ''
+    }
 }

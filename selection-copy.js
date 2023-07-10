@@ -345,6 +345,29 @@ export class SelectionCopyManager {
         }
     }
 
+
+    createUniquePuzzleSelection(origSel, xOffset, yOffset, id) {
+        let tilesize = 16
+        let sel = ig.copy(origSel)
+
+        xOffset = Math.floor(xOffset/tilesize)*tilesize
+        yOffset = Math.floor(yOffset/tilesize)*tilesize
+
+        for (let i = 0; i < sel.bb.length; i++) {
+            sel.bb[i].x = sel.bb[i].x - sel.size.x + xOffset
+            sel.bb[i].y = sel.bb[i].y - sel.size.y + yOffset
+        }
+        
+        if (sel.data.stateLog && sel.data.stateLog.puzzleLog) {
+            for (let i = 0; i < sel.data.stateLog.puzzleLog.length; i++) {
+                let action = sel.data.stateLog.puzzleLog[i]
+                sel.data.stateLog.puzzleLog[i] = [action[0], action[1] + '_' + id, action[2]]
+            }
+        }
+
+        return sel
+    }
+
     mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, 
         oldToNewLevelsMap, selLevelOffset, levelsLength, mergeLayers = false) {
 
@@ -593,8 +616,9 @@ export class SelectionCopyManager {
         if (! disableEntities) {
             entities = this.mergeMapEntities(baseMap, selMap, sel,
                 xOffset, yOffset, oldToNewLevelsMap, selLevelOffset)
-        } 
+        }
 
+        let uniqueSel = this.createUniquePuzzleSelection(sel, xOffset, yOffset, this.uniqueId)
 
         let allLayers = []
         let id = 0
@@ -689,7 +713,10 @@ export class SelectionCopyManager {
         }
 
         console.log(map)
-        return map
+        return {
+            map,
+            uniqueSel,
+        }
     }
 
     async copySelToMapAndWrite(baseMapName, sel, xOffset, yOffset,
@@ -702,7 +729,7 @@ export class SelectionCopyManager {
         let baseMap = await ig.blitzkrieg.util.getMapObject(baseMapName)
         let selMap = await ig.blitzkrieg.util.getMapObject(sel.map)
 
-        let newMap = await this.copySelToMap(baseMap, selMap, sel,
+        let { map: newMap } = await this.copySelToMap(baseMap, selMap, sel,
             xOffset, yOffset, newName, disableEntities, mergeLayers)
 
         let newMapPath = './assets/mods/cc-rouge/assets/data/maps/rouge/' + newNameShort + '.json'

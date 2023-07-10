@@ -67,7 +67,7 @@ export default class Blitzkrieg {
         })
 
         ig.Game.inject({
-            preloadLevel(...args) {
+            loadLevel(...args) {
                 this.parent(...args)
                 ig.blitzkrieg.puzzleSelections.onNewMapEnter()
                 ig.blitzkrieg.battleSelections.onNewMapEnter()
