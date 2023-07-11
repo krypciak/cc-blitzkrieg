@@ -361,9 +361,19 @@ export class SelectionCopyManager {
             sel.bb[i].y = sel.bb[i].y - sel.size.y + yOffset
         }
 
+        if (sel.data.startPos) {
+            sel.data.startPos.x = sel.data.startPos.x - sel.size.x + xOffset
+            sel.data.startPos.y = sel.data.startPos.y - sel.size.y + yOffset
+        }
+        
+        if (sel.data.endPos) {
+            sel.data.endPos.x = sel.data.endPos.x - sel.size.x + xOffset
+            sel.data.endPos.y = sel.data.endPos.y - sel.size.y + yOffset
+        }
+
         sel.size.x = xOffset
         sel.size.y = yOffset
-        
+
         if (sel.data.stateLog && sel.data.stateLog.puzzleLog) {
             for (let i = 0; i < sel.data.stateLog.puzzleLog.length; i++) {
                 let action = sel.data.stateLog.puzzleLog[i]

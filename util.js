@@ -408,10 +408,10 @@ export class Util {
     getDoorDirName(side) {
         let dir
         switch (side) {
-        case 0: dir = 'NORTH'; break
-        case 1: dir = 'EAST'; break
-        case 2: dir = 'SOUTH'; break
-        case 3: dir = 'WEST'; break
+        case 0: dir = 'SOUTH'; break
+        case 1: dir = 'WEST'; break
+        case 2: dir = 'NORTH'; break
+        case 3: dir = 'EAST'; break
         }
         return dir
     }
