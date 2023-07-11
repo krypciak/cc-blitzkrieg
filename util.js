@@ -1,7 +1,7 @@
 import { Selection } from './selection.js'
 const fs = require('fs')
 const path = require('path')
-let tilesize = ig.blitzkrieg.tilesize
+let tilesize
 
 export class Rectangle {
     constructor(x, y, width, height) {
@@ -22,6 +22,10 @@ export class Stack {
 }
 
 export class Util {
+    constructor() {
+        tilesize = ig.blitzkrieg.tilesize
+    }
+
     executeRecursiveAction(obj, action, args) {
         for (let key in obj) {
             if (typeof obj[key] === 'object') {
@@ -304,9 +308,31 @@ export class Util {
         sel.size = sizeRect
         sel.data = {}
         sel.data.startPos = {
-            x: 100,
-            y: 100,
+            x: 0,
+            y: 0,
             z: mapData.levels[mapData.masterLevel].height
+        }
+        sel.data.endPos = sel.data.startPos
+        return sel
+    }
+
+    getSelFromSpawner(spawner, map, xOffset = -1, yOffset = -1) {
+        let sel = new Selection(map)
+        let sizeRect = new Rectangle(
+            xOffset > 0 ? xOffset : spawner.x,
+            yOffset > 0 ? yOffset : spawner.y,
+            spawner.settings.size.x,
+            spawner.settings.size.y
+        )
+
+        let mapData = ig.blitzkrieg.allMaps[map]
+        sel.bb.push(sizeRect)
+        sel.size = sizeRect
+        sel.data = {}
+        sel.data.startPos = {
+            x: 0,
+            y: 0,
+            z: mapData.levels[spawner.level].height,
         }
         sel.data.endPos = sel.data.startPos
         return sel
@@ -377,6 +403,17 @@ export class Util {
             })
 
         })
+    }
+
+    getDoorDirName(side) {
+        let dir
+        switch (side) {
+        case 0: dir = 'NORTH'; break
+        case 1: dir = 'EAST'; break
+        case 2: dir = 'SOUTH'; break
+        case 3: dir = 'WEST'; break
+        }
+        return dir
     }
 }
 

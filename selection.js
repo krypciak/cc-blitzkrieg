@@ -1,5 +1,5 @@
 import { Rectangle, Stack } from './util.js'
-let tilesize = ig.blitzkrieg.tilesize
+let tilesize
 
 export class Selection {
     constructor(map) {
@@ -14,6 +14,7 @@ export class Selections {
     // walkInEvent(Selection)
     // walkOutEvent(Selection)
     constructor(completeColor, tempColor, jsonfile, newSelEvent, walkInEvent, walkOutEvent) {
+        tilesize = ig.blitzkrieg.tilesize
         this.selHashMap = {}
         this.mapSels = {
             sels: [],

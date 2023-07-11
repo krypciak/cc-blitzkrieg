@@ -1,9 +1,10 @@
 import { Stack } from './util.js'
 const fs = require('fs')
-let tilesize = ig.blitzkrieg.tilesize
+let tilesize
 
 export class SelectionCopyManager {
     constructor() {
+        tilesize = ig.blitzkrieg.tilesize
         this.xOffset = 64
         this.yOffset = 64
         this.copyCount = 0
@@ -144,6 +145,10 @@ export class SelectionCopyManager {
 
             // case 'layer':
             case 'group':
+            case 'varName':
+            case 'preVariable':
+            case 'postVariable':
+            case 'countVariable':
             case 'variable': {
                 if (value === null ||
                     typeof value === 'boolean' ||
@@ -355,6 +360,9 @@ export class SelectionCopyManager {
             sel.bb[i].x = sel.bb[i].x - sel.size.x + xOffset
             sel.bb[i].y = sel.bb[i].y - sel.size.y + yOffset
         }
+
+        sel.size.x = xOffset
+        sel.size.y = yOffset
         
         if (sel.data.stateLog && sel.data.stateLog.puzzleLog) {
             for (let i = 0; i < sel.data.stateLog.puzzleLog.length; i++) {
