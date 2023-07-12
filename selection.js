@@ -1,5 +1,6 @@
 import { Rectangle, Stack } from './util.js'
 let tilesize
+let fs = require('fs')
 
 export class Selection {
     constructor(map) {
@@ -28,8 +29,7 @@ export class Selections {
 
         this.completeColor = completeColor
         this.tempColor = tempColor
-        this.drawBoxes = true
-        this.fs = require('fs')
+        this.drawBoxes = false
         this.jsonfile = jsonfile
         try {
             this.load()
@@ -37,6 +37,7 @@ export class Selections {
             // file doesn't exist
         }
         this._ready = true
+
     }
 
     onNewMapEnter() {
@@ -227,13 +228,13 @@ export class Selections {
     save() {
         // ig.blitzkrieg.msg('blitzkrieg', 'save', 2)
         const json = JSON.stringify(this.selHashMap)
-        this.fs.writeFileSync(this.jsonfile, json)
+        fs.writeFileSync(this.jsonfile, json)
     }
 
     load() {
-        const json = this.fs.readFileSync(this.jsonfile, 'utf8')
+        const json = fs.readFileSync(this.jsonfile, 'utf8')
         const obj = JSON.parse(json)
-        this.selHashMap =  obj
+        this.selHashMap = obj
     }
 }
 

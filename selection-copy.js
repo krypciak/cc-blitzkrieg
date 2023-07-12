@@ -611,17 +611,45 @@ export class SelectionCopyManager {
             })
         })
 
+        // copy nav layers
+        let navLayers = []
+        // get base nav layers
+        baseMap.layer.forEach((layer) => {
+            if (! (layer.type == 'Navigation')) { return }
+            navLayers.push(layer)
+        })
+        // merge base layers with sel layers
+        sel.bb.forEach((rect) => {
+            // eslint-disable-next-line no-unused-vars
+            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
+            selMap.layer.forEach((layer) => {
+                if (! (layer.type == 'Navigation')) { return }
+
+                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                    x3, y3, width, height)
+
+                if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
+                    let layer1 = layer
+                    layer1.data = subArray
+                    layer1.width = width
+                    layer1.height = height 
+                    navLayers.push(layer1)
+                }
+            })
+        })
+
         
         return {
             lightLayer,
             collisionLayers,
             tileLayers,
             objectLayers,
+            navLayers,
             mapWidth: width,
             mapHeight: height,
         }
     }
-
 
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
         disableEntities, mergeLayers,
@@ -631,7 +659,7 @@ export class SelectionCopyManager {
 
         let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap, sel)
 
-        let { lightLayer, collisionLayers, tileLayers, objectLayers, mapWidth, mapHeight } =
+        let { lightLayer, collisionLayers, tileLayers, objectLayers, navLayers, mapWidth, mapHeight } =
             this.mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, oldToNewLevelsMap,
                 selLevelOffset, levels.length, mergeLayers)
         
@@ -699,6 +727,10 @@ export class SelectionCopyManager {
             }
         }
         collisionLayers.forEach((layer) => {
+            layer.id = id++
+            allLayers.push(layer)
+        })
+        navLayers.forEach((layer) => {
             layer.id = id++
             allLayers.push(layer)
         })
