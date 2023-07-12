@@ -524,18 +524,20 @@ export class SelectionCopyManager {
             }
         })
         // add sel layers
-        sel.bb.forEach((rect) => {
-            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
-                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
-            selMap.layer.forEach((layer) => {
-                if (layer.type != 'Background' || (typeof layer.level === 'string' && 
-                    layer.level.startsWith('object'))) { return }
-                let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
-                // console.log('old level: ' + layer.level + 'new level: ' + level +', type: ' + layer.type + ', name: ' + layer.name)
+        selMap.layer.forEach((layer) => {
+            if (layer.type != 'Background' || (typeof layer.level === 'string' && 
+                layer.level.startsWith('object'))) { return }
 
-                if (! (level in tileLayers)) {
-                    tileLayers[level] = []
-                }
+            let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
+
+            if (! (level in tileLayers)) {
+                tileLayers[level] = []
+            }
+            let rectLayer
+
+            sel.bb.forEach((rect) => {
+                let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                    this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
 
                 if (! mergeLayers && tileLayersClear[level]) {
                     tileLayers[level].forEach((layer1) => { 
@@ -566,13 +568,18 @@ export class SelectionCopyManager {
 
                         }
                     } else {
-                        let layer1 = ig.copy(layer)
-                        layer1.data = subArray
-                        layer1.width = width
-                        layer1.height = height 
-                        layer1.level = level
-                        layer1.name = this.uniqueId + '_' + layer1.name
-                        tileLayers[level].push(layer1)
+                        if (rectLayer) {
+                            ig.blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
+                        } else {
+                            let layer1 = ig.copy(layer)
+                            layer1.data = subArray
+                            layer1.width = width
+                            layer1.height = height 
+                            layer1.level = level
+                            layer1.name = this.uniqueId + '_' + layer1.name
+                            tileLayers[level].push(layer1)
+                            rectLayer = layer1
+                        }
                     }
                 }
             })
@@ -589,24 +596,32 @@ export class SelectionCopyManager {
             objectLayers.push(layer)
         })
         // merge base layers with sel layers
-        sel.bb.forEach((rect) => {
+        selMap.layer.forEach((layer) => {
+            let level = layer.level
+            if (! (layer.type == 'Background' && typeof level === 'string' &&
+                 level.startsWith('object'))) { return }
+
+            let rectLayer
+
+            sel.bb.forEach((rect) => {
             // eslint-disable-next-line no-unused-vars
-            let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
-                this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
-            selMap.layer.forEach((layer) => {
-                let level = layer.level
-                if (! (layer.type == 'Background' && typeof level === 'string' &&
-                    level.startsWith('object'))) { return }
+                let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                    this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
 
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
 
                 if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
-                    let layer1 = layer
-                    layer1.data = subArray
-                    layer1.width = width
-                    layer1.height = height 
-                    objectLayers.push(layer1)
+                    if (rectLayer) {
+                        ig.blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
+                    } else {
+                        let layer1 = layer
+                        layer1.data = subArray
+                        layer1.width = width
+                        layer1.height = height 
+                        objectLayers.push(layer1)
+                        rectLayer = layer1
+                    }
                 }
             })
         })
