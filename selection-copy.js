@@ -9,10 +9,16 @@ export class SelectionCopyManager {
         this.yOffset = 64
         this.copyCount = 0
         this._sels = new Stack()
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
         //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
         //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
@@ -618,9 +624,10 @@ export class SelectionCopyManager {
 
 
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
-        disableEntities, mergeLayers) {
+        disableEntities, mergeLayers,
+        uniqueId = ig.blitzkrieg.util.generateUniqueID()) {
 
-        this.uniqueId = ig.blitzkrieg.util.generateUniqueID() 
+        this.uniqueId = uniqueId
 
         let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap, sel)
 
@@ -633,8 +640,6 @@ export class SelectionCopyManager {
             entities = this.mergeMapEntities(baseMap, selMap, sel,
                 xOffset, yOffset, oldToNewLevelsMap, selLevelOffset)
         }
-
-        let uniqueSel = this.createUniquePuzzleSelection(sel, xOffset, yOffset, this.uniqueId)
 
         let allLayers = []
         let id = 0
@@ -729,10 +734,7 @@ export class SelectionCopyManager {
         }
 
         console.log(map)
-        return {
-            map,
-            uniqueSel,
-        }
+        return map
     }
 
     async copySelToMapAndWrite(baseMapName, sel, xOffset, yOffset,
@@ -745,7 +747,7 @@ export class SelectionCopyManager {
         let baseMap = await ig.blitzkrieg.util.getMapObject(baseMapName)
         let selMap = await ig.blitzkrieg.util.getMapObject(sel.map)
 
-        let { map: newMap } = await this.copySelToMap(baseMap, selMap, sel,
+        let newMap = await this.copySelToMap(baseMap, selMap, sel,
             xOffset, yOffset, newName, disableEntities, mergeLayers)
 
         let newMapPath = './assets/mods/cc-rouge/assets/data/maps/rouge/' + newNameShort + '.json'

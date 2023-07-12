@@ -70,6 +70,14 @@ export class Util {
         }
     }
 
+    parseArrayAt2d(arr1, arr2, x1, y1) {
+        for (let y = y1; y < y1 + arr2.length; y++) {
+            for (let x = x1; x < x1 + arr2[y - y1].length; x++) {
+                arr1[y][x] = arr2[y - y1][x - x1]
+            }
+        }
+    }
+
     createSubArray2d(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
         let nArr = ig.blitzkrieg.util.emptyArray2d(width, height)
 
