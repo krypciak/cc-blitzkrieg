@@ -196,10 +196,10 @@ export class MapArranger {
 
 
     async epicMapGrid() {
-        let baseName = 'rouge.300empty'
+        let baseName = 'rouge/300empty'
 
         let newNameShort = '300emptytmp'
-        let newName = 'rouge.' + newNameShort
+        let newName = 'rouge/' + newNameShort
 
         let filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/data/maps')
         filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/extension/post-game/data/maps', filePaths)

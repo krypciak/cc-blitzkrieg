@@ -192,6 +192,7 @@ export class PuzzleRecordManager {
             // let frame = action[0]
             let path = action[1]
             let value = action[2]
+            // console.log(path, value)
             if (path.startsWith('.maps')) { continue }
             if (path.toLowerCase().includes('solved') && value == true) {
                 return path.substring(1)
@@ -199,7 +200,9 @@ export class PuzzleRecordManager {
 
         }
 
-        ig.blitzkrieg.msg('blitzkrieg', 'solution not found')
+        ig.blitzkrieg.msg('blitzkrieg', 'solution not found', 10)
+        throw new Error('Puzzle solution not found')
+        debugger
         return ''
     }
 }

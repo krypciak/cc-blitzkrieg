@@ -149,6 +149,7 @@ export class SelectionCopyManager {
             case 'preVariable':
             case 'postVariable':
             case 'countVariable':
+            case 'varIncrease':
             case 'variable': {
                 if (value === null ||
                     typeof value === 'boolean' ||
@@ -779,12 +780,12 @@ export class SelectionCopyManager {
         //     baseMapName = 'rouge.10empty'
         // }
         let newNameShort = '300emptytmp'
-        let baseMapName = 'rouge.' + newNameShort
+        let baseMapName = 'rouge/' + newNameShort
         if (this.copyCount++ == 0) {
-            baseMapName = 'rouge.300empty'
+            baseMapName = 'rouge/300empty'
         }
 
-        let newName = 'rouge.' + newNameShort
+        let newName = 'rouge/' + newNameShort
 
         this.copySelToMapAndWrite(baseMapName, sel,
             this.xOffset, this.yOffset, newName, newNameShort, false, false)

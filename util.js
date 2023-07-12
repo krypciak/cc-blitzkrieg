@@ -249,6 +249,7 @@ export class Util {
                     resolve(response)
                 },
                 error: function (b, c, e) {
+                    console.log('what')
                     ig.system.error(Error('Loading of Map \'' + mapPath +
                         '\' failed: ' + b + ' / ' + c + ' / ' + e))
                     reject()
@@ -288,7 +289,7 @@ export class Util {
             // eslint-disable-next-line no-async-promise-executor
             return new Promise(async (resolve) => {
                 let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
-                let mapName = mapData.name.split('/').join('.')
+                let mapName = mapData.name
                 let obj = {}
                 obj[mapName] = mapData
                 resolve(obj)
@@ -362,6 +363,28 @@ export class Util {
         })
 
         return filePaths
+    }
+
+    getBarrierEntity(x, y, level, width, height, cond, customData = {}) {
+        width = Math.floor(width/8)*8
+        height = Math.floor(height/8)*8
+        let barrierType = width == 8 ? 'barrierV' : 'barrierH'
+        return {
+            type: 'ScalableProp',
+            x,
+            y,
+            level,
+            settings: {
+                name: '', 
+                patternOffset: {x: 0, y: 0}, 
+                blockNavMap: false, 
+                propConfig: {ends: null, name: barrierType, sheet: 'dungeon-ar'},
+                size: {x: width, y: height},
+                wallZHeight: 32,
+                spawnCondition: (cond ? cond : ''),
+            },
+            customData,
+        }
     }
 
     spawnBarrier(x, y, z, width, height) {
