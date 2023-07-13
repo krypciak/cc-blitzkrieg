@@ -59,9 +59,13 @@ export class PuzzleSelectionManager {
         let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         let puzzleDiff = await ig.blitzkrieg.util.syncDialog('select puzzle difficulty', scale)
         let puzzleLen = await ig.blitzkrieg.util.syncDialog('select puzzle length', scale)
+        let puzzleType = await ig.blitzkrieg.util.syncDialog('select puzzle type', ['normal', 'getTo'])
 
         sel.data.difficulty = puzzleDiff
         sel.data.timeLength = puzzleLen
+        sel.data.type = puzzleType
+        sel.data.chapter = sc.model.player.chapter
+        sel.data.plotLine = ig.vars.storage.plot ? ig.vars.storage.plot.line : -1
 
         ig.blitzkrieg.msg('blitzkrieg', 'Starting position', 3)
         sel.data.startPos = await ig.blitzkrieg.util.waitForPositionKey()
