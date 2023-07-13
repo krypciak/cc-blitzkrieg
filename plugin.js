@@ -8,7 +8,12 @@ import { Selections } from './selection.js'
 import { Util } from './util.js'
 import { TextNotification } from './text-notification.js'
 
-export default class Blitzkrieg {
+export default class Blitzkrieg extends Plugin {
+    constructor(mod) {
+        super()
+        this.mod = mod
+    }
+
     bindKeys(keys, category) {
         for (let keyName in keys) {
             let key = keys[keyName]
@@ -121,13 +126,13 @@ export default class Blitzkrieg {
     
     async prestart() {
         ig.blitzkrieg = this
+        ig.blitzkrieg.tilesize = 16
         ig.blitzkrieg.name = 'BLITZKRIEG'
         ig.blitzkrieg.displayName = 'Blitzkrieg'
         ig.blitzkrieg.selectionMode = true
 
         TextNotification.init()
         ig.blitzkrieg.msg = TextNotification.msg
-        ig.blitzkrieg.tilesize = 16
         ig.blitzkrieg.util = new Util()
 
 
@@ -137,7 +142,7 @@ export default class Blitzkrieg {
         ig.blitzkrieg.puzzleSelections = new Selections(
             '#77000044',
             '#ff222244',
-            './assets/mods/cc-blitzkrieg/json/puzzleData.json',
+            ig.blitzkrieg.mod.baseDirectory + 'json/puzzleData.json',
             ig.blitzkrieg.puzzleSelectionManager.newSelEvent,
             ig.blitzkrieg.puzzleSelectionManager.walkInEvent,
             ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
@@ -154,7 +159,7 @@ export default class Blitzkrieg {
         ig.blitzkrieg.battleSelections = new Selections(
             '#00770044',
             '#22ff2244',
-            './assets/mods/cc-blitzkrieg/json/battleData.json',
+            ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json',
             (sel) => {
                 // ig.blitzkrieg.msg('blitzkrieg', 'new selection', 2)
                 ig.blitzkrieg.battleSelectionManager.addData(sel)

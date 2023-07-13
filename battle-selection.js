@@ -11,10 +11,11 @@ export class BattleSelectionManager {
             return
         sel.data['index'] = this.battleIndex++
             
+        // heat cold shock wave
         sel.data['elements'] = [
+            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
         ]
         sel.data.skills = []

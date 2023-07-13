@@ -257,7 +257,7 @@ export class Util {
                     resolve(response)
                 },
                 error: function (b, c, e) {
-                    console.log('what')
+                    console.log(mapPath)
                     ig.system.error(Error('Loading of Map \'' + mapPath +
                         '\' failed: ' + b + ' / ' + c + ' / ' + e))
                     reject()

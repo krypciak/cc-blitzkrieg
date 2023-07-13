@@ -201,8 +201,9 @@ export class PuzzleRecordManager {
         }
 
         ig.blitzkrieg.msg('blitzkrieg', 'solution not found', 10)
-        throw new Error('Puzzle solution not found')
-        debugger
+        console.log('Puzzle solution not found: ', sel)
+        //throw new Error('Puzzle solution not found')
+        //debugger
         return ''
     }
 }
