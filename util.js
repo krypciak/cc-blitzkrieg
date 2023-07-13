@@ -373,28 +373,6 @@ export class Util {
         return filePaths
     }
 
-    getBarrierEntity(x, y, level, width, height, cond, customData = {}) {
-        width = Math.floor(width/8)*8
-        height = Math.floor(height/8)*8
-        let barrierType = width == 8 ? 'barrierV' : 'barrierH'
-        return {
-            type: 'ScalableProp',
-            x,
-            y,
-            level,
-            settings: {
-                name: '', 
-                patternOffset: {x: 0, y: 0}, 
-                blockNavMap: false, 
-                propConfig: {ends: null, name: barrierType, sheet: 'dungeon-ar'},
-                size: {x: width, y: height},
-                wallZHeight: 32,
-                spawnCondition: (cond ? cond : ''),
-            },
-            customData,
-        }
-    }
-
     spawnBarrier(x, y, z, width, height) {
         width = Math.floor(width/8)*8
         height = Math.floor(height/8)*8
@@ -434,17 +412,6 @@ export class Util {
             })
 
         })
-    }
-
-    getDoorDirName(side) {
-        let dir
-        switch (side) {
-        case 0: dir = 'SOUTH'; break
-        case 1: dir = 'WEST'; break
-        case 2: dir = 'NORTH'; break
-        case 3: dir = 'EAST'; break
-        }
-        return dir
     }
 }
 
