@@ -407,7 +407,17 @@ export class Util {
             let intervalId = setInterval(function() {
                 if (ig.blitzkrieg.util.waitingForPos == false) {
                     clearInterval(intervalId)
-                    resolve(ig.copy(ig.game.playerEntity.coll.pos))
+                    let pos = ig.copy(ig.game.playerEntity.coll.pos)
+                    for (let i in ig.game.levels) {
+                        if (ig.game.levels[i].height == pos.z) {
+                            pos.level = i
+                            break
+                        }
+                    }
+                    if (! pos.level) {
+                        throw new Error('level not found')
+                    }
+                    resolve(pos)
                 }
             })
 
