@@ -113,7 +113,7 @@ export default class Blitzkrieg {
 
     async reloadLevel() {
         let pos = ig.copy(ig.game.playerEntity.coll.pos)
-        let map = ig.game.mapName
+        let map = ig.game.mapName.split('.').join('./')
         ig.game.loadLevel(await ig.blitzkrieg.util.getMapObject(map), false, false)
         ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
 

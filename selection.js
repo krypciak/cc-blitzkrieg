@@ -41,13 +41,14 @@ export class Selections {
     }
 
     onNewMapEnter() {
-        this.mapSels = this.selHashMap[ig.game.mapName]
+        let mapName = ig.game.mapName.split('.').join('/')
+        this.mapSels = this.selHashMap[mapName]
         if (this.mapSels === undefined)
             this.mapSels = {
                 sels: [],
-                tempSel: new Selection(ig.game.mapName),
+                tempSel: new Selection(mapName),
             }
-        this.selHashMap[ig.game.mapName] = this.mapSels
+        this.selHashMap[mapName] = this.mapSels
     }
 
     async create() {
@@ -66,15 +67,16 @@ export class Selections {
             this.selectStep = -1
             setStep = false
         }
-        this.mapSels.tempSel = new Selection(ig.game.mapName)
+        this.mapSels.tempSel = new Selection(ig.game.mapName.split('.').join('/'))
         if (setStep) {
             this.selectStep = 0
+        } else {
+            this.save()
         }
         this._x = 0
         this._y = 0
         this._width = 0
         this._height = 0
-        this.save()
     }
 
     delete() {
@@ -85,16 +87,53 @@ export class Selections {
             sc.control.getMouseY()
         )
 
+        let deletedAnything = false
         for (let i = 0; i < this.mapSels.sels.length; i++) {
             let sel = this.mapSels.sels[i]
             if (this.isSelInPos(sel, pos)) {
                 this.mapSels.sels.splice(i, 1)
                 i--
+                deletedAnything = true
             }
         }
         
-        let self = this
-        this.mapSels.tempSel.bb = this.mapSels.tempSel.bb.filter(rect => ! self.isRectInPos(rect, pos))
+        for (let i = 0; i < this.mapSels.tempSel.bb.length; i++) {
+            if (this.isRectInPos(this.mapSels.tempSel.bb[i], pos)) {
+                this.mapSels.tempSel.bb.splice(i, 1)
+                i--
+                deletedAnything = true
+            }
+        }
+        if (! deletedAnything) {
+            this.deconstruct()
+        }
+        this.save()
+    }
+
+
+    deconstruct() {
+        let sel = this.inSelStack.peek()
+        if (! sel) { return }
+
+        this.mapSels.tempSel = ig.copy(sel)
+        let index
+        for (let i = 0; i < this.mapSels.sels.length; i++) {
+            let selI = this.mapSels.sels[i]
+            if (selI.size.x == sel.size.x && selI.size.y == sel.size.y &&
+                selI.size.width == sel.size.width && selI.size.height == sel.size.height) {
+                
+                index = i
+                break
+            }
+        }
+        this.mapSels.sels.splice(index, 1)
+
+        this._x = 0
+        this._y = 0
+        this._width = 0
+        this._height = 0
+        this.selectStep = 0
+
         this.save()
     }
 
@@ -226,7 +265,12 @@ export class Selections {
     }
 
     save() {
-        // ig.blitzkrieg.msg('blitzkrieg', 'save', 2)
+        for (let mapName in this.selHashMap) {
+            let obj = this.selHashMap[mapName]
+            if (obj.sels.length == 0 && obj.tempSel.bb.length == 0) {
+                delete this.selHashMap[mapName]
+            }
+        }
         const json = JSON.stringify(this.selHashMap)
         fs.writeFileSync(this.jsonfile, json)
     }

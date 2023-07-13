@@ -297,7 +297,7 @@ export class Util {
             // eslint-disable-next-line no-async-promise-executor
             return new Promise(async (resolve) => {
                 let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
-                let mapName = mapData.name
+                let mapName = mapData.name.split('.').join('/')
                 let obj = {}
                 obj[mapName] = mapData
                 resolve(obj)
