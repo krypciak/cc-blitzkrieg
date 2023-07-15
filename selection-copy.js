@@ -100,7 +100,7 @@ export class SelectionCopyManager {
     getOffsetEntityPos(rect, entity, xOffset, yOffset, sel) {
         return {
             x: Math.floor(xOffset/tilesize)*16 - Math.floor(rect.x/tilesize)*16 + entity.x + rect.x - sel.size.x,
-            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y + rect.y - sel.size.y,
+            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y + rect.y - sel.size.y - sel.data.startPos.z,
         }
     }
 
@@ -177,9 +177,9 @@ export class SelectionCopyManager {
             switch (key) {
             case 'newPos': {
                 if ('x' in value && 'y' in value) {
-                    let { x, y } = self.getOffsetEntityPos(args.rect, obj.newPos, args.xOffset, args.yOffset, args.sel)
-                    obj.newPos.x = x
-                    obj.newPos.y = y
+                    let { x, y } = self.getOffsetEntityPos(args.rect, obj[key], args.xOffset, args.yOffset, args.sel)
+                    obj[key].x = x
+                    obj[key].y = y
                 }
                 return
             }
@@ -279,7 +279,6 @@ export class SelectionCopyManager {
 
                         newEntity.x = x
                         newEntity.y = y
-                        newEntity.y -= sel.data.startPos.z
                         newEntity.id = ++entityId
                         if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
