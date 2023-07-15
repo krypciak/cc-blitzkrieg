@@ -27,6 +27,10 @@ export class SelectionCopyManager {
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['final-dng.b4.bridge'].sels[0])
         // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['jungle.left.path-left-03'].sels[0])
         // this._sels.push(ig.blitzkrieg.util.['autumn-fall.path-05'].sels[1])
+        //
+        this.excludeEventTypes = new Set([
+            'SET_CAMERA_POS'
+        ])
     }
 
     mergeMapLevels(baseMap, selMap, sel) {
@@ -188,10 +192,23 @@ export class SelectionCopyManager {
             }
             }
         }
+
+        if (args.removeCutscenes) {
+            if (key == 'event' && Array.isArray(value)) {
+                for (let i = 0; i < value.length; i++) {
+                    let event = value[i]
+                    let type = event.type
+                    if (self.excludeEventTypes.has(type)) {
+                        value.splice(i, 1)
+                        i--
+                    }
+                }
+            }
+        }
     }
 
     mergeMapEntities(baseMap, selMap, sel, xOffset, yOffset,
-        oldToNewLevelsMap, selLevelOffset) {
+        oldToNewLevelsMap, selLevelOffset, removeCutscenes) {
         
         if (baseMap.entities === undefined && selMap.entities === undefined) {
             return []
@@ -206,6 +223,7 @@ export class SelectionCopyManager {
                 makePuzzlesUnique: false,
                 rePosition: false,
                 isSel: false,
+                removeCutscenes: false,
                 selLevelOffset,
                 oldToNewLevelsMap,
                 sel,
@@ -250,6 +268,7 @@ export class SelectionCopyManager {
                             makePuzzlesUnique: true,
                             rePosition: true,
                             isSel: true,
+                            removeCutscenes,
                             selLevelOffset,
                             oldToNewLevelsMap,
                             xOffset: xOffset,
@@ -680,7 +699,7 @@ export class SelectionCopyManager {
     }
 
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
-        disableEntities, mergeLayers,
+        disableEntities, mergeLayers, removeCutscenes,
         uniqueId = ig.blitzkrieg.util.generateUniqueID()) {
 
         this.uniqueId = uniqueId
@@ -694,7 +713,7 @@ export class SelectionCopyManager {
         let entities = []
         if (! disableEntities) {
             entities = this.mergeMapEntities(baseMap, selMap, sel,
-                xOffset, yOffset, oldToNewLevelsMap, selLevelOffset)
+                xOffset, yOffset, oldToNewLevelsMap, selLevelOffset, removeCutscenes)
         }
 
         let allLayers = []
@@ -850,7 +869,7 @@ export class SelectionCopyManager {
         let newName = 'rouge/' + newNameShort
 
         this.copySelToMapAndWrite(baseMapName, sel,
-            this.xOffset, this.yOffset, newName, newNameShort, false, false)
+            this.xOffset, this.yOffset, newName, newNameShort, false, false, true)
         this.xOffset += sel.size.width + 32
     }
 }
