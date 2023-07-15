@@ -154,8 +154,27 @@ export class Util {
         case 2: pos.y = y2; break // Bottom side
         case 3: pos.x = x1; break // Left side
         }
-        return closestSideIndex
+        return { distance: minDistance, side: closestSideIndex }
     }
+
+    setToClosestSelSide(pos, sel) {
+        let minDist = 100000
+        let minSide
+        let minPos
+        for (let rect of sel.bb) {
+            let posCopy = ig.copy(pos)
+            let { distance, side } = this.setToClosestRectSide(posCopy, rect)
+            if (distance < minDist) {
+                minDist = distance
+                minSide = side
+                minPos = ig.copy(posCopy)
+            }
+        }
+        pos.x = minPos.x
+        pos.y = minPos.y
+        return minSide
+    }
+
 
     reduceRectArr(rects) {
         let minX = 10000
@@ -311,37 +330,23 @@ export class Util {
     }
 
     getEntireMapSel(mapData) {
-        let sel = new Selection(mapData.name)
-        let sizeRect = new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16)
-        sel.bb.push(sizeRect)
-        sel.size = sizeRect
-        sel.data = {}
-        sel.data.startPos = {
-            x: 0,
-            y: 0,
-            z: mapData.levels[mapData.masterLevel].height
-        }
-        sel.data.endPos = sel.data.startPos
-        return sel
+        return this.getSelFromRect(new Rectangle(0, 0, mapData.mapWidth*16, mapData.mapHeight*16),
+            mapData.name, mapData.levels[mapData.masterLevel].height)
     }
 
-    getSelFromSpawner(spawner, map, xOffset = -1, yOffset = -1) {
+    getSelFromRect(rect, map, z) {
         let sel = new Selection(map)
-        let sizeRect = new Rectangle(
-            xOffset > 0 ? xOffset : spawner.x,
-            yOffset > 0 ? yOffset : spawner.y,
-            spawner.settings.size.x,
-            spawner.settings.size.y
-        )
-
-        let mapData = ig.blitzkrieg.allMaps[map]
-        sel.bb.push(sizeRect)
-        sel.size = sizeRect
+        rect.x = Math.floor(rect.x / tilesize)*tilesize
+        rect.y = Math.floor(rect.y / tilesize)*tilesize
+        rect.width = Math.floor(rect.width / tilesize)*tilesize
+        rect.height = Math.floor(rect.height / tilesize)*tilesize
+        sel.bb.push(rect)
+        sel.size = rect 
         sel.data = {}
         sel.data.startPos = {
-            x: 0,
-            y: 0,
-            z: mapData.levels[spawner.level].height,
+            x: rect.x,
+            y: rect.y,
+            z,
         }
         sel.data.endPos = sel.data.startPos
         return sel
@@ -423,5 +428,22 @@ export class Util {
 
         })
     }
+
+    seedrandom(min, max, seedObj) {
+        let x = Math.sin(this.stringToDigitNumber(seedObj.seed, 16)) * 10000
+        seedObj.seed += 1000
+        let random = (x - Math.floor(x)) * (max - min) + min
+        return Math.floor(random)
+    }
+    stringToDigitNumber(str, len) {
+        let hash = 0
+        for (let i = 0; i < str.length; i++) {
+            hash = (hash << 5) - hash + str.charCodeAt(i)
+            hash |= 0
+        }
+        hash *= 370548503574
+    
+        return Math.abs(hash).toString().padStart(len, '0')
+    }   
 }
 

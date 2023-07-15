@@ -60,10 +60,12 @@ export class PuzzleSelectionManager {
         let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         let puzzleDiff = await ig.blitzkrieg.util.syncDialog('select puzzle difficulty', scale)
         let puzzleLen = await ig.blitzkrieg.util.syncDialog('select puzzle length', scale)
-        let puzzleType = await ig.blitzkrieg.util.syncDialog('select puzzle type', ['normal', 'getTo'])
+        let puzzleCompletionType = await ig.blitzkrieg.util.syncDialog('select puzzle completion type', ['normal', 'getTo'])
+        let puzzleType = await ig.blitzkrieg.util.syncDialog('select puzzle type', ['whole room', 'add walls', 'dis'])
 
         sel.data.difficulty = parseInt(puzzleDiff)
         sel.data.timeLength = parseInt(puzzleLen)
+        sel.data.completionType = puzzleCompletionType
         sel.data.type = puzzleType
         sel.data.chapter = sc.model.player.chapter
         sel.data.plotLine = ig.vars.storage.plot ? ig.vars.storage.plot.line : -1

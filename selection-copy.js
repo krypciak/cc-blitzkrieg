@@ -216,7 +216,7 @@ export class SelectionCopyManager {
         })
 
         let entityId = maxEntityId
-
+        let triggersIncluded = []
         sel.bb.forEach((rect) => {
             selMap.entities.forEach((entity) => {
                 // check if entity is in rect bounds
@@ -230,6 +230,16 @@ export class SelectionCopyManager {
 
                     let { x, y } = this.getOffsetEntityPos(rect, newEntity, xOffset, yOffset, sel)
                     if (entity.type == 'EventTrigger') {
+                        for (let obj of triggersIncluded) {
+                            if (entity.settings.name == obj.name && entity.x == obj.x && entity.y == obj.y) {
+                                return
+                            }
+                        }
+                        triggersIncluded.push({
+                            name: entity.settings.name,
+                            x: entity.x,
+                            y: entity.y,
+                        })
                         x = xOffset
                         y = yOffset
                     }
@@ -254,6 +264,9 @@ export class SelectionCopyManager {
                         newEntity.id = ++entityId
                         if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
+                            if (newEntity.type == 'EventTrigger') {
+                                console.log(newEntity)
+                            }
                             entities.push(newEntity)
                         }
                     }
