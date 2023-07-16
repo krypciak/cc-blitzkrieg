@@ -282,9 +282,6 @@ export class SelectionCopyManager {
                         newEntity.id = ++entityId
                         if ('settings' in newEntity) {
                             newEntity.settings.mapId = entityId
-                            if (newEntity.type == 'EventTrigger') {
-                                console.log(newEntity)
-                            }
                             entities.push(newEntity)
                         }
                     }
