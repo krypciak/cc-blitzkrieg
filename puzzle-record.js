@@ -117,6 +117,7 @@ export class PuzzleRecordManager {
             splittedPath.shift()
             let value = ig.vars.storage
             for (let i = 0; i < splittedPath.length - 1; i++) {
+                // eslint-disable-next-line 
                 if (! value.hasOwnProperty(splittedPath[i])) {
                     value[splittedPath[i]] = {}
                 }
@@ -191,19 +192,14 @@ export class PuzzleRecordManager {
             let action = puzzleLog[i]
             // let frame = action[0]
             let path = action[1]
-            let value = action[2]
+            // let value = action[2]
             // console.log(path, value)
             if (path.startsWith('.maps')) { continue }
-            if (path.toLowerCase().includes('solved') && value == true) {
-                return path.substring(1)
-            }
+            return path.substring(1)
+            // if (path.toLowerCase().includes('solved') && value == true) {
+            //     return path.substring(1)
+            // }
 
         }
-
-        ig.blitzkrieg.msg('blitzkrieg', 'solution not found', 10)
-        console.log('Puzzle solution not found: ', sel)
-        //throw new Error('Puzzle solution not found')
-        //debugger
-        return ''
     }
 }

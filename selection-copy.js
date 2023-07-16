@@ -153,7 +153,6 @@ export class SelectionCopyManager {
                 return
             }
 
-            // case 'layer':
             case 'group':
             case 'varName':
             case 'preVariable':
