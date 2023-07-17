@@ -142,7 +142,7 @@ export default class Blitzkrieg extends Plugin {
         ig.blitzkrieg.puzzleSelections = new Selections(
             '#77000044',
             '#ff222244',
-            ig.blitzkrieg.mod.baseDirectory + 'json/puzzleData.json',
+            [ ig.blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ],
             ig.blitzkrieg.puzzleSelectionManager.newSelEvent,
             ig.blitzkrieg.puzzleSelectionManager.walkInEvent,
             ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
@@ -159,7 +159,7 @@ export default class Blitzkrieg extends Plugin {
         ig.blitzkrieg.battleSelections = new Selections(
             '#00770044',
             '#22ff2244',
-            ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json',
+            [ ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json', ],
             (sel) => {
                 // ig.blitzkrieg.msg('blitzkrieg', 'new selection', 2)
                 ig.blitzkrieg.battleSelectionManager.addData(sel)

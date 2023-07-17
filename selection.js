@@ -14,12 +14,13 @@ export class Selections {
     // newSelEvent(Selection)
     // walkInEvent(Selection)
     // walkOutEvent(Selection)
-    constructor(completeColor, tempColor, jsonfile, newSelEvent, walkInEvent, walkOutEvent) {
+    constructor(completeColor, tempColor, jsonfiles, newSelEvent, walkInEvent, walkOutEvent) {
         tilesize = ig.blitzkrieg.tilesize
         this.selHashMap = {}
         this.mapSels = {
             sels: [],
             tempSel: new Selection(null),
+            fileIndex: 0,
         }
         this.newSelEvent = newSelEvent !== undefined ? newSelEvent : () => {}
         this.walkInEvent = walkInEvent !== undefined ? walkInEvent : () => {}
@@ -30,14 +31,9 @@ export class Selections {
         this.completeColor = completeColor
         this.tempColor = tempColor
         this.drawBoxes = false
-        this.jsonfile = jsonfile
-        try {
-            this.load()
-        } catch(error) {
-            // file doesn't exist
-        }
+        this.jsonfiles = jsonfiles
+        this.loadAll()
         this._ready = true
-
     }
 
     onNewMapEnter() {
@@ -47,6 +43,7 @@ export class Selections {
             this.mapSels = {
                 sels: [],
                 tempSel: new Selection(mapName),
+                fileIndex: 0,
             }
         this.selHashMap[mapName] = this.mapSels
     }
@@ -264,21 +261,46 @@ export class Selections {
         this.drawBoxes = ! this.drawBoxes
     }
 
-    save() {
-        for (let mapName in this.selHashMap) {
-            let obj = this.selHashMap[mapName]
+    async save() {
+        let newMap = ig.copy(this.selHashMap)
+        for (let mapName in newMap) {
+            let obj = newMap[mapName]
             if (obj.sels.length == 0 && obj.tempSel.bb.length == 0) {
+                delete newMap[mapName]
                 delete this.selHashMap[mapName]
             }
         }
-        const json = JSON.stringify(this.selHashMap)
-        fs.writeFileSync(this.jsonfile, json)
+        let saveObjects = []
+        for (let i = 0; i < this.jsonfiles.length; i++) { saveObjects.push({}) }
+        for (let mapName in newMap) {
+            let mapsel = newMap[mapName]
+            saveObjects[mapsel.fileIndex][mapName] = mapsel
+        }
+        for (let i = 0; i < this.jsonfiles.length; i++) {
+            let json = JSON.stringify(saveObjects[i])
+            fs.writeFileSync(this.jsonfiles[i], json)
+        }
     }
 
-    load() {
-        const json = fs.readFileSync(this.jsonfile, 'utf8')
-        const obj = JSON.parse(json)
-        this.selHashMap = obj
+    async load(index) {
+        try {
+            const json = fs.readFileSync(this.jsonfiles[index], 'utf8')
+            const obj = JSON.parse(json)
+            for (let mapName in obj) {
+                obj[mapName].fileIndex = index
+            }
+            if (this.selHashMap) {
+                this.selHashMap = { ...this.selHashMap, ...obj }
+            }
+        } catch(error) {
+            // file doesn't exist
+        }
+    }
+
+    async loadAll() {
+        for (let i = 0; i < this.jsonfiles.length; i++) {
+            this.load(i)
+        }
     }
 }
 

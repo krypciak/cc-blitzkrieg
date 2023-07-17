@@ -29,7 +29,8 @@ export class SelectionCopyManager {
         // this._sels.push(ig.blitzkrieg.util.['autumn-fall.path-05'].sels[1])
         //
         this.excludeEventTypes = new Set([
-            'SET_CAMERA_POS'
+            'SET_CAMERA_POS',
+            // 'WAIT',
         ])
     }
 
