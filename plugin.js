@@ -85,6 +85,13 @@ export default class Blitzkrieg extends Plugin {
                 ig.blitzkrieg.setupTabEvent(this)
             }
         })
+
+        ig.ENTITY.Player.inject({
+            updateModelStats(...args) {
+                if (ig.blitzkrieg.puzzleSelectionManager.modifiersActive) { return }
+                this.parent(...args)
+            }
+        })
     }
 
     toogleSelectionMode() {
@@ -160,16 +167,9 @@ export default class Blitzkrieg extends Plugin {
             '#00770044',
             '#22ff2244',
             [ ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json', ],
-            (sel) => {
-                // ig.blitzkrieg.msg('blitzkrieg', 'new selection', 2)
-                ig.blitzkrieg.battleSelectionManager.addData(sel)
-            },
-            () => {
-                // ig.blitzkrieg.msg('blitzkrieg', 'walked into selection', 2)
-            },
-            () => {
-                // ig.blitzkrieg.msg('blitzkrieg', 'walked out of selection', 2)
-            },
+            ig.blitzkrieg.battleSelectionManager.newSelEvent,
+            () => {},
+            () => {},
         )
         ig.blitzkrieg.keys = {
             'selection-toogle':          { desc: 'Toogle selection mode',          func: ig.blitzkrieg.toogleSelectionMode,
@@ -191,10 +191,10 @@ export default class Blitzkrieg extends Plugin {
             'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolveFast,
                 key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
-            // 'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: ig.blitzkrieg.puzzleSpeedManager.inc, 
-            //     key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSpeedManager },
-            // 'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: ig.blitzkrieg.puzzleSpeedManager.dec, 
-            //     key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSpeedManager },
+            'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: ig.blitzkrieg.puzzleSelectionManager.incSpeed, 
+                key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
+            'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: ig.blitzkrieg.puzzleSelectionManager.decSpeed, 
+                key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
             // 'begin-battle':      { desc: 'begin battle',  func: ig.blitzkrieg.battleReplayManager.prepareBattles, 
             //     key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
             // 'next-battle':      { desc: 'next battle', func: ig.blitzkrieg.battleReplayManager.nextBattle, 

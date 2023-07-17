@@ -1,6 +1,11 @@
 export class PuzzleSelectionManager {
     constructor() {
         this.incStep = 0.05
+        this.changeModifiers = true
+        this.changeSpeed = true
+        this.fakeBuffItemId = 213700
+        this.modifiersActive = false
+        this.fakeBuffActive = false
     }
 
     _increse_speed(val) {
@@ -17,6 +22,10 @@ export class PuzzleSelectionManager {
         sc.options.set('assist-puzzle-speed', sel.data.puzzleSpeed)
         ig.blitzkrieg.msg('blitzkrieg', (val > 0 ? 'Incresing' : 'Decresing') + ' selection puzzle speed to ' + Math.round(sel.data.puzzleSpeed * 100) + '%', 1)
         ig.blitzkrieg.puzzleSelections.save()
+
+        if (sel.data.puzzleSpeed == 1 && ! ig.blitzkrieg.puzzleSelectionManager.modifiersActive) {
+            ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
+        }
     }
     
     incSpeed() {
@@ -27,19 +36,66 @@ export class PuzzleSelectionManager {
         this._increse_speed(-this.incStep)
     }
 
-    walkInEvent(sel) {
+    updatePuzzleSpeed(sel) {
         let speed = sel === undefined || ! ('puzzleSpeed' in sel.data) ? 1 : sel.data.puzzleSpeed
 
-        if (sc.options.get('assist-puzzle-speed') != speed) {
+        if (this.changeSpeed && sc.options.get('assist-puzzle-speed') != speed) {
             sc.options.set('assist-puzzle-speed', speed) 
             ig.blitzkrieg.msg('blitzkrieg', 'Setting puzzle speed to ' + Math.round(speed * 100) + '%', 1)
+            if (speed != 1) { ig.blitzkrieg.puzzleSelectionManager.createFakeBuff() }
+            if (speed == 1 && ! ig.blitzkrieg.puzzleSelectionManager.modifiersActive) {
+                ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff() 
+            }
         }
+    }
 
+    createFakeBuff() {
+        if (ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
+
+        ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive = true
+        // add a buff that only shows when the modifiers are active
+        let buff = new sc.ItemBuff(['DASH-STEP-1'], 100000, ig.blitzkrieg.puzzleSelectionManager.fakeBuffItemId)
+        buff.modifiers = {}
+        sc.model.player.params.addBuff(buff)
+    }
+
+    destroyFakeBuff() {
+        if (! ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
+        ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive = false
+        // remove fake buff
+        for (let buff of sc.model.player.params.buffs) {
+            if (buff.itemID == ig.blitzkrieg.puzzleSelectionManager.fakeBuffItemId) {
+                sc.model.player.params.removeBuff(buff)
+            }
+        }
+    }
+
+    walkInEvent(sel) {
+        ig.blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(sel)
+
+        if (ig.blitzkrieg.puzzleSelectionManager.changeModifiers) {
+            ig.game.playerEntity.params.modifiers.AIMING_MOVEMENT = 0.5
+            ig.game.playerEntity.params.modifiers.AIM_SPEED = 2
+            ig.game.playerEntity.params.modifiers.AIM_STABILITY = 1
+            ig.game.playerEntity.params.modifiers.DASH_STEP = 0
+            ig.game.playerEntity.params.modifiers.ASSAULT = 0.5
+            ig.game.playerEntity.updateModelStats()
+            ig.blitzkrieg.puzzleSelectionManager.modifiersActive = true
+
+            ig.blitzkrieg.puzzleSelectionManager.createFakeBuff()
+        }
     }
 
     // eslint-disable-next-line no-unused-vars
     walkOutEvent(sel) {
-        this.walkInEvent(ig.blitzkrieg.puzzleSelections.inSelStack.peek())
+        ig.blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(ig.blitzkrieg.puzzleSelections.inSelStack.peek())
+
+        if (ig.blitzkrieg.puzzleSelectionManager.changeModifiers) {
+            ig.blitzkrieg.puzzleSelectionManager.modifiersActive = false
+            sc.model.player.updateStats()
+
+            ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
+        }
     }
 
 
