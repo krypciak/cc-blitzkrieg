@@ -1,5 +1,6 @@
 import { PuzzleSelectionManager } from './puzzle-selection.js'
 import { BattleSelectionManager } from './battle-selection.js'
+import { BossSelectionManager } from './boss-selection.js'
 import { SelectionCopyManager } from './selection-copy.js'
 import { MapArranger } from './map-arrange.js'
 import { Selections } from './selection.js'
@@ -57,6 +58,7 @@ export default class Blitzkrieg extends Plugin {
                 let pos = ig.game.playerEntity.coll.pos
                 ig.blitzkrieg.puzzleSelections.checkForEvents(pos)
                 ig.blitzkrieg.battleSelections.checkForEvents(pos)
+                ig.blitzkrieg.bossSelections.checkForEvents(pos)
                 return this.parent(...args)
             }
         })
@@ -66,6 +68,7 @@ export default class Blitzkrieg extends Plugin {
                 this.parent(...args)
                 ig.blitzkrieg.puzzleSelections.drawSelections()
                 ig.blitzkrieg.battleSelections.drawSelections()
+                ig.blitzkrieg.bossSelections.drawSelections()
             }
         })
 
@@ -74,6 +77,7 @@ export default class Blitzkrieg extends Plugin {
                 this.parent(...args)
                 ig.blitzkrieg.puzzleSelections.onNewMapEnter()
                 ig.blitzkrieg.battleSelections.onNewMapEnter()
+                ig.blitzkrieg.bossSelections.onNewMapEnter()
             }
         })
 
@@ -92,14 +96,25 @@ export default class Blitzkrieg extends Plugin {
         })
     }
 
-    toogleSelectionMode() {
-        ig.blitzkrieg.selectionMode = ! ig.blitzkrieg.selectionMode
-        if (ig.blitzkrieg.selectionMode) {
+    async selectionDialog() {
+        ig.blitzkrieg.selectionMode = await ig.blitzkrieg.util.syncDialog('select selection type', ['puzzle', 'battle', 'boss'])
+        ig.blitzkrieg.updateSelectionMode()
+    }
+
+    updateSelectionMode() {
+        switch (ig.blitzkrieg.selectionMode) {
+        case 'puzzle':
             ig.blitzkrieg.selectionInstance = ig.blitzkrieg.puzzleSelections
             ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.puzzleSelectionManager
-        } else {
+            break
+        case 'battle':
             ig.blitzkrieg.selectionInstance = ig.blitzkrieg.battleSelections
             ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.battleSelectionManager
+            break
+        case 'boss':
+            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.bossSelections
+            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.bossSelectionManager
+            break
         }
         ig.blitzkrieg.msg('blitzkrieg', 'Switched selection mode to: ' + ig.blitzkrieg.selectionInstance.name, 2)
     }
@@ -122,6 +137,7 @@ export default class Blitzkrieg extends Plugin {
     bindingToogleRender() {
         ig.blitzkrieg.puzzleSelections.toogleDrawing()
         ig.blitzkrieg.battleSelections.toogleDrawing()
+        ig.blitzkrieg.bossSelections.toogleDrawing()
     }
 
     async reloadLevel() {
@@ -142,7 +158,6 @@ export default class Blitzkrieg extends Plugin {
 
 
         ig.blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
-
         ig.blitzkrieg.puzzleSelections = new Selections(
             'puzzle',
             '#77000044',
@@ -160,7 +175,6 @@ export default class Blitzkrieg extends Plugin {
 
 
         ig.blitzkrieg.battleSelectionManager = new BattleSelectionManager()
-
         ig.blitzkrieg.battleSelections = new Selections(
             'battle',
             '#00770044',
@@ -170,12 +184,25 @@ export default class Blitzkrieg extends Plugin {
             () => {},
             () => {},
         )
+        ig.blitzkrieg.battleSelectionManager.recorder.selInstance = ig.blitzkrieg.battleSelections
 
-        ig.blitzkrieg.selectionMode = false
-        ig.blitzkrieg.toogleSelectionMode()
+        
+        ig.blitzkrieg.bossSelectionManager = new BossSelectionManager()
+        ig.blitzkrieg.bossSelections = new Selections(
+            'boss',
+            '#0000ff44',
+            '#2222ff44',
+            [ ig.blitzkrieg.mod.baseDirectory + 'json/bossData.json', ],
+            ig.blitzkrieg.bossSelectionManager.newSelEvent,
+            () => {},
+            () => {},
+        )
+
+        ig.blitzkrieg.selectionMode = 'puzzle'
+        ig.blitzkrieg.updateSelectionMode()
 
         ig.blitzkrieg.keys = {
-            'selection-toogle':          { desc: 'Toogle selection mode',          func: ig.blitzkrieg.toogleSelectionMode,
+            'selection-toogle':          { desc: 'Toogle selection mode',          func: ig.blitzkrieg.selectionDialog,
                 key: ig.KEY.MINUS,         header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
             'puzzle-create':             { desc: 'Create a new entry',             func: ig.blitzkrieg.bindingCreate,

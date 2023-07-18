@@ -1,16 +1,36 @@
+import { ChangeRecorder } from './change-record.js'
+
 export class BattleSelectionManager {
     constructor() {
         this.battleIndex = 0
         this.waitForLoad = false
         this._tmpSel = null
         this.barrierList = []
+
+
+        let ignoreSet = new Set([
+            '.playerVar.input.melee',
+            '.gamepad.active'
+        ])
+        this.recorder = new ChangeRecorder(10, ignoreSet,
+            (battleSelections, record, loopIndex) => {
+                if (! record.enemyLog) { record.enemyLog = [] }
+                if (loopIndex % 5 == 0) { 
+                    record.enemyLog.push([loopIndex, 'test', loopIndex])
+                }
+            }
+        )
     }
 
-    addData(sel) {
-        if (sel === null) 
-            return
-        sel.data['index'] = this.battleIndex++
-            
+    async newSelEvent(sel) {
+        await ig.blitzkrieg.battleSelectionManager.finalizeSel(sel)
+    }
+
+    async finalizeSel(sel) {
+        let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        let battleDiff = await ig.blitzkrieg.util.syncDialog('select battle difficulty', scale)
+        let battleType = await ig.blitzkrieg.util.syncDialog('select boss type', ['main', 'side'])
+
         // heat cold shock wave
         sel.data['elements'] = [
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
@@ -18,16 +38,22 @@ export class BattleSelectionManager {
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
             sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
         ]
+        sel.data.difficulty = parseInt(battleDiff)
+        sel.data.type = battleType
+        sel.data.chapter = sc.model.player.chapter
+        sel.data.plotLine = ig.vars.storage.plot ? ig.vars.storage.plot.line : -1
+
+        sel.data.startPos = ig.game.playerEntity.coll.pos
+        sel.data.endPos = ig.game.playerEntity.coll.pos
+
         sel.data.skills = []
         sc.model.player.skills.forEach((val, i) => {
             if (val !== null) sel.data.skills.push(i)
         })
-        sel.data['spLevel'] = sc.model.player.spLevel
-        sel.data['skillPoints'] = ig.copy(sc.model.player.skillPoints)
-        sel.data['chapter'] = sc.model.player.chapter
-        sel.data['level'] = sc.model.player.level
-        sel.data['equip'] = ig.copy(sc.model.player.equip)
-        sel.data['plotLine'] = 'plot' in ig.vars.storage ? ig.vars.storage.plot.line : -1
+        sel.data.spLevel = sc.model.player.spLevel
+        sel.data.skillPoints = ig.copy(sc.model.player.skillPoints)
+        sel.data.level = sc.model.player.level
+        sel.data.equip = ig.copy(sc.model.player.equip)
     }
 
     restoreData(sel) {
@@ -63,6 +89,21 @@ export class BattleSelectionManager {
         sc.model.player.updateStats()
     }
 
+    // skip fight
+    solve() {
+        let sel = ig.blitzkrieg.battleSelections.inSelStack.peek()
+
+        if (! sel) { return }
+
+        if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
+            ig.blitzkrieg.msg('blitzkrieg', 'No battle skip recorded!')
+            return
+        }
+
+        ig.blitzkrieg.puzzleSelectionManager.solveSel(sel, 0)
+
+    }
+
     async findAllSpawners() {
         await ig.blitzkrieg.util.loadAllMaps()
         let spawners = {}
@@ -80,5 +121,4 @@ export class BattleSelectionManager {
         }
         ig.blitzkrieg.allSpawners = spawners
     }
-
 }

@@ -243,18 +243,20 @@ export class Selections {
         }
 
         this.drawSelBoxes(this.mapSels.tempSel, this.tempColor)
-        if (this.selectStep == 0) {
-            let pos = { x: 0, y: 0 }
-            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
-            pos.x = Math.floor(pos.x / tilesize) * tilesize
-            pos.y = Math.floor(pos.y / tilesize) * tilesize
-            this.drawBox(new Rectangle(pos.x, pos.y, tilesize, tilesize), this.tempColor)
-        } else if (this.selectStep == 1) {
-            let pos = { x: 0, y: 0 }
-            ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
-            let width = (Math.floor(pos.x / tilesize) * tilesize) - this._x
-            let height = (Math.floor(pos.y / tilesize) * tilesize) - this._y
-            this.drawBox(new Rectangle(this._x, this._y, width, height), this.tempColor)
+        if (ig.blitzkrieg.selectionMode == this.name) {
+            if (this.selectStep == 0) {
+                let pos = { x: 0, y: 0 }
+                ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+                pos.x = Math.floor(pos.x / tilesize) * tilesize
+                pos.y = Math.floor(pos.y / tilesize) * tilesize
+                this.drawBox(new Rectangle(pos.x, pos.y, tilesize, tilesize), this.tempColor)
+            } else if (this.selectStep == 1) {
+                let pos = { x: 0, y: 0 }
+                ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
+                let width = (Math.floor(pos.x / tilesize) * tilesize) - this._x
+                let height = (Math.floor(pos.y / tilesize) * tilesize) - this._y
+                this.drawBox(new Rectangle(this._x, this._y, width, height), this.tempColor)
+            }
         }
     }
 

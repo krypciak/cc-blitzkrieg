@@ -142,35 +142,66 @@ export class PuzzleSelectionManager {
         sel.data.endPos = await ig.blitzkrieg.util.waitForPositionKey()
     }
 
-
     solve() {
         let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
 
         if (! sel) { return }
 
+        if (sel.data.completionType == 'getTo') {
+            let pos = sel.data.endPos
+            ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
+            return
+        }
+
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
             ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
             return
         }
-        
+        ig.blitzkrieg.puzzleSelectionManager.solveSel(sel)
+    }
+
+    solveSel(sel, delay = 0) {
         let log = sel.data.recordLog.log
 
-        for (let i = 0; i < log.length; i++) {
-            let action = log[i]
+        if (delay == 0) {
+            for (let i = 0; i < log.length; i++) {
+                let action = log[i]
 
-            let splittedPath = action[1].split('.')
-            splittedPath.shift()
-            let value = ig.vars.storage
-            for (let i = 0; i < splittedPath.length - 1; i++) {
-                // eslint-disable-next-line 
-                if (! value.hasOwnProperty(splittedPath[i])) {
-                    value[splittedPath[i]] = {}
+                let splittedPath = action[1].split('.')
+                splittedPath.shift()
+                let value = ig.vars.storage
+                for (let i = 0; i < splittedPath.length - 1; i++) {
+                    // eslint-disable-next-line 
+                    if (! value.hasOwnProperty(splittedPath[i])) {
+                        value[splittedPath[i]] = {}
+                    }
+                    value = value[splittedPath[i]]
                 }
-                value = value[splittedPath[i]]
+
+                value[splittedPath[splittedPath.length - 1]] = action[2]
+
             }
+        } else {
+            let solveArrayIndex = 0
+            let intervalID = setInterval(async () => {
+                let action = log[solveArrayIndex]
+                let splittedPath = action[1].split('.')
+                splittedPath.shift()
+                let value = ig.vars.storage
+                for (let i = 0; i < splittedPath.length - 1; i++) {
+                    value = value[splittedPath[i]]
+                }
 
-            value[splittedPath[splittedPath.length - 1]] = action[2]
+                value[splittedPath[splittedPath.length - 1]] = action[2]
 
+                ig.game.varsChangedDeferred()
+
+                console.log(solveArrayIndex)
+                solveArrayIndex++
+                if (solveArrayIndex == log.length) {
+                    clearInterval(intervalID)
+                }
+            }, 1000 / delay)
         }
         ig.game.varsChangedDeferred()
         ig.blitzkrieg.msg('blitzkrieg', 'Solved puzzle')
