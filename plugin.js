@@ -1,7 +1,5 @@
-import { PuzzleRecordManager } from './puzzle-record.js'
 import { PuzzleSelectionManager } from './puzzle-selection.js'
 import { BattleSelectionManager } from './battle-selection.js'
-import { BattleReplayManager } from './battle-replay.js'
 import { SelectionCopyManager } from './selection-copy.js'
 import { MapArranger } from './map-arrange.js'
 import { Selections } from './selection.js'
@@ -88,7 +86,7 @@ export default class Blitzkrieg extends Plugin {
 
         ig.ENTITY.Player.inject({
             updateModelStats(...args) {
-                if (ig.blitzkrieg.puzzleSelectionManager.modifiersActive) { return }
+                if (ig.blitzkrieg.puzzleSelectionManager && ig.blitzkrieg.puzzleSelectionManager.modifiersActive) { return }
                 this.parent(...args)
             }
         })
@@ -96,27 +94,30 @@ export default class Blitzkrieg extends Plugin {
 
     toogleSelectionMode() {
         ig.blitzkrieg.selectionMode = ! ig.blitzkrieg.selectionMode
-        ig.blitzkrieg.msg('blitzkrieg', 'Switched selection mode to: ' + (ig.blitzkrieg.selectionMode ? 'puzzle' : 'battle'), 2)
+        if (ig.blitzkrieg.selectionMode) {
+            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.puzzleSelections
+            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.puzzleSelectionManager
+        } else {
+            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.battleSelections
+            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.battleSelectionManager
+        }
+        ig.blitzkrieg.msg('blitzkrieg', 'Switched selection mode to: ' + ig.blitzkrieg.selectionInstance.name, 2)
     }
 
     bindingCreate() {
-        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleSelections : ig.blitzkrieg.battleSelections).create()
+        ig.blitzkrieg.selectionInstance.create()
     }
     bindingCreateSel() {
-        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleSelections : ig.blitzkrieg.battleSelections).select()
+        ig.blitzkrieg.selectionInstance.select()
     }
     bindingDeleteSel() {
-        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleSelections : ig.blitzkrieg.battleSelections).delete()
+        ig.blitzkrieg.selectionInstance.delete()
     }
     bindingRecord() {
-        (ig.blitzkrieg.selectionMode ? ig.blitzkrieg.puzzleRecordManager : ig.blitzkrieg.battleSelectionManager).toogleRecording()
+        ig.blitzkrieg.selectionInstanceManager.recorder.toogleRecording()
     }
-    bindingSolveFast() {
-        if (ig.blitzkrieg.selectionMode) {
-            ig.blitzkrieg.puzzleRecordManager.solveFast()
-        } else {
-            ig.blitzkrieg.battleSelectionManager.restoreData(ig.blitzkrieg.battleSelections.inSelStack.peek())
-        }
+    bindingSolve() {
+        ig.blitzkrieg.selectionInstanceManager.solve()
     }
     bindingToogleRender() {
         ig.blitzkrieg.puzzleSelections.toogleDrawing()
@@ -128,7 +129,6 @@ export default class Blitzkrieg extends Plugin {
         let map = ig.game.mapName.split('.').join('/')
         ig.game.loadLevel(await ig.blitzkrieg.util.getMapObject(map), false, false)
         ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
-
     }
     
     async prestart() {
@@ -136,17 +136,15 @@ export default class Blitzkrieg extends Plugin {
         ig.blitzkrieg.tilesize = 16
         ig.blitzkrieg.name = 'BLITZKRIEG'
         ig.blitzkrieg.displayName = 'Blitzkrieg'
-        ig.blitzkrieg.selectionMode = true
 
-        TextNotification.init()
-        ig.blitzkrieg.msg = TextNotification.msg
+        ig.blitzkrieg.msg = () => {}
         ig.blitzkrieg.util = new Util()
 
 
-        ig.blitzkrieg.puzzleRecordManager = new PuzzleRecordManager()
         ig.blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
 
         ig.blitzkrieg.puzzleSelections = new Selections(
+            'puzzle',
             '#77000044',
             '#ff222244',
             [ ig.blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ],
@@ -154,6 +152,7 @@ export default class Blitzkrieg extends Plugin {
             ig.blitzkrieg.puzzleSelectionManager.walkInEvent,
             ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
         )
+        ig.blitzkrieg.puzzleSelectionManager.recorder.selInstance = ig.blitzkrieg.puzzleSelections
 
         ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
 
@@ -161,9 +160,9 @@ export default class Blitzkrieg extends Plugin {
 
 
         ig.blitzkrieg.battleSelectionManager = new BattleSelectionManager()
-        ig.blitzkrieg.battleReplayManager = new BattleReplayManager()
 
         ig.blitzkrieg.battleSelections = new Selections(
+            'battle',
             '#00770044',
             '#22ff2244',
             [ ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json', ],
@@ -171,6 +170,10 @@ export default class Blitzkrieg extends Plugin {
             () => {},
             () => {},
         )
+
+        ig.blitzkrieg.selectionMode = false
+        ig.blitzkrieg.toogleSelectionMode()
+
         ig.blitzkrieg.keys = {
             'selection-toogle':          { desc: 'Toogle selection mode',          func: ig.blitzkrieg.toogleSelectionMode,
                 key: ig.KEY.MINUS,         header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
@@ -186,19 +189,13 @@ export default class Blitzkrieg extends Plugin {
             'selection-render-toogle':   { desc: 'Toogle selection rendering',     func: ig.blitzkrieg.bindingToogleRender,
                 key: ig.KEY.SINGLE_QUOTE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
-            // 'puzzle-solve':              { desc: 'Solve puzzle',                   func: ig.blitzkrieg.puzzleRecordManager.solve,
-            //     key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleRecordManager },
-            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolveFast,
+            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolve,
                 key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
 
             'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: ig.blitzkrieg.puzzleSelectionManager.incSpeed, 
                 key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
             'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: ig.blitzkrieg.puzzleSelectionManager.decSpeed, 
                 key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
-            // 'begin-battle':      { desc: 'begin battle',  func: ig.blitzkrieg.battleReplayManager.prepareBattles, 
-            //     key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
-            // 'next-battle':      { desc: 'next battle', func: ig.blitzkrieg.battleReplayManager.nextBattle, 
-            //     key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.battleReplayManager },
 
             'copy-selection':   { desc: 'copy selection', func: ig.blitzkrieg.selectionCopyManager.copy, 
                 key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
@@ -208,6 +205,7 @@ export default class Blitzkrieg extends Plugin {
             'reload-level':     { desc: 'Reload level',   func: ig.blitzkrieg.reloadLevel, 
                 key: ig.KEY.BACKSPACE,     header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
         }
+
         ig.blitzkrieg.setupTabs()
         ig.blitzkrieg.bindKeys(ig.blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)
         ig.blitzkrieg.registerEvents()
@@ -250,6 +248,9 @@ export default class Blitzkrieg extends Plugin {
         ig.blitzkrieg.updateKeybindingLabels()
         ig.blitzkrieg.adjustPuzzleAssistSlider()
         ig.blitzkrieg.prepareTabFonts()
+
+        TextNotification.init()
+        ig.blitzkrieg.msg = TextNotification.msg
     }
 
 

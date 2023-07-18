@@ -1,3 +1,5 @@
+import { ChangeRecorder } from './change-record.js'
+
 export class PuzzleSelectionManager {
     constructor() {
         this.incStep = 0.05
@@ -6,16 +8,28 @@ export class PuzzleSelectionManager {
         this.fakeBuffItemId = 213700
         this.modifiersActive = false
         this.fakeBuffActive = false
+        
+        let ignoreSet = new Set([
+            '.playerVar.input.melee',
+            '.gamepad.active'
+        ])
+        this.recorder = new ChangeRecorder(10, ignoreSet, () => {}
+            /*(puzzleSelections, record, loopIndex) => {
+                if (! record.enemyLog) { record.enemyLog = [] }
+                if (loopIndex % 5) { 
+                    record.enemyLog.push([loopIndex, 'obama', loopIndex])
+                }
+            }*/
+        )
     }
 
     _increse_speed(val) {
-        const sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
+        let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
 
-        if (sel == null) 
-            return
+        if (! sel) { return }
 
-        if (sel.data['puzzleSpeed'] === undefined) {
-            sel.data['puzzleSpeed'] = 1
+        if (! sel.data.puzzleSpeed) {
+            sel.data.puzzleSpeed = 1
         }
 
         sel.data.puzzleSpeed += val
@@ -28,16 +42,12 @@ export class PuzzleSelectionManager {
         }
     }
     
-    incSpeed() {
-        this._increse_speed(this.incStep)
-    }
+    incSpeed() { this._increse_speed(this.incStep) }
 
-    decSpeed() {
-        this._increse_speed(-this.incStep)
-    }
+    decSpeed() { this._increse_speed(-this.incStep) }
 
     updatePuzzleSpeed(sel) {
-        let speed = sel === undefined || ! ('puzzleSpeed' in sel.data) ? 1 : sel.data.puzzleSpeed
+        let speed = (! sel || ! sel.data.puzzleSpeed) ? 1 : sel.data.puzzleSpeed
 
         if (this.changeSpeed && sc.options.get('assist-puzzle-speed') != speed) {
             sc.options.set('assist-puzzle-speed', speed) 
@@ -130,5 +140,58 @@ export class PuzzleSelectionManager {
         sel.data.startPos = await ig.blitzkrieg.util.waitForPositionKey()
         ig.blitzkrieg.msg('blitzkrieg', 'Ending position', 3)
         sel.data.endPos = await ig.blitzkrieg.util.waitForPositionKey()
+    }
+
+
+    solve() {
+        let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
+
+        if (! sel) { return }
+
+        if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
+            ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+            return
+        }
+        
+        let log = sel.data.recordLog.log
+
+        for (let i = 0; i < log.length; i++) {
+            let action = log[i]
+
+            let splittedPath = action[1].split('.')
+            splittedPath.shift()
+            let value = ig.vars.storage
+            for (let i = 0; i < splittedPath.length - 1; i++) {
+                // eslint-disable-next-line 
+                if (! value.hasOwnProperty(splittedPath[i])) {
+                    value[splittedPath[i]] = {}
+                }
+                value = value[splittedPath[i]]
+            }
+
+            value[splittedPath[splittedPath.length - 1]] = action[2]
+
+        }
+        ig.game.varsChangedDeferred()
+        ig.blitzkrieg.msg('blitzkrieg', 'Solved puzzle')
+    }
+
+    getPuzzleSolveCondition(sel) {
+        if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
+            ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+            return
+        }
+
+        let log = sel.data.recordLog.log
+        for (let i = log.length - 1; i >= 0; i--) {
+            let action = log[i]
+            // let frame = action[0]
+            let path = action[1]
+            // let value = action[2]
+            // console.log(path, value)
+            if (path.startsWith('.maps')) { continue }
+            return path.substring(1)
+        }
+        throw new Error('puzzle solution empty somehow?')
     }
 }

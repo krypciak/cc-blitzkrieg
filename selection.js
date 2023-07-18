@@ -14,8 +14,9 @@ export class Selections {
     // newSelEvent(Selection)
     // walkInEvent(Selection)
     // walkOutEvent(Selection)
-    constructor(completeColor, tempColor, jsonfiles, newSelEvent, walkInEvent, walkOutEvent) {
+    constructor(name, completeColor, tempColor, jsonfiles, newSelEvent, walkInEvent, walkOutEvent) {
         tilesize = ig.blitzkrieg.tilesize
+        this.name = name
         this.selHashMap = {}
         this.mapSels = {
             sels: [],
