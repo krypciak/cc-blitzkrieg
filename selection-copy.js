@@ -410,10 +410,10 @@ export class SelectionCopyManager {
         sel.size.x = xOffset
         sel.size.y = yOffset
 
-        if (sel.data.stateLog && sel.data.stateLog.puzzleLog) {
-            for (let i = 0; i < sel.data.stateLog.puzzleLog.length; i++) {
-                let action = sel.data.stateLog.puzzleLog[i]
-                sel.data.stateLog.puzzleLog[i] = [action[0], action[1] + '_' + id, action[2]]
+        if (sel.data.recordLog && sel.data.recordLog.log) {
+            for (let i = 0; i < sel.data.recordLog.log.length; i++) {
+                let action = sel.data.recordLog.log[i]
+                sel.data.recordLog.log[i] = [action[0], action[1] + '_' + id, action[2]]
             }
         }
 
