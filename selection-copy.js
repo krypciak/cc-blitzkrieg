@@ -174,8 +174,10 @@ export class SelectionCopyManager {
             }
         }
 
-        if (args.rePosition) {
+        if (args.rePosition && typeof value == 'object') {
             switch (key) {
+            case 'value':
+            case 'position':
             case 'newPos': {
                 if ('x' in value && 'y' in value) {
                     let { x, y } = self.getOffsetEntityPos(args.rect, obj[key], args.xOffset, args.yOffset, args.sel)
@@ -391,22 +393,26 @@ export class SelectionCopyManager {
         yOffset = Math.floor(yOffset/tilesize)*tilesize
 
         for (let i = 0; i < sel.bb.length; i++) {
-            sel.bb[i].x = sel.bb[i].x - sel.size.x + xOffset
-            sel.bb[i].y = sel.bb[i].y - sel.size.y + yOffset
+            let { x, y } = this.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, origSel)
+            sel.bb[i].x = x
+            sel.bb[i].y = y
         }
 
         if (sel.data.startPos) {
-            sel.data.startPos.x = sel.data.startPos.x - sel.size.x + xOffset
-            sel.data.startPos.y = sel.data.startPos.y - sel.size.y + yOffset
+            let { x, y } = this.getOffsetEntityPos(sel.size, sel.data.startPos, xOffset, yOffset, origSel)
+            sel.data.startPos.x = x
+            sel.data.startPos.y = y
         }
         
         if (sel.data.endPos) {
-            sel.data.endPos.x = sel.data.endPos.x - sel.size.x + xOffset
-            sel.data.endPos.y = sel.data.endPos.y - sel.size.y + yOffset
+            let { x, y } = this.getOffsetEntityPos(sel.size, sel.data.endPos, xOffset, yOffset, origSel)
+            sel.data.endPos.x = x
+            sel.data.endPos.y = y
         }
 
-        sel.size.x = xOffset
-        sel.size.y = yOffset
+        let { x, y } = this.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, origSel)
+        sel.size.x = x
+        sel.size.y = y
 
         if (sel.data.recordLog && sel.data.recordLog.log) {
             for (let i = 0; i < sel.data.recordLog.log.length; i++) {
@@ -799,15 +805,7 @@ export class SelectionCopyManager {
             mapWidth: mapWidth,
             mapHeight,
             masterLevel,
-            attributes: { 
-                saveMode: 'ENABLED', 
-                bgm: '',
-                cameraInBounds: false,
-                'map-sounds': '',
-                mapStyle: 'rhombus-puzzle',
-                weather: '',
-                area: 'rhombus-dng' 
-            },
+            attributes: baseMap.attributes,
             // screen is not used? setting just to be safe
             screen: { x: 0, y: 0 },
             entities,

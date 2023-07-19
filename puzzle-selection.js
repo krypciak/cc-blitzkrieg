@@ -149,10 +149,12 @@ export class PuzzleSelectionManager {
 
         let yell = true
 
-        if (sel.data.completionType == 'getTo') {
+        if (sel.data.endPos) {
             let pos = sel.data.endPos
             ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
-            yell = false
+            if (sel.data.completionType == 'getTo') {
+                yell = false
+            }
         }
 
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
