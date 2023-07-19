@@ -147,14 +147,18 @@ export class PuzzleSelectionManager {
 
         if (! sel) { return }
 
+        let yell = true
+
         if (sel.data.completionType == 'getTo') {
             let pos = sel.data.endPos
             ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
-            return
+            yell = false
         }
 
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
-            ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+            if (yell) {
+                ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+            }
             return
         }
         ig.blitzkrieg.puzzleSelectionManager.solveSel(sel)
