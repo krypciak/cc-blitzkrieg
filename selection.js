@@ -143,15 +143,15 @@ export class Selections {
             ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
             pos.x = Math.floor(pos.x / tilesize) * tilesize
             pos.y = Math.floor(pos.y / tilesize) * tilesize
-            this._x = pos.x 
-            this._y = pos.y
+            this._x = Math.max(0, pos.x)
+            this._y = Math.max(0, pos.y)
 
             break
         }
         case 1: {
             ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
-            pos.x = Math.floor(pos.x / tilesize) * tilesize
-            pos.y = Math.floor(pos.y / tilesize) * tilesize
+            pos.x = Math.max(0, Math.floor(pos.x / tilesize) * tilesize)
+            pos.y = Math.max(0, Math.floor(pos.y / tilesize) * tilesize)
             let width = pos.x - this._x
             let height = pos.y - this._y
             this.selectStep = -1

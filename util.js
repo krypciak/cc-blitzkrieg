@@ -414,7 +414,8 @@ export class Util {
                     clearInterval(intervalId)
                     let pos = ig.copy(ig.game.playerEntity.coll.pos)
                     for (let i in ig.game.levels) {
-                        if (ig.game.levels[i].height == pos.z) {
+                        if (ig.game.levels[i].height + 5 >= pos.z &&
+                            ig.game.levels[i].height - 5 <= pos.z) {
                             pos.level = i
                             break
                         }

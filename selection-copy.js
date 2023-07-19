@@ -75,6 +75,7 @@ export class SelectionCopyManager {
     }
 
     getUniqueConditionVariables(str) {
+        if (! str) { return [] }
         let keywordList = [
             // List of JavaScript keywords and reserved words
             'abstract', 'arguments', 'await', 'boolean', 'break', 'byte',
@@ -280,10 +281,10 @@ export class SelectionCopyManager {
                         newEntity.x = x
                         newEntity.y = y
                         newEntity.id = ++entityId
-                        if ('settings' in newEntity) {
+                        if (newEntity.settings) {
                             newEntity.settings.mapId = entityId
-                            entities.push(newEntity)
                         }
+                        entities.push(newEntity)
                     }
                 }
             })
