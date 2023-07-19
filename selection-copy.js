@@ -124,9 +124,9 @@ export class SelectionCopyManager {
             if ('lvl' in value) {
                 let oldLevel = parseInt(value.lvl)
                 let newLevel = args.oldToNewLevelsMap[oldLevel + (args.isSel ? args.selLevelOffset : 0)]
+
                 obj.newPos.lvl = newLevel
             }
-
             // newPos also adjusted later
             break
         }
@@ -292,7 +292,6 @@ export class SelectionCopyManager {
         return entities
     }
 
-
     processCollisionLayers(mapData) {
         let width = mapData.mapWidth
         let height = mapData.mapHeight
@@ -384,7 +383,6 @@ export class SelectionCopyManager {
             x4, y4
         }
     }
-
 
     createUniquePuzzleSelection(origSel, xOffset, yOffset, id) {
         let sel = ig.copy(origSel)
@@ -697,11 +695,18 @@ export class SelectionCopyManager {
 
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
         disableEntities, mergeLayers, removeCutscenes,
-        uniqueId = ig.blitzkrieg.util.generateUniqueID()) {
+        uniqueId = ig.blitzkrieg.util.generateUniqueID(), uniqueSel = null) {
 
         this.uniqueId = uniqueId
 
         let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap, sel)
+
+        if (uniqueSel) {
+            uniqueSel.data.startPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.startPos.level) + selLevelOffset]
+            uniqueSel.data.startPos.z = levels[parseInt(uniqueSel.data.startPos.level)].height + (uniqueSel.data.startPos.z % 16)
+            uniqueSel.data.endPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.endPos.level) + selLevelOffset]
+            uniqueSel.data.endPos.z = levels[parseInt(uniqueSel.data.endPos.level)].height + (uniqueSel.data.endPos.z % 16)
+        }
 
         let { lightLayer, collisionLayers, tileLayers, objectLayers, navLayers, mapWidth, mapHeight } =
             this.mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, oldToNewLevelsMap,
