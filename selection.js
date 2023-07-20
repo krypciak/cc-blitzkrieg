@@ -177,8 +177,8 @@ export class Selections {
     }
 
     isRectInPos(rect, pos) {
-        return (pos.x >= rect.x && pos.x <= (rect.x + rect.width) &&
-                pos.y >= rect.y && pos.y <= (rect.y + rect.height))
+        return (pos.x >= rect.x && pos.x < (rect.x + rect.width) &&
+                pos.y >= rect.y && pos.y < (rect.y + rect.height))
     }
 
     isSelInPos(sel, pos) {

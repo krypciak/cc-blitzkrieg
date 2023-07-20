@@ -144,7 +144,8 @@ export class SelectionCopyManager {
             case 'blockEventCondition': {
                 if (value === null ||
                     typeof value === 'boolean' ||
-                    (typeof value === 'string' && value.trim().length == 0)) {
+                    (typeof value === 'string' && value.trim().length == 0) ||
+                    (typeof value === 'string' && value.includes('_destroyed'))) {
                     return
                 }
                 let vars = self.getUniqueConditionVariables(value)
@@ -164,7 +165,8 @@ export class SelectionCopyManager {
             case 'variable': {
                 if (value === null ||
                     typeof value === 'boolean' ||
-                    (typeof value === 'string' && value.trim().length == 0)) {
+                    (typeof value === 'string' && value.trim().length == 0) ||
+                    (typeof value === 'string' && value.includes('_destroyed'))) {
                     return
                 }
                 obj[key] = value + '_' + self.uniqueId
@@ -175,17 +177,21 @@ export class SelectionCopyManager {
         }
 
         if (args.rePosition && typeof value == 'object') {
-            if (key == 'position') {
-                console.log(obj, key, value)
-            }
             switch (key) {
             // case 'position':
             case 'value':
+            case 'target':
             case 'newPos': {
                 if ('x' in value && 'y' in value) {
                     let { x, y } = self.getOffsetEntityPos(args.rect, obj[key], args.xOffset, args.yOffset, args.sel)
                     obj[key].x = x
                     obj[key].y = y
+                }
+                if ('lvl' in value) {
+                    let oldLevel = parseInt(value.lvl)
+                    let newLevel = args.oldToNewLevelsMap[oldLevel + (args.isSel ? args.selLevelOffset : 0)]
+
+                    obj[key].lvl = newLevel
                 }
                 return
             }
@@ -286,8 +292,10 @@ export class SelectionCopyManager {
                         newEntity.x = x
                         newEntity.y = y
                         newEntity.id = ++entityId
-                        if (newEntity.settings) {
-                            newEntity.settings.mapId = entityId
+                        if (newEntity.type != 'Destructible') {
+                            if (newEntity.settings) {
+                                newEntity.settings.mapId = entityId
+                            }
                         }
                         entities.push(newEntity)
                     }
@@ -420,7 +428,8 @@ export class SelectionCopyManager {
         if (sel.data.recordLog && sel.data.recordLog.log) {
             for (let i = 0; i < sel.data.recordLog.log.length; i++) {
                 let action = sel.data.recordLog.log[i]
-                sel.data.recordLog.log[i] = [action[0], action[1] + '_' + id, action[2]]
+                let suffix = (typeof action[1] === 'string' && action[1].includes('_destroyed')) ? '' : ('_' + id)
+                sel.data.recordLog.log[i] = [action[0], action[1] + suffix, action[2]]
             }
         }
 
