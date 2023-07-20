@@ -175,9 +175,12 @@ export class SelectionCopyManager {
         }
 
         if (args.rePosition && typeof value == 'object') {
+            if (key == 'position') {
+                console.log(obj, key, value)
+            }
             switch (key) {
+            // case 'position':
             case 'value':
-            case 'position':
             case 'newPos': {
                 if ('x' in value && 'y' in value) {
                     let { x, y } = self.getOffsetEntityPos(args.rect, obj[key], args.xOffset, args.yOffset, args.sel)
