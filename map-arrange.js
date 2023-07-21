@@ -248,7 +248,11 @@ export class MapArranger {
                 console.log('ran out of space')
             }
             baseMap = await ig.blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
-                xOffset, yOffset, newName, true, true, true)
+                xOffset, yOffset, newName, {
+                    disableEntities: true,
+                    mergeLayers: true,
+                    removeCutscenes: true
+                })
 
             // xOffset = xOffset_tmp
             // if (++i >= 100) {

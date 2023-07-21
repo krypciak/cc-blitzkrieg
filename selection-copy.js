@@ -178,10 +178,11 @@ export class SelectionCopyManager {
 
         if (args.rePosition && typeof value == 'object') {
             switch (key) {
-            // case 'position':
+            case 'position':
             case 'value':
             case 'target':
             case 'newPos': {
+                if (key == 'position' && obj.duration) { return }
                 if ('x' in value && 'y' in value) {
                     let { x, y } = self.getOffsetEntityPos(args.rect, obj[key], args.xOffset, args.yOffset, args.sel)
                     obj[key].x = x
@@ -220,7 +221,7 @@ export class SelectionCopyManager {
     }
 
     mergeMapEntities(baseMap, selMap, sel, xOffset, yOffset,
-        oldToNewLevelsMap, selLevelOffset, removeCutscenes) {
+        oldToNewLevelsMap, selLevelOffset, removeCutscenes, makePuzzlesUnique) {
         
         if (baseMap.entities === undefined && selMap.entities === undefined) {
             return []
@@ -277,7 +278,7 @@ export class SelectionCopyManager {
                     if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
                         ig.blitzkrieg.util.executeRecursiveAction(newEntity, this.changeEntityRecursive, {
                             self: this,
-                            makePuzzlesUnique: true,
+                            makePuzzlesUnique,
                             rePosition: true,
                             isSel: true,
                             removeCutscenes,
@@ -400,30 +401,7 @@ export class SelectionCopyManager {
     createUniquePuzzleSelection(origSel, xOffset, yOffset, id) {
         let sel = ig.copy(origSel)
 
-        xOffset = Math.floor(xOffset/tilesize)*tilesize
-        yOffset = Math.floor(yOffset/tilesize)*tilesize
-
-        for (let i = 0; i < sel.bb.length; i++) {
-            let { x, y } = this.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, origSel)
-            sel.bb[i].x = x
-            sel.bb[i].y = y
-        }
-
-        if (sel.data.startPos) {
-            let { x, y } = this.getOffsetEntityPos(sel.size, sel.data.startPos, xOffset, yOffset, origSel)
-            sel.data.startPos.x = x
-            sel.data.startPos.y = y
-        }
-        
-        if (sel.data.endPos) {
-            let { x, y } = this.getOffsetEntityPos(sel.size, sel.data.endPos, xOffset, yOffset, origSel)
-            sel.data.endPos.x = x
-            sel.data.endPos.y = y
-        }
-
-        let { x, y } = this.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, origSel)
-        sel.size.x = x
-        sel.size.y = y
+        ig.blitzkrieg.util.setSelPos(sel, xOffset, yOffset)
 
         if (sel.data.recordLog && sel.data.recordLog.log) {
             for (let i = 0; i < sel.data.recordLog.log.length; i++) {
@@ -673,29 +651,54 @@ export class SelectionCopyManager {
 
         // copy nav layers
         let navLayers = []
+        
+        for (let i = 0; i < levelsLength; i++) {
+            navLayers[i] = {
+                type: 'Navigation',
+                name: 'Navigation',
+                level: i,
+                width: width,
+                height: height,
+                visible: 1,
+                tilesetName: 'media/map/pathmap-tiles.png',
+                repeat: false,
+                distance: 1,
+                yDistance: 0,
+                tilesize: tilesize,
+                moveSpeed: { x: 0, y: 0 },
+                data: ig.copy(emptyData),
+            }
+        }
+
         // get base nav layers
         baseMap.layer.forEach((layer) => {
             if (! (layer.type == 'Navigation')) { return }
-            navLayers.push(layer)
+            let level = oldToNewLevelsMap[parseInt(layer.level)]
+            layer = ig.copy(layer)
+            layer.level = level
+            layer.tilesetName = 'media/map/pathmap-tiles.png'
+            layer.isBase = true
+            navLayers[level] = layer
         })
         // merge base layers with sel layers
         sel.bb.forEach((rect) => {
-            // eslint-disable-next-line no-unused-vars
             let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
                 this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
+            for (let layer of navLayers) {
+                if (layer.isBase) {
+                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
+                }
+            }
             selMap.layer.forEach((layer) => {
                 if (! (layer.type == 'Navigation')) { return }
 
+                let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
+                let layer1 = navLayers[level]
+
                 let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
-
-                if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
-                    let layer1 = layer
-                    layer1.data = subArray
-                    layer1.width = width
-                    layer1.height = height 
-                    navLayers.push(layer1)
-                }
+                
+                ig.blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
             })
         })
 
@@ -711,15 +714,17 @@ export class SelectionCopyManager {
         }
     }
 
-    async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName,
-        disableEntities, mergeLayers, removeCutscenes,
-        uniqueId = ig.blitzkrieg.util.generateUniqueID(), uniqueSel = null) {
+    async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName, options) {
 
-        this.uniqueId = uniqueId
+        if (! options.uniqueId) {
+            options.uniqueId = ig.blitzkrieg.util.generateUniqueID()
+        }
+        this.uniqueId = options.uniqueId
 
         let { levels, oldToNewLevelsMap, selLevelOffset, masterLevel } = this.mergeMapLevels(baseMap, selMap, sel)
 
-        if (uniqueSel) {
+        if (options.uniqueSel) {
+            let uniqueSel = options.uniqueSel
             uniqueSel.data.startPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.startPos.level) + selLevelOffset]
             uniqueSel.data.startPos.z = levels[parseInt(uniqueSel.data.startPos.level)].height + (uniqueSel.data.startPos.z % 16)
             uniqueSel.data.endPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.endPos.level) + selLevelOffset]
@@ -728,17 +733,17 @@ export class SelectionCopyManager {
 
         let { lightLayer, collisionLayers, tileLayers, objectLayers, navLayers, mapWidth, mapHeight } =
             this.mergeMapLayers(baseMap, selMap, sel, xOffset, yOffset, oldToNewLevelsMap,
-                selLevelOffset, levels.length, mergeLayers)
+                selLevelOffset, levels.length, options.mergeLayers)
         
         let entities = []
-        if (! disableEntities) {
+        if (! options.disableEntities) {
             entities = this.mergeMapEntities(baseMap, selMap, sel,
-                xOffset, yOffset, oldToNewLevelsMap, selLevelOffset, removeCutscenes)
+                xOffset, yOffset, oldToNewLevelsMap, selLevelOffset, options.removeCutscenes, options.makePuzzlesUnique)
         }
 
         let allLayers = []
         let id = 0
-        if (mergeLayers) {
+        if (options.mergeLayers) {
             Object.keys(tileLayers).forEach((key) => { 
                 let tilesetList = tileLayers[key]
                 Object.keys(tilesetList).forEach((key1) => { 
@@ -829,7 +834,7 @@ export class SelectionCopyManager {
     }
 
     async copySelToMapAndWrite(baseMapName, sel, xOffset, yOffset,
-        newName, newNameShort, disableEntities = false, mergeLayers = false) {
+        newName, newNameShort, options) {
         // ig.blitzkrieg.msg('blitzkrieg', 'Copying map data', 2)
         // ig.blitzkrieg.msg('blitzkrieg', 'base: ' + baseMapName, 2)
         ig.blitzkrieg.msg('blitzkrieg', 'copying sel: ' + sel.map, 1)
@@ -839,7 +844,7 @@ export class SelectionCopyManager {
         let selMap = await ig.blitzkrieg.util.getMapObject(sel.map)
 
         let newMap = await this.copySelToMap(baseMap, selMap, sel,
-            xOffset, yOffset, newName, disableEntities, mergeLayers)
+            xOffset, yOffset, newName, options)
 
         let newMapPath = './assets/mods/cc-rouge/assets/data/maps/rouge/' + newNameShort + '.json'
         
@@ -881,7 +886,11 @@ export class SelectionCopyManager {
         let newName = 'rouge/' + newNameShort
 
         this.copySelToMapAndWrite(baseMapName, sel,
-            this.xOffset, this.yOffset, newName, newNameShort, false, false, true)
+            this.xOffset, this.yOffset, newName, newNameShort, {
+                disableEntities: false,
+                mergeLayers: false, 
+                removeCutscenes: true
+            })
         this.xOffset += sel.size.width + 32
     }
 }

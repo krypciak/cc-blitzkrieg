@@ -215,8 +215,7 @@ export class PuzzleSelectionManager {
 
     getPuzzleSolveCondition(sel) {
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
-            ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
-            return
+            throw new Error('no puzzle solution recorded')
         }
 
         let log = sel.data.recordLog.log

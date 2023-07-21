@@ -175,6 +175,32 @@ export class Util {
         return minSide
     }
 
+    setSelPos(sel, xOffset, yOffset) {
+        xOffset = Math.floor(xOffset/tilesize)*tilesize
+        yOffset = Math.floor(yOffset/tilesize)*tilesize
+
+        for (let i = 0; i < sel.bb.length; i++) {
+            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, sel)
+            sel.bb[i].x = x
+            sel.bb[i].y = y
+        }
+
+        if (sel.data.startPos) {
+            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.startPos, xOffset, yOffset, sel)
+            sel.data.startPos.x = x
+            sel.data.startPos.y = y
+        }
+        
+        if (sel.data.endPos) {
+            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.endPos, xOffset, yOffset, sel)
+            sel.data.endPos.x = x
+            sel.data.endPos.y = y
+        }
+
+        let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, sel)
+        sel.size.x = x
+        sel.size.y = y
+    }
 
     reduceRectArr(rects) {
         let minX = 10000
