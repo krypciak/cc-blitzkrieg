@@ -829,7 +829,7 @@ export class SelectionCopyManager {
             layer: allLayers
         }
 
-        console.log(map)
+        // console.log(map)
         return map
     }
 
