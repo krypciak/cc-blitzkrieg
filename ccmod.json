@@ -1,0 +1,31 @@
+{
+	"id": "cc-blitzkrieg",
+	"version": "2.0.0",
+	"title": {
+		"en_US": "Blitzkrieg",
+		"de_DE": "Blitzkrieg",
+		"fr_FR": "Blitzkrieg",
+		"zh_CN": "Blitzkrieg",
+		"zh_TW": "Blitzkrieg",
+		"ja_JP": "Blitzkrieg",
+		"ko_KR": "Blitzkrieg"
+	},
+	"description": {
+		"en_US": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"de_DE": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"fr_FR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"zh_CN": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"zh_TW": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"ja_JP": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+		"ko_KR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools"
+	},
+	"icons": {
+		"24": "icon.png"
+	},
+	"plugin": "plugin.js",
+	"dependencies": {
+		"input-api": ">=1.0.0",
+		"crosscode": ">=1.4.0",
+		"post-game": ">=1.4.0"
+	}
+}
