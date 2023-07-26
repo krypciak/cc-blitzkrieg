@@ -7,9 +7,8 @@ import { Selections } from './selection.js'
 import { Util } from './util.js'
 import { TextNotification } from './text-notification.js'
 
-export default class Blitzkrieg extends Plugin {
+export default class Blitzkrieg {
     constructor(mod) {
-        super()
         this.mod = mod
     }
 
