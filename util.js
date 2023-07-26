@@ -311,15 +311,18 @@ export class Util {
         })
     }
 
-    async getMapObject(mapName) {
-        let mapPath = ig.getFilePath(mapName.toPath(ig.root + 'data/maps/', '.json') + ig.getCacheSuffix())
-        return ig.blitzkrieg.util.getMapObjectByPath(mapPath)
+    async getMapObject(name, noCache = false) {
+        if (! ig.blitzkrieg.util.cachedMaps) { ig.blitzkrieg.util.cachedMaps = {} }
+        let mapEntry = ig.blitzkrieg.util.cachedMaps[name]
+        if (! noCache && mapEntry) { return mapEntry }
+        let path = ig.getFilePath(name.toPath(ig.root + 'data/maps/', '.json') + ig.getCacheSuffix())
+        let map = await ig.blitzkrieg.util.getMapObjectByPath(path)
+        ig.blitzkrieg.util.cachedMaps[name] = map
+        return map
     }
 
     async loadAllMaps() {
-        if (ig.blitzkrieg.allMaps) {
-            return
-        }
+        if (ig.blitzkrieg.util.loadedAllMaps) { return }
         let filePaths = []
         let paths = [
             './assets/data/maps/',
@@ -337,6 +340,9 @@ export class Util {
             }
         }
         
+        if (ig.blitzkrieg.util.cachedMaps && ig.blitzkrieg.util.cachedMaps) {
+            return
+        }
         
         let promises = filePaths.map((path) => {
             // eslint-disable-next-line no-async-promise-executor
@@ -350,7 +356,10 @@ export class Util {
         })
         let objArr = await Promise.all(promises)
 
-        ig.blitzkrieg.allMaps = objArr.reduce((result, currObj) => {
+
+        ig.blitzkrieg.util.loadedAllMaps = true
+
+        ig.blitzkrieg.util.cachedMaps = objArr.reduce((result, currObj) => {
             return { ...result, ...currObj }
         }, {})
     }

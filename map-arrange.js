@@ -84,7 +84,7 @@ export class MapArranger {
     async arrangeMaps() {
         await ig.blitzkrieg.util.loadAllMaps()
 
-        let maps = ig.blitzkrieg.allMaps
+        let maps = ig.blitzkrieg.util.cachedMaps
         console.log(maps)
 
         let entitiesToKill = []

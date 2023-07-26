@@ -108,8 +108,8 @@ export class BattleSelectionManager {
         await ig.blitzkrieg.util.loadAllMaps()
         let spawners = {}
 
-        for (let mapName in ig.blitzkrieg.allMaps) {
-            let map = ig.blitzkrieg.allMaps[mapName]
+        for (let mapName in ig.blitzkrieg.util.cachedMaps) {
+            let map = ig.blitzkrieg.util.cachedMaps[mapName]
             for (let entity of map.entities) {
                 if (entity.type == 'EnemySpawner') {
                     if (! (mapName in spawners)) {
