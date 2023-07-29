@@ -96,8 +96,7 @@ export class PuzzleSelectionManager {
         }
     }
 
-    // eslint-disable-next-line no-unused-vars
-    walkOutEvent(sel) {
+    walkOutEvent() {
         ig.blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(ig.blitzkrieg.puzzleSelections.inSelStack.peek())
 
         if (ig.blitzkrieg.puzzleSelectionManager.changeModifiers) {
@@ -177,7 +176,6 @@ export class PuzzleSelectionManager {
                 splittedPath.shift()
                 let value = ig.vars.storage
                 for (let i = 0; i < splittedPath.length - 1; i++) {
-                    // eslint-disable-next-line 
                     if (! value.hasOwnProperty(splittedPath[i])) {
                         value[splittedPath[i]] = {}
                     }
@@ -202,7 +200,6 @@ export class PuzzleSelectionManager {
 
                 ig.game.varsChangedDeferred()
 
-                console.log(solveArrayIndex)
                 solveArrayIndex++
                 if (solveArrayIndex == log.length) {
                     clearInterval(intervalID)
