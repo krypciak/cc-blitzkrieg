@@ -9,19 +9,11 @@ export class SelectionCopyManager {
         this.yOffset = 64
         this.copyCount = 0
         this._sels = new Stack()
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
         //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
         //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
         // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
 
         // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['final-dng.b4.bridge'].sels[0])
@@ -99,10 +91,10 @@ export class SelectionCopyManager {
         return condVars
     }
 
-    getOffsetEntityPos(rect, entity, xOffset, yOffset, sel) {
+    getOffsetEntityPos(rect, entity, xOffset, yOffset, sel, addZ=true) {
         return {
             x: Math.floor(xOffset/tilesize)*16 - Math.floor(rect.x/tilesize)*16 + entity.x + rect.x - sel.size.x,
-            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y + rect.y - sel.size.y - sel.data.startPos.z,
+            y: Math.floor(yOffset/tilesize)*16 - Math.floor(rect.y/tilesize)*16 + entity.y + rect.y - sel.size.y - (addZ ? sel.data.startPos.z : 0),
         }
     }
 
@@ -858,6 +850,7 @@ export class SelectionCopyManager {
 
     async copy() {
         let sel = blitzkrieg.puzzleSelections.inSelStack.peek()
+        sel = blitzkrieg.puzzleSelections.selHashMap['rhombus-dng/room-3-2'].sels[0]
         // let sel = null
         if (sel == null) {
             if (this._sels.length() > 0) {
@@ -883,13 +876,25 @@ export class SelectionCopyManager {
             baseMapName = 'rouge/300empty'
         }
 
+        const puzzleUniqueId = blitzkrieg.util.generateUniqueID()
+        const puzzleUniqueSel = blitzkrieg.selectionCopyManager
+            .createUniquePuzzleSelection(sel, this.xOffset, this.yOffset, puzzleUniqueId)
+
         let newName = 'rouge/' + newNameShort
+
+        blitzkrieg.puzzleSelections.selHashMap[newName] = {
+            sels: [ puzzleUniqueSel ],
+            tempSel: { bb: [], map: newName, data: {} },
+            fileIndex: rouge.puzzleFileIndex,
+        }
+
 
         this.copySelToMapAndWrite(baseMapName, sel,
             this.xOffset, this.yOffset, newName, newNameShort, {
                 disableEntities: false,
                 mergeLayers: false, 
-                removeCutscenes: true
+                removeCutscenes: true,
+                uniqueId: puzzleUniqueId,
             })
         this.xOffset += sel.size.width + 32
     }

@@ -180,7 +180,7 @@ export class Util {
         yOffset = Math.floor(yOffset/tilesize)*tilesize
 
         for (let i = 0; i < sel.bb.length; i++) {
-            let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, sel)
+            let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, sel, false)
             sel.bb[i].x = x
             sel.bb[i].y = y
         }
@@ -197,7 +197,7 @@ export class Util {
             sel.data.endPos.y = y
         }
 
-        let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, sel)
+        let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, sel, false)
         sel.size.x = x
         sel.size.y = y
     }

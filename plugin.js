@@ -223,8 +223,8 @@ export default class Blitzkrieg {
             'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: blitzkrieg.puzzleSelectionManager.decSpeed, 
                 key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.puzzleSelectionManager },
 
-            //'copy-selection':   { desc: 'copy selection', func: blitzkrieg.selectionCopyManager.copy, 
-            //    key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.selectionCopyManager },
+            'copy-selection':   { desc: 'copy selection', func: blitzkrieg.selectionCopyManager.copy, 
+                key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.selectionCopyManager },
             //'arrange-maps':     { desc: 'arrange maps', func: blitzkrieg.mapArranger.arrange, 
             //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.mapArranger },
             
