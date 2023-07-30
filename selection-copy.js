@@ -4,29 +4,29 @@ let tilesize
 
 export class SelectionCopyManager {
     constructor() {
-        tilesize = ig.blitzkrieg.tilesize
+        tilesize = blitzkrieg.tilesize
         this.xOffset = 64
         this.yOffset = 64
         this.copyCount = 0
         this._sels = new Stack()
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        //this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[0])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-1-5'].sels[1])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        //this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2-pre'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['rhombus-dng.room-3-2'].sels[0])
 
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['final-dng.b4.bridge'].sels[0])
-        // this._sels.push(ig.blitzkrieg.puzzleSelections.selHashMap['jungle.left.path-left-03'].sels[0])
-        // this._sels.push(ig.blitzkrieg.util.['autumn-fall.path-05'].sels[1])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['final-dng.b4.bridge'].sels[0])
+        // this._sels.push(blitzkrieg.puzzleSelections.selHashMap['jungle.left.path-left-03'].sels[0])
+        // this._sels.push(blitzkrieg.util.['autumn-fall.path-05'].sels[1])
         //
         this.excludeEventTypes = new Set([
             'SET_CAMERA_POS',
@@ -231,7 +231,7 @@ export class SelectionCopyManager {
 
         let entities = ig.copy(baseMap.entities)
         entities.forEach((entity) => {
-            ig.blitzkrieg.util.executeRecursiveAction(entity, this.changeEntityRecursive, {
+            blitzkrieg.util.executeRecursiveAction(entity, this.changeEntityRecursive, {
                 self: this,
                 makePuzzlesUnique: false,
                 rePosition: false,
@@ -276,7 +276,7 @@ export class SelectionCopyManager {
                     }
                     // check if entity doesn't clip out of the base map
                     if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
-                        ig.blitzkrieg.util.executeRecursiveAction(newEntity, this.changeEntityRecursive, {
+                        blitzkrieg.util.executeRecursiveAction(newEntity, this.changeEntityRecursive, {
                             self: this,
                             makePuzzlesUnique,
                             rePosition: true,
@@ -309,7 +309,7 @@ export class SelectionCopyManager {
     processCollisionLayers(mapData) {
         let width = mapData.mapWidth
         let height = mapData.mapHeight
-        let emptyData = ig.blitzkrieg.util.emptyArray2d(width, height)
+        let emptyData = blitzkrieg.util.emptyArray2d(width, height)
         let levels = mapData.levels
 
         let collisionLayers = []
@@ -401,7 +401,7 @@ export class SelectionCopyManager {
     createUniquePuzzleSelection(origSel, xOffset, yOffset, id) {
         let sel = ig.copy(origSel)
 
-        ig.blitzkrieg.util.setSelPos(sel, xOffset, yOffset)
+        blitzkrieg.util.setSelPos(sel, xOffset, yOffset)
 
         if (sel.data.recordLog && sel.data.recordLog.log) {
             for (let i = 0; i < sel.data.recordLog.log.length; i++) {
@@ -424,7 +424,7 @@ export class SelectionCopyManager {
         let xTileOffset = Math.floor(xOffset / tilesize)
         let yTileOffset = Math.floor(yOffset / tilesize)
 
-        let emptyData = ig.blitzkrieg.util.emptyArray2d(width, height)
+        let emptyData = blitzkrieg.util.emptyArray2d(width, height)
 
         // get lightLayer
         // search for base light layer
@@ -458,10 +458,10 @@ export class SelectionCopyManager {
             sel.bb.forEach((rect) => {
                 let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
                     this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
-                ig.blitzkrieg.util.fillArray2d(lightLayer.data, 0, x3, y3, x4, y4)
-                let subArray = ig.blitzkrieg.util.createSubArray2d(selLightLayer.data, x1, y1, x2, y2,
+                blitzkrieg.util.fillArray2d(lightLayer.data, 0, x3, y3, x4, y4)
+                let subArray = blitzkrieg.util.createSubArray2d(selLightLayer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
-                ig.blitzkrieg.util.mergeArrays2d(lightLayer.data, subArray)
+                blitzkrieg.util.mergeArrays2d(lightLayer.data, subArray)
             })
         }
         lightLayer.width = width
@@ -509,7 +509,7 @@ export class SelectionCopyManager {
                 this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
             for (let layer of collisionLayers) {
                 if (layer.isBase) {
-                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
+                    blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
                 }
             }
             selMap.layer.forEach((layer) => {
@@ -517,10 +517,10 @@ export class SelectionCopyManager {
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = collisionLayers[level]
 
-                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                let subArray = blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
                 
-                ig.blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
+                blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
             })
         })
 
@@ -565,21 +565,21 @@ export class SelectionCopyManager {
                 if (! mergeLayers && tileLayersClear[level]) {
                     tileLayers[level].forEach((layer1) => { 
                         if (layer1.isBase) {
-                            ig.blitzkrieg.util.fillArray2d(layer1.data, 0, x3, y3, x4, y4)
+                            blitzkrieg.util.fillArray2d(layer1.data, 0, x3, y3, x4, y4)
                         }
                     })
                 }
-                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                let subArray = blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
-                if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
+                if (!blitzkrieg.util.isArrayEmpty2d(subArray)) {
                     if (mergeLayers) {
                         let tilesetName = layer.tilesetName
                         if (tilesetName in tileLayers[level]) {
                             // merge
                             let layer1 = tileLayers[level][tilesetName]
-                            ig.blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
+                            blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
                         } else {
-                            if (! ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
+                            if (! blitzkrieg.util.isArrayEmpty2d(subArray)) {
                                 let layer1 = ig.copy(layer)
                                 layer1.data = subArray
                                 layer1.width = width
@@ -592,7 +592,7 @@ export class SelectionCopyManager {
                         }
                     } else {
                         if (rectLayer) {
-                            ig.blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
+                            blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
                         } else {
                             let layer1 = ig.copy(layer)
                             layer1.data = subArray
@@ -631,12 +631,12 @@ export class SelectionCopyManager {
                 let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
                     this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
 
-                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                let subArray = blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
 
-                if (!ig.blitzkrieg.util.isArrayEmpty2d(subArray)) {
+                if (!blitzkrieg.util.isArrayEmpty2d(subArray)) {
                     if (rectLayer) {
-                        ig.blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
+                        blitzkrieg.util.mergeArrays2d(rectLayer.data, subArray)
                     } else {
                         let layer1 = layer
                         layer1.data = subArray
@@ -686,7 +686,7 @@ export class SelectionCopyManager {
                 this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
             for (let layer of navLayers) {
                 if (layer.isBase) {
-                    ig.blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
+                    blitzkrieg.util.fillArray2d(layer.data, 0, x3, y3, x4, y4)
                 }
             }
             selMap.layer.forEach((layer) => {
@@ -695,10 +695,10 @@ export class SelectionCopyManager {
                 let level = oldToNewLevelsMap[parseInt(layer.level) + selLevelOffset]
                 let layer1 = navLayers[level]
 
-                let subArray = ig.blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
+                let subArray = blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
                     x3, y3, width, height)
                 
-                ig.blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
+                blitzkrieg.util.mergeArrays2d(layer1.data, subArray)
             })
         })
 
@@ -717,7 +717,7 @@ export class SelectionCopyManager {
     async copySelToMap(baseMap, selMap, sel, xOffset, yOffset, newName, options) {
 
         if (! options.uniqueId) {
-            options.uniqueId = ig.blitzkrieg.util.generateUniqueID()
+            options.uniqueId = blitzkrieg.util.generateUniqueID()
         }
         this.uniqueId = options.uniqueId
 
@@ -835,13 +835,13 @@ export class SelectionCopyManager {
 
     async copySelToMapAndWrite(baseMapName, sel, xOffset, yOffset,
         newName, newNameShort, options) {
-        // ig.blitzkrieg.msg('blitzkrieg', 'Copying map data', 2)
-        // ig.blitzkrieg.msg('blitzkrieg', 'base: ' + baseMapName, 2)
-        ig.blitzkrieg.msg('blitzkrieg', 'copying sel: ' + sel.map, 1)
-        //ig.blitzkrieg.msg('blitzkrieg', 'new map: ' + newName, 2)
+        // blitzkrieg.msg('blitzkrieg', 'Copying map data', 2)
+        // blitzkrieg.msg('blitzkrieg', 'base: ' + baseMapName, 2)
+        blitzkrieg.msg('blitzkrieg', 'copying sel: ' + sel.map, 1)
+        //blitzkrieg.msg('blitzkrieg', 'new map: ' + newName, 2)
 
-        let baseMap = await ig.blitzkrieg.util.getMapObject(baseMapName)
-        let selMap = await ig.blitzkrieg.util.getMapObject(sel.map)
+        let baseMap = await blitzkrieg.util.getMapObject(baseMapName)
+        let selMap = await blitzkrieg.util.getMapObject(sel.map)
 
         let newMap = await this.copySelToMap(baseMap, selMap, sel,
             xOffset, yOffset, newName, options)
@@ -857,7 +857,7 @@ export class SelectionCopyManager {
 
 
     async copy() {
-        let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
+        let sel = blitzkrieg.puzzleSelections.inSelStack.peek()
         // let sel = null
         if (sel == null) {
             if (this._sels.length() > 0) {

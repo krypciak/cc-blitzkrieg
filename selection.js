@@ -15,7 +15,7 @@ export class Selections {
     // walkInEvent(Selection)
     // walkOutEvent(Selection)
     constructor(name, completeColor, tempColor, jsonfiles, newSelEvent, walkInEvent, walkOutEvent) {
-        tilesize = ig.blitzkrieg.tilesize
+        tilesize = blitzkrieg.tilesize
         this.name = name
         this.selHashMap = {}
         this.mapSels = {
@@ -50,13 +50,13 @@ export class Selections {
     }
 
     async create() {
-        if (ig.blitzkrieg.util.waitingForPos) {
-            ig.blitzkrieg.util.waitingForPos = false
+        if (blitzkrieg.util.waitingForPos) {
+            blitzkrieg.util.waitingForPos = false
             return
         }
         let setStep = true
         if (this.mapSels.tempSel.bb.length > 0) {
-            let { rects, size } = ig.blitzkrieg.util.reduceRectArr(this.mapSels.tempSel.bb)
+            let { rects, size } = blitzkrieg.util.reduceRectArr(this.mapSels.tempSel.bb)
             this.mapSels.tempSel.bb = rects
             this.mapSels.tempSel.size = size
 
@@ -243,7 +243,7 @@ export class Selections {
         }
 
         this.drawSelBoxes(this.mapSels.tempSel, this.tempColor)
-        if (ig.blitzkrieg.selectionMode == this.name) {
+        if (blitzkrieg.selectionMode == this.name) {
             if (this.selectStep == 0) {
                 let pos = { x: 0, y: 0 }
                 ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())

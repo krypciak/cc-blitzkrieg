@@ -55,9 +55,9 @@ export default class Blitzkrieg {
         ig.ENTITY.Player.inject({
             update(...args) {
                 let pos = ig.game.playerEntity.coll.pos
-                ig.blitzkrieg.puzzleSelections.checkForEvents(pos)
-                ig.blitzkrieg.battleSelections.checkForEvents(pos)
-                ig.blitzkrieg.bossSelections.checkForEvents(pos)
+                blitzkrieg.puzzleSelections.checkForEvents(pos)
+                blitzkrieg.battleSelections.checkForEvents(pos)
+                blitzkrieg.bossSelections.checkForEvents(pos)
                 return this.parent(...args)
             }
         })
@@ -65,178 +65,178 @@ export default class Blitzkrieg {
         ig.Renderer2d.inject({
             drawPostLayerSprites(...args) {
                 this.parent(...args)
-                ig.blitzkrieg.puzzleSelections.drawSelections()
-                ig.blitzkrieg.battleSelections.drawSelections()
-                ig.blitzkrieg.bossSelections.drawSelections()
+                blitzkrieg.puzzleSelections.drawSelections()
+                blitzkrieg.battleSelections.drawSelections()
+                blitzkrieg.bossSelections.drawSelections()
             }
         })
 
         ig.Game.inject({
             loadLevel(...args) {
                 this.parent(...args)
-                ig.blitzkrieg.puzzleSelections.onNewMapEnter()
-                ig.blitzkrieg.battleSelections.onNewMapEnter()
-                ig.blitzkrieg.bossSelections.onNewMapEnter()
+                blitzkrieg.puzzleSelections.onNewMapEnter()
+                blitzkrieg.battleSelections.onNewMapEnter()
+                blitzkrieg.bossSelections.onNewMapEnter()
             }
         })
 
         sc.OptionsTabBox.inject({
             init(...args) {
                 this.parent(...args)
-                ig.blitzkrieg.setupTabEvent(this)
+                blitzkrieg.setupTabEvent(this)
             }
         })
 
         ig.ENTITY.Player.inject({
             updateModelStats(...args) {
-                if (ig.blitzkrieg.puzzleSelectionManager && ig.blitzkrieg.puzzleSelectionManager.modifiersActive) { return }
+                if (blitzkrieg.puzzleSelectionManager && blitzkrieg.puzzleSelectionManager.modifiersActive) { return }
                 this.parent(...args)
             }
         })
     }
 
     async selectionDialog() {
-        ig.blitzkrieg.selectionMode = await ig.blitzkrieg.util.syncDialog('select selection type', ['puzzle', 'battle', 'boss'])
-        ig.blitzkrieg.updateSelectionMode()
+        blitzkrieg.selectionMode = await blitzkrieg.util.syncDialog('select selection type', ['puzzle', 'battle', 'boss'])
+        blitzkrieg.updateSelectionMode()
     }
 
     updateSelectionMode() {
-        switch (ig.blitzkrieg.selectionMode) {
+        switch (blitzkrieg.selectionMode) {
         case 'puzzle':
-            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.puzzleSelections
-            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.puzzleSelectionManager
+            blitzkrieg.selectionInstance = blitzkrieg.puzzleSelections
+            blitzkrieg.selectionInstanceManager = blitzkrieg.puzzleSelectionManager
             break
         case 'battle':
-            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.battleSelections
-            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.battleSelectionManager
+            blitzkrieg.selectionInstance = blitzkrieg.battleSelections
+            blitzkrieg.selectionInstanceManager = blitzkrieg.battleSelectionManager
             break
         case 'boss':
-            ig.blitzkrieg.selectionInstance = ig.blitzkrieg.bossSelections
-            ig.blitzkrieg.selectionInstanceManager = ig.blitzkrieg.bossSelectionManager
+            blitzkrieg.selectionInstance = blitzkrieg.bossSelections
+            blitzkrieg.selectionInstanceManager = blitzkrieg.bossSelectionManager
             break
         }
-        ig.blitzkrieg.msg('blitzkrieg', 'Switched selection mode to: ' + ig.blitzkrieg.selectionInstance.name, 2)
+        blitzkrieg.msg('blitzkrieg', 'Switched selection mode to: ' + blitzkrieg.selectionInstance.name, 2)
     }
 
     bindingCreate() {
-        ig.blitzkrieg.selectionInstance.create()
+        blitzkrieg.selectionInstance.create()
     }
     bindingCreateSel() {
-        ig.blitzkrieg.selectionInstance.select()
+        blitzkrieg.selectionInstance.select()
     }
     bindingDeleteSel() {
-        ig.blitzkrieg.selectionInstance.delete()
+        blitzkrieg.selectionInstance.delete()
     }
     bindingRecord() {
-        ig.blitzkrieg.selectionInstanceManager.recorder.toogleRecording()
+        blitzkrieg.selectionInstanceManager.recorder.toogleRecording()
     }
     bindingSolve() {
-        ig.blitzkrieg.selectionInstanceManager.solve()
+        blitzkrieg.selectionInstanceManager.solve()
     }
     bindingToogleRender() {
-        ig.blitzkrieg.puzzleSelections.toogleDrawing()
-        ig.blitzkrieg.battleSelections.toogleDrawing()
-        ig.blitzkrieg.bossSelections.toogleDrawing()
+        blitzkrieg.puzzleSelections.toogleDrawing()
+        blitzkrieg.battleSelections.toogleDrawing()
+        blitzkrieg.bossSelections.toogleDrawing()
     }
 
     async reloadLevel() {
         let pos = ig.copy(ig.game.playerEntity.coll.pos)
         let map = ig.game.mapName.split('.').join('/')
-        ig.game.loadLevel(await ig.blitzkrieg.util.getMapObject(map, true), false, false)
+        ig.game.loadLevel(await blitzkrieg.util.getMapObject(map, true), false, false)
         ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
     }
     
     async prestart() {
-        ig.blitzkrieg = this
-        ig.blitzkrieg.tilesize = 16
-        ig.blitzkrieg.name = 'BLITZKRIEG'
-        ig.blitzkrieg.displayName = 'Blitzkrieg'
+        window.blitzkrieg = this
+        blitzkrieg.tilesize = 16
+        blitzkrieg.name = 'BLITZKRIEG'
+        blitzkrieg.displayName = 'Blitzkrieg'
 
-        ig.blitzkrieg.msg = () => {}
-        ig.blitzkrieg.util = new Util()
+        blitzkrieg.msg = () => {}
+        blitzkrieg.util = new Util()
 
 
-        ig.blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
-        ig.blitzkrieg.puzzleSelections = new Selections(
+        blitzkrieg.puzzleSelectionManager = new PuzzleSelectionManager()
+        blitzkrieg.puzzleSelections = new Selections(
             'puzzle',
             '#77000044',
             '#ff222244',
-            [ ig.blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ],
-            ig.blitzkrieg.puzzleSelectionManager.newSelEvent,
-            ig.blitzkrieg.puzzleSelectionManager.walkInEvent,
-            ig.blitzkrieg.puzzleSelectionManager.walkOutEvent,
+            [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ],
+            blitzkrieg.puzzleSelectionManager.newSelEvent,
+            blitzkrieg.puzzleSelectionManager.walkInEvent,
+            blitzkrieg.puzzleSelectionManager.walkOutEvent,
         )
-        ig.blitzkrieg.puzzleSelectionManager.recorder.selInstance = ig.blitzkrieg.puzzleSelections
+        blitzkrieg.puzzleSelectionManager.recorder.selInstance = blitzkrieg.puzzleSelections
 
-        ig.blitzkrieg.selectionCopyManager = new SelectionCopyManager()
+        blitzkrieg.selectionCopyManager = new SelectionCopyManager()
 
-        ig.blitzkrieg.mapArranger = new MapArranger()
+        blitzkrieg.mapArranger = new MapArranger()
 
 
-        ig.blitzkrieg.battleSelectionManager = new BattleSelectionManager()
-        ig.blitzkrieg.battleSelections = new Selections(
+        blitzkrieg.battleSelectionManager = new BattleSelectionManager()
+        blitzkrieg.battleSelections = new Selections(
             'battle',
             '#00770044',
             '#22ff2244',
-            [ ig.blitzkrieg.mod.baseDirectory + 'json/battleData.json', ],
-            ig.blitzkrieg.battleSelectionManager.newSelEvent,
+            [ blitzkrieg.mod.baseDirectory + 'json/battleData.json', ],
+            blitzkrieg.battleSelectionManager.newSelEvent,
             () => {},
             () => {},
         )
-        ig.blitzkrieg.battleSelectionManager.recorder.selInstance = ig.blitzkrieg.battleSelections
+        blitzkrieg.battleSelectionManager.recorder.selInstance = blitzkrieg.battleSelections
 
         
-        ig.blitzkrieg.bossSelectionManager = new BossSelectionManager()
-        ig.blitzkrieg.bossSelections = new Selections(
+        blitzkrieg.bossSelectionManager = new BossSelectionManager()
+        blitzkrieg.bossSelections = new Selections(
             'boss',
             '#0000ff44',
             '#2222ff44',
-            [ ig.blitzkrieg.mod.baseDirectory + 'json/bossData.json', ],
-            ig.blitzkrieg.bossSelectionManager.newSelEvent,
+            [ blitzkrieg.mod.baseDirectory + 'json/bossData.json', ],
+            blitzkrieg.bossSelectionManager.newSelEvent,
             () => {},
             () => {},
         )
 
-        ig.blitzkrieg.selectionMode = 'puzzle'
-        ig.blitzkrieg.updateSelectionMode()
+        blitzkrieg.selectionMode = 'puzzle'
+        blitzkrieg.updateSelectionMode()
 
-        ig.blitzkrieg.keys = {
-            'selection-toogle':          { desc: 'Toogle selection mode',          func: ig.blitzkrieg.selectionDialog,
-                key: ig.KEY.MINUS,         header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
+        blitzkrieg.keys = {
+            'selection-toogle':          { desc: 'Toogle selection mode',          func: blitzkrieg.selectionDialog,
+                key: ig.KEY.MINUS,         header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
 
-            'puzzle-create':             { desc: 'Create a new entry',             func: ig.blitzkrieg.bindingCreate,
-                key: ig.KEY.P,             header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
-            'puzzle-selection-create':   { desc: 'Create a selection',             func: ig.blitzkrieg.bindingCreateSel, 
-                key: ig.KEY.BRACKET_OPEN,  header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
-            'puzzle-selection-delete':   { desc: 'Delete a selection/puzzle',      func: ig.blitzkrieg.bindingDeleteSel, 
-                key: ig.KEY.BRACKET_CLOSE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
-            'puzzle-record-toogle':      { desc: 'Toogle game state recording',    func: ig.blitzkrieg.bindingRecord,
-                key: ig.KEY._8,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
-            'selection-render-toogle':   { desc: 'Toogle selection rendering',     func: ig.blitzkrieg.bindingToogleRender,
-                key: ig.KEY.SINGLE_QUOTE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
+            'puzzle-create':             { desc: 'Create a new entry',             func: blitzkrieg.bindingCreate,
+                key: ig.KEY.P,             header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
+            'puzzle-selection-create':   { desc: 'Create a selection',             func: blitzkrieg.bindingCreateSel, 
+                key: ig.KEY.BRACKET_OPEN,  header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
+            'puzzle-selection-delete':   { desc: 'Delete a selection/puzzle',      func: blitzkrieg.bindingDeleteSel, 
+                key: ig.KEY.BRACKET_CLOSE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
+            'puzzle-record-toogle':      { desc: 'Toogle game state recording',    func: blitzkrieg.bindingRecord,
+                key: ig.KEY._8,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
+            'selection-render-toogle':   { desc: 'Toogle selection rendering',     func: blitzkrieg.bindingToogleRender,
+                key: ig.KEY.SINGLE_QUOTE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
 
-            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: ig.blitzkrieg.bindingSolve,
-                key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
+            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: blitzkrieg.bindingSolve,
+                key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
 
-            'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: ig.blitzkrieg.puzzleSelectionManager.incSpeed, 
-                key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
-            'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: ig.blitzkrieg.puzzleSelectionManager.decSpeed, 
-                key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.puzzleSelectionManager },
+            'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: blitzkrieg.puzzleSelectionManager.incSpeed, 
+                key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.puzzleSelectionManager },
+            'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: blitzkrieg.puzzleSelectionManager.decSpeed, 
+                key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.puzzleSelectionManager },
 
-            'copy-selection':   { desc: 'copy selection', func: ig.blitzkrieg.selectionCopyManager.copy, 
-                key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.selectionCopyManager },
-            //'arrange-maps':     { desc: 'arrange maps', func: ig.blitzkrieg.mapArranger.arrange, 
-            //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg.mapArranger },
+            //'copy-selection':   { desc: 'copy selection', func: blitzkrieg.selectionCopyManager.copy, 
+            //    key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.selectionCopyManager },
+            //'arrange-maps':     { desc: 'arrange maps', func: blitzkrieg.mapArranger.arrange, 
+            //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.mapArranger },
             
-            'reload-level':     { desc: 'Reload level',   func: ig.blitzkrieg.reloadLevel, 
-                key: ig.KEY.BACKSPACE,     header: 'blitzkrieg-keybindings', hasDivider: false, parent: ig.blitzkrieg },
+            'reload-level':     { desc: 'Reload level',   func: blitzkrieg.reloadLevel, 
+                key: ig.KEY.BACKSPACE,     header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
         }
 
-        ig.blitzkrieg.setupTabs()
-        ig.blitzkrieg.bindKeys(ig.blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)
-        ig.blitzkrieg.registerEvents()
+        blitzkrieg.setupTabs()
+        blitzkrieg.bindKeys(blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)
+        blitzkrieg.registerEvents()
 
-        ig.blitzkrieg.loaded = true
+        blitzkrieg.loaded = true
     }
 
     adjustPuzzleAssistSlider() {
@@ -271,12 +271,12 @@ export default class Blitzkrieg {
     }
 
     async main() {
-        ig.blitzkrieg.updateKeybindingLabels()
-        ig.blitzkrieg.adjustPuzzleAssistSlider()
-        ig.blitzkrieg.prepareTabFonts()
+        blitzkrieg.updateKeybindingLabels()
+        blitzkrieg.adjustPuzzleAssistSlider()
+        blitzkrieg.prepareTabFonts()
 
         TextNotification.init()
-        ig.blitzkrieg.msg = TextNotification.msg
+        blitzkrieg.msg = TextNotification.msg
     }
 
 
@@ -316,12 +316,12 @@ export default class Blitzkrieg {
     }
 
     prepareTabFonts() {
-        const name = ig.blitzkrieg.name
-        // const displayName = ig.blitzkrieg.displayName
+        const name = blitzkrieg.name
+        // const displayName = blitzkrieg.displayName
 
-        const iconSet = ig.blitzkrieg._findIconSet()
-        const mapping = ig.blitzkrieg._findMapping()
-        const indexMapping = ig.blitzkrieg._findIndexMapping()
+        const iconSet = blitzkrieg._findIconSet()
+        const mapping = blitzkrieg._findMapping()
+        const indexMapping = blitzkrieg._findIndexMapping()
         // const font = sc.fontsystem.font
         const icons = new ig.Font('media/blitzkrieg-icons.png', 16, 2000)
         const page = iconSet.push(icons) - 1
@@ -336,8 +336,8 @@ export default class Blitzkrieg {
     }
 
     setupTabs() {
-        const name = ig.blitzkrieg.name
-        // const displayName = ig.blitzkrieg.displayName
+        const name = blitzkrieg.name
+        // const displayName = blitzkrieg.displayName
 
         // borrowed from https://github.com/CCDirectLink/CCLoader/blob/master/assets/mods/simplify/mod.js
         sc.OPTION_CATEGORY[name] = Object.keys(sc.OPTION_CATEGORY).length
@@ -360,8 +360,8 @@ export default class Blitzkrieg {
     }
 
     setupTabEvent(tabBox) {
-        const name = ig.blitzkrieg.name
-        const displayName = ig.blitzkrieg.displayName
+        const name = blitzkrieg.name
+        const displayName = blitzkrieg.displayName
 
         ig.lang.labels.sc.gui.menu.option[name] = displayName
         // borrowed from https://github.com/CCDirectLink/CCLoader/blob/master/assets/mods/simplify/mod.js

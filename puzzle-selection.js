@@ -24,7 +24,7 @@ export class PuzzleSelectionManager {
     }
 
     _increse_speed(val) {
-        let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
+        let sel = blitzkrieg.puzzleSelections.inSelStack.peek()
 
         if (! sel) { return }
 
@@ -34,11 +34,11 @@ export class PuzzleSelectionManager {
 
         sel.data.puzzleSpeed += val
         sc.options.set('assist-puzzle-speed', sel.data.puzzleSpeed)
-        ig.blitzkrieg.msg('blitzkrieg', (val > 0 ? 'Incresing' : 'Decresing') + ' selection puzzle speed to ' + Math.round(sel.data.puzzleSpeed * 100) + '%', 1)
-        ig.blitzkrieg.puzzleSelections.save()
+        blitzkrieg.msg('blitzkrieg', (val > 0 ? 'Incresing' : 'Decresing') + ' selection puzzle speed to ' + Math.round(sel.data.puzzleSpeed * 100) + '%', 1)
+        blitzkrieg.puzzleSelections.save()
 
-        if (sel.data.puzzleSpeed == 1 && ! ig.blitzkrieg.puzzleSelectionManager.modifiersActive) {
-            ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
+        if (sel.data.puzzleSpeed == 1 && ! blitzkrieg.puzzleSelectionManager.modifiersActive) {
+            blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
         }
     }
     
@@ -51,65 +51,65 @@ export class PuzzleSelectionManager {
 
         if (this.changeSpeed && sc.options.get('assist-puzzle-speed') != speed) {
             sc.options.set('assist-puzzle-speed', speed) 
-            ig.blitzkrieg.msg('blitzkrieg', 'Setting puzzle speed to ' + Math.round(speed * 100) + '%', 1)
-            if (speed != 1) { ig.blitzkrieg.puzzleSelectionManager.createFakeBuff() }
-            if (speed == 1 && ! ig.blitzkrieg.puzzleSelectionManager.modifiersActive) {
-                ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff() 
+            blitzkrieg.msg('blitzkrieg', 'Setting puzzle speed to ' + Math.round(speed * 100) + '%', 1)
+            if (speed != 1) { blitzkrieg.puzzleSelectionManager.createFakeBuff() }
+            if (speed == 1 && ! blitzkrieg.puzzleSelectionManager.modifiersActive) {
+                blitzkrieg.puzzleSelectionManager.destroyFakeBuff() 
             }
         }
     }
 
     createFakeBuff() {
-        if (ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
+        if (blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
 
-        ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive = true
+        blitzkrieg.puzzleSelectionManager.fakeBuffActive = true
         // add a buff that only shows when the modifiers are active
-        let buff = new sc.ItemBuff(['DASH-STEP-1'], 100000, ig.blitzkrieg.puzzleSelectionManager.fakeBuffItemId)
+        let buff = new sc.ItemBuff(['DASH-STEP-1'], 100000, blitzkrieg.puzzleSelectionManager.fakeBuffItemId)
         buff.modifiers = {}
         sc.model.player.params.addBuff(buff)
     }
 
     destroyFakeBuff() {
-        if (! ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
-        ig.blitzkrieg.puzzleSelectionManager.fakeBuffActive = false
+        if (! blitzkrieg.puzzleSelectionManager.fakeBuffActive) { return }
+        blitzkrieg.puzzleSelectionManager.fakeBuffActive = false
         // remove fake buff
         for (let buff of sc.model.player.params.buffs) {
-            if (buff.itemID == ig.blitzkrieg.puzzleSelectionManager.fakeBuffItemId) {
+            if (buff.itemID == blitzkrieg.puzzleSelectionManager.fakeBuffItemId) {
                 sc.model.player.params.removeBuff(buff)
             }
         }
     }
 
     walkInEvent(sel) {
-        ig.blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(sel)
+        blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(sel)
 
-        if (ig.blitzkrieg.puzzleSelectionManager.changeModifiers) {
+        if (blitzkrieg.puzzleSelectionManager.changeModifiers) {
             ig.game.playerEntity.params.modifiers.AIMING_MOVEMENT = 0.5
             ig.game.playerEntity.params.modifiers.AIM_SPEED = 2
             ig.game.playerEntity.params.modifiers.AIM_STABILITY = 1
             ig.game.playerEntity.params.modifiers.DASH_STEP = 0
             ig.game.playerEntity.params.modifiers.ASSAULT = 0.5
             ig.game.playerEntity.updateModelStats()
-            ig.blitzkrieg.puzzleSelectionManager.modifiersActive = true
+            blitzkrieg.puzzleSelectionManager.modifiersActive = true
 
-            ig.blitzkrieg.puzzleSelectionManager.createFakeBuff()
+            blitzkrieg.puzzleSelectionManager.createFakeBuff()
         }
     }
 
     walkOutEvent() {
-        ig.blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(ig.blitzkrieg.puzzleSelections.inSelStack.peek())
+        blitzkrieg.puzzleSelectionManager.updatePuzzleSpeed(blitzkrieg.puzzleSelections.inSelStack.peek())
 
-        if (ig.blitzkrieg.puzzleSelectionManager.changeModifiers) {
-            ig.blitzkrieg.puzzleSelectionManager.modifiersActive = false
+        if (blitzkrieg.puzzleSelectionManager.changeModifiers) {
+            blitzkrieg.puzzleSelectionManager.modifiersActive = false
             sc.model.player.updateStats()
 
-            ig.blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
+            blitzkrieg.puzzleSelectionManager.destroyFakeBuff()
         }
     }
 
 
     async newSelEvent(sel) {
-        await ig.blitzkrieg.puzzleSelectionManager.finalizeSel(sel)
+        await blitzkrieg.puzzleSelectionManager.finalizeSel(sel)
     }
 
     
@@ -123,10 +123,10 @@ export class PuzzleSelectionManager {
         ]
 
         let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        let puzzleDiff = await ig.blitzkrieg.util.syncDialog('select puzzle difficulty', scale)
-        let puzzleLen = await ig.blitzkrieg.util.syncDialog('select puzzle length', scale)
-        let puzzleCompletionType = await ig.blitzkrieg.util.syncDialog('select puzzle completion type', ['normal', 'getTo'])
-        let puzzleType = await ig.blitzkrieg.util.syncDialog('select puzzle type', ['whole room', 'add walls', 'dis'])
+        let puzzleDiff = await blitzkrieg.util.syncDialog('select puzzle difficulty', scale)
+        let puzzleLen = await blitzkrieg.util.syncDialog('select puzzle length', scale)
+        let puzzleCompletionType = await blitzkrieg.util.syncDialog('select puzzle completion type', ['normal', 'getTo'])
+        let puzzleType = await blitzkrieg.util.syncDialog('select puzzle type', ['whole room', 'add walls', 'dis'])
 
         sel.data.difficulty = parseInt(puzzleDiff)
         sel.data.timeLength = parseInt(puzzleLen)
@@ -135,14 +135,14 @@ export class PuzzleSelectionManager {
         sel.data.chapter = sc.model.player.chapter
         sel.data.plotLine = ig.vars.storage.plot ? ig.vars.storage.plot.line : -1
 
-        ig.blitzkrieg.msg('blitzkrieg', 'Starting position', 3)
-        sel.data.startPos = await ig.blitzkrieg.util.waitForPositionKey()
-        ig.blitzkrieg.msg('blitzkrieg', 'Ending position', 3)
-        sel.data.endPos = await ig.blitzkrieg.util.waitForPositionKey()
+        blitzkrieg.msg('blitzkrieg', 'Starting position', 3)
+        sel.data.startPos = await blitzkrieg.util.waitForPositionKey()
+        blitzkrieg.msg('blitzkrieg', 'Ending position', 3)
+        sel.data.endPos = await blitzkrieg.util.waitForPositionKey()
     }
 
     solve() {
-        let sel = ig.blitzkrieg.puzzleSelections.inSelStack.peek()
+        let sel = blitzkrieg.puzzleSelections.inSelStack.peek()
 
         if (! sel) { return }
 
@@ -158,11 +158,11 @@ export class PuzzleSelectionManager {
 
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
             if (yell) {
-                ig.blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
+                blitzkrieg.msg('blitzkrieg', 'No puzzle solution recorded!')
             }
             return
         }
-        ig.blitzkrieg.puzzleSelectionManager.solveSel(sel)
+        blitzkrieg.puzzleSelectionManager.solveSel(sel)
     }
 
     solveSel(sel, delay = 0) {
@@ -207,7 +207,7 @@ export class PuzzleSelectionManager {
             }, 1000 / delay)
         }
         ig.game.varsChangedDeferred()
-        ig.blitzkrieg.msg('blitzkrieg', 'Solved puzzle')
+        blitzkrieg.msg('blitzkrieg', 'Solved puzzle')
     }
 
     getPuzzleSolveCondition(sel) {

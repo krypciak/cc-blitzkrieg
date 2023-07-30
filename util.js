@@ -23,7 +23,7 @@ export class Stack {
 
 export class Util {
     constructor() {
-        tilesize = ig.blitzkrieg.tilesize
+        tilesize = blitzkrieg.tilesize
     }
 
     executeRecursiveAction(obj, action, args) {
@@ -79,7 +79,7 @@ export class Util {
     }
 
     createSubArray2d(arr, x1, y1, x2, y2, xTileOffset, yTileOffset, width, height) {
-        let nArr = ig.blitzkrieg.util.emptyArray2d(width, height)
+        let nArr = blitzkrieg.util.emptyArray2d(width, height)
 
         let arrWidth = arr[0].length
         let arrHeight = arr.length
@@ -180,24 +180,24 @@ export class Util {
         yOffset = Math.floor(yOffset/tilesize)*tilesize
 
         for (let i = 0; i < sel.bb.length; i++) {
-            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, sel)
+            let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.bb[i], xOffset, yOffset, sel)
             sel.bb[i].x = x
             sel.bb[i].y = y
         }
 
         if (sel.data.startPos) {
-            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.startPos, xOffset, yOffset, sel)
+            let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.startPos, xOffset, yOffset, sel)
             sel.data.startPos.x = x
             sel.data.startPos.y = y
         }
         
         if (sel.data.endPos) {
-            let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.endPos, xOffset, yOffset, sel)
+            let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.data.endPos, xOffset, yOffset, sel)
             sel.data.endPos.x = x
             sel.data.endPos.y = y
         }
 
-        let { x, y } = ig.blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, sel)
+        let { x, y } = blitzkrieg.selectionCopyManager.getOffsetEntityPos(sel.size, sel.size, xOffset, yOffset, sel)
         sel.size.x = x
         sel.size.y = y
     }
@@ -223,7 +223,7 @@ export class Util {
         let width = maxWidth - minX
         let height = maxHeight - minY
 
-        let map = ig.blitzkrieg.util.emptyArray2d(width, height)
+        let map = blitzkrieg.util.emptyArray2d(width, height)
 
         for (let rect of rects) {
             let x1 = Math.floor(rect.x/tilesize)-minX
@@ -312,17 +312,17 @@ export class Util {
     }
 
     async getMapObject(name, noCache = false) {
-        if (! ig.blitzkrieg.util.cachedMaps) { ig.blitzkrieg.util.cachedMaps = {} }
-        let mapEntry = ig.blitzkrieg.util.cachedMaps[name]
+        if (! blitzkrieg.util.cachedMaps) { blitzkrieg.util.cachedMaps = {} }
+        let mapEntry = blitzkrieg.util.cachedMaps[name]
         if (! noCache && mapEntry) { return mapEntry }
         let path = ig.getFilePath(name.toPath(ig.root + 'data/maps/', '.json') + ig.getCacheSuffix())
-        let map = await ig.blitzkrieg.util.getMapObjectByPath(path)
-        ig.blitzkrieg.util.cachedMaps[name] = map
+        let map = await blitzkrieg.util.getMapObjectByPath(path)
+        blitzkrieg.util.cachedMaps[name] = map
         return map
     }
 
     async loadAllMaps() {
-        if (ig.blitzkrieg.util.loadedAllMaps) { return }
+        if (blitzkrieg.util.loadedAllMaps) { return }
         let filePaths = []
         let paths = [
             './assets/data/maps/',
@@ -335,19 +335,19 @@ export class Util {
         for (let path of paths) {
             // remove leading /
             path = path.replace(/\/$/, '')
-            if (ig.blitzkrieg.util.dirExists(path)) {
-                filePaths = ig.blitzkrieg.util.getFilesInDir(path, filePaths)
+            if (blitzkrieg.util.dirExists(path)) {
+                filePaths = blitzkrieg.util.getFilesInDir(path, filePaths)
             }
         }
         
-        if (ig.blitzkrieg.util.cachedMaps && ig.blitzkrieg.util.cachedMaps) {
+        if (blitzkrieg.util.cachedMaps && blitzkrieg.util.cachedMaps) {
             return
         }
         
         let promises = filePaths.map((path) => {
             // eslint-disable-next-line no-async-promise-executor
             return new Promise(async (resolve) => {
-                let mapData = await ig.blitzkrieg.util.getMapObjectByPath(path)
+                let mapData = await blitzkrieg.util.getMapObjectByPath(path)
                 let mapName = mapData.name.split('.').join('/')
                 let obj = {}
                 obj[mapName] = mapData
@@ -357,9 +357,9 @@ export class Util {
         let objArr = await Promise.all(promises)
 
 
-        ig.blitzkrieg.util.loadedAllMaps = true
+        blitzkrieg.util.loadedAllMaps = true
 
-        ig.blitzkrieg.util.cachedMaps = objArr.reduce((result, currObj) => {
+        blitzkrieg.util.cachedMaps = objArr.reduce((result, currObj) => {
             return { ...result, ...currObj }
         }, {})
     }
@@ -404,7 +404,7 @@ export class Util {
             let stat = fs.statSync(filePath)
 
             if (stat.isDirectory()) {
-                ig.blitzkrieg.util.getFilesInDir(filePath, filePaths)
+                blitzkrieg.util.getFilesInDir(filePath, filePaths)
             } else {
                 filePaths.push(filePath)
             }
@@ -441,11 +441,11 @@ export class Util {
     }
 
     async waitForPositionKey() {
-        ig.blitzkrieg.msg('blitzkrieg', 'Waiting for position key')
+        blitzkrieg.msg('blitzkrieg', 'Waiting for position key')
         return new Promise((resolve) => {
-            ig.blitzkrieg.util.waitingForPos = true
+            blitzkrieg.util.waitingForPos = true
             let intervalId = setInterval(function() {
-                if (ig.blitzkrieg.util.waitingForPos == false) {
+                if (blitzkrieg.util.waitingForPos == false) {
                     clearInterval(intervalId)
                     let pos = ig.copy(ig.game.playerEntity.coll.pos)
                     for (let i in ig.game.levels) {

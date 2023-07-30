@@ -1,12 +1,12 @@
 export class BossSelectionManager {
     async newSelEvent(sel) {
-        await ig.blitzkrieg.bossSelectionManager.finalizeSel(sel)
+        await blitzkrieg.bossSelectionManager.finalizeSel(sel)
     }
 
     async finalizeSel(sel) {
         let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        let bossDiff = await ig.blitzkrieg.util.syncDialog('select boss difficulty', scale)
-        let bossType = await ig.blitzkrieg.util.syncDialog('select boss type', ['main', 'side'])
+        let bossDiff = await blitzkrieg.util.syncDialog('select boss difficulty', scale)
+        let bossType = await blitzkrieg.util.syncDialog('select boss type', ['main', 'side'])
 
         // heat cold shock wave
         sel.data.elements = [

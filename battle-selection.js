@@ -23,13 +23,13 @@ export class BattleSelectionManager {
     }
 
     async newSelEvent(sel) {
-        await ig.blitzkrieg.battleSelectionManager.finalizeSel(sel)
+        await blitzkrieg.battleSelectionManager.finalizeSel(sel)
     }
 
     async finalizeSel(sel) {
         let scale = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        let battleDiff = await ig.blitzkrieg.util.syncDialog('select battle difficulty', scale)
-        let battleType = await ig.blitzkrieg.util.syncDialog('select boss type', ['main', 'side'])
+        let battleDiff = await blitzkrieg.util.syncDialog('select battle difficulty', scale)
+        let battleType = await blitzkrieg.util.syncDialog('select boss type', ['main', 'side'])
 
         // heat cold shock wave
         sel.data['elements'] = [
@@ -57,7 +57,7 @@ export class BattleSelectionManager {
     }
 
     restoreData(sel) {
-        ig.blitzkrieg.msg('blitzkrieg', 'Restored battle data', 2)
+        blitzkrieg.msg('blitzkrieg', 'Restored battle data', 2)
         // let enemies = []
         // sel.bb.forEach((rect, i) => {
         //     enemies = enemies.concat(ig.game.getEntitiesInRectangle(rect.x, rect.y, 0, rect.width, rect.height, 1000).filter((entity) => 'aggression' in entity))
@@ -91,25 +91,25 @@ export class BattleSelectionManager {
 
     // skip fight
     solve() {
-        let sel = ig.blitzkrieg.battleSelections.inSelStack.peek()
+        let sel = blitzkrieg.battleSelections.inSelStack.peek()
 
         if (! sel) { return }
 
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
-            ig.blitzkrieg.msg('blitzkrieg', 'No battle skip recorded!')
+            blitzkrieg.msg('blitzkrieg', 'No battle skip recorded!')
             return
         }
 
-        ig.blitzkrieg.puzzleSelectionManager.solveSel(sel, 0)
+        blitzkrieg.puzzleSelectionManager.solveSel(sel, 0)
 
     }
 
     async findAllSpawners() {
-        await ig.blitzkrieg.util.loadAllMaps()
+        await blitzkrieg.util.loadAllMaps()
         let spawners = {}
 
-        for (let mapName in ig.blitzkrieg.util.cachedMaps) {
-            let map = ig.blitzkrieg.util.cachedMaps[mapName]
+        for (let mapName in blitzkrieg.util.cachedMaps) {
+            let map = blitzkrieg.util.cachedMaps[mapName]
             for (let entity of map.entities) {
                 if (entity.type == 'EnemySpawner') {
                     if (! (mapName in spawners)) {
@@ -119,6 +119,6 @@ export class BattleSelectionManager {
                 }
             }
         }
-        ig.blitzkrieg.allSpawners = spawners
+        blitzkrieg.allSpawners = spawners
     }
 }

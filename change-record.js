@@ -14,7 +14,7 @@ export class ChangeRecorder {
         this.gscopy = ig.copy(ig.vars.storage)
         this.loopIndex = 0
         this.recording = true
-        ig.blitzkrieg.msg('blitzkrieg', 'Started recording for game state changes', 2)
+        blitzkrieg.msg('blitzkrieg', 'Started recording for game state changes', 2)
 
         const self = this
         const intervalID = setInterval(async () => {
@@ -24,7 +24,7 @@ export class ChangeRecorder {
             }
             if (! ig.perf.gui) {
                 clearInterval(intervalID)
-                ig.blitzkrieg.msg('blitzkrieg', 'Stopping game state recording (entered gui)', 2)
+                blitzkrieg.msg('blitzkrieg', 'Stopping game state recording (entered gui)', 2)
                 return
             }
             self.recordLoop()
@@ -33,11 +33,11 @@ export class ChangeRecorder {
 
     stopRecording() {
         if (! this.selInstance.inSelStack || this.selInstance.inSelStack.length() == 0) {
-            ig.blitzkrieg.msg('blitzkrieg', 'Not in a selection area', 2)
+            blitzkrieg.msg('blitzkrieg', 'Not in a selection area', 2)
             return
         }
         this.recording = false
-        ig.blitzkrieg.msg('blitzkrieg', 'Stopped recording', 2)
+        blitzkrieg.msg('blitzkrieg', 'Stopped recording', 2)
 
         this.selInstance.inSelStack.peek().data.recordLog = this.currentRecord
         this.selInstance.save()

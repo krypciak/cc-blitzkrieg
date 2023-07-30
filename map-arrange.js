@@ -82,9 +82,9 @@ export class MapArranger {
     }
 
     async arrangeMaps() {
-        await ig.blitzkrieg.util.loadAllMaps()
+        await blitzkrieg.util.loadAllMaps()
 
-        let maps = ig.blitzkrieg.util.cachedMaps
+        let maps = blitzkrieg.util.cachedMaps
         console.log(maps)
 
         let entitiesToKill = []
@@ -166,7 +166,7 @@ export class MapArranger {
     }
 
     async arrange() {
-        ig.blitzkrieg.msg('blitzkrieg', 'arrange')
+        blitzkrieg.msg('blitzkrieg', 'arrange')
 
         let obj = await this.arrangeMaps()
         let obj1 = ig.copy(obj)
@@ -190,7 +190,7 @@ export class MapArranger {
         fs.writeFileSync('./assets/mods/cc-blitzkrieg/json/position-data.json', JSON.stringify(obj1))
         // this.drawPositionsCanvas(positions, maps, data, width, height)
         
-        ig.blitzkrieg.msg('blitzkrieg', 'arrange done')
+        blitzkrieg.msg('blitzkrieg', 'arrange done')
         console.log('now you can run the python script at ./assets/mods/cc-blitzkrieg/json/drawArrangeMapCanvas.py')
     }
 
@@ -201,10 +201,10 @@ export class MapArranger {
         let newNameShort = '300emptytmp'
         let newName = 'rouge/' + newNameShort
 
-        let filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/data/maps')
-        filePaths = ig.blitzkrieg.util.getFilesInDir('./assets/extension/post-game/data/maps', filePaths)
+        let filePaths = blitzkrieg.util.getFilesInDir('./assets/data/maps')
+        filePaths = blitzkrieg.util.getFilesInDir('./assets/extension/post-game/data/maps', filePaths)
 
-        let baseMap = await ig.blitzkrieg.util.getMapObject(baseName)
+        let baseMap = await blitzkrieg.util.getMapObject(baseName)
         let mapWidth = baseMap.mapWidth*16
         let mapHeight = baseMap.mapHeight*16
 
@@ -223,12 +223,12 @@ export class MapArranger {
             if (mapPath.includes('maps/arena/')) {
                 continue
             }
-            let selMapData = await ig.blitzkrieg.util.getMapObjectByPath(mapPath)
+            let selMapData = await blitzkrieg.util.getMapObjectByPath(mapPath)
             biggestWidth = Math.max(biggestWidth, selMapData.mapWidth)
             biggestHeight = Math.max(biggestHeight, selMapData.mapHeight)
             let selMapWidth = selMapData.mapWidth * 16
             let selMapHeight = selMapData.mapHeight * 16
-            let sel = ig.blitzkrieg.util.getEntireMapSel(selMapData)
+            let sel = blitzkrieg.util.getEntireMapSel(selMapData)
 
             let xOffset_tmp = xOffset + selMapWidth + 32
             if (xOffset_tmp >= mapWidth) {
@@ -247,7 +247,7 @@ export class MapArranger {
                 maxHeight = 0
                 console.log('ran out of space')
             }
-            baseMap = await ig.blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
+            baseMap = await blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
                 xOffset, yOffset, newName, {
                     disableEntities: true,
                     mergeLayers: true,
