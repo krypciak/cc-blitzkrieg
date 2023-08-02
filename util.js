@@ -125,6 +125,49 @@ export class Util {
         return true
     }
 
+    getTrimArrayPos2d(arr) {
+        const origWidth = arr[0].length
+        const origHeight = arr.length
+
+        let nx
+        for (let x = 0; x < origWidth; x++) {
+            let empty = true
+            for (let y = 0; y < origHeight; y++) {
+                if (arr[y][x] != 0) { empty = false; break }
+            }
+            if (! empty) { nx = x; break }
+        }
+        let ny
+        for (let y = 0; y < origHeight; y++) {
+            let empty = true
+            for (let x = 0; x < origWidth; x++) {
+                if (arr[y][x] != 0) { empty = false; break }
+            }
+            if (! empty) { ny = y; break }
+        }
+
+        let nw
+        for (let x = origWidth- 1; x >= 0; x--) {
+            let empty = true
+            for (let y = 0; y < origHeight; y++) {
+                if (arr[y][x] != 0) { empty = false; break }
+            }
+            if (! empty) { nw = y; break }
+        }
+
+        let nh
+        for (let y = origHeight - 1; y >= 0; y--) {
+            let empty = true
+            for (let x = 0; x < origWidth; x++) {
+                if (arr[y][x] != 0) { empty = false; break }
+            }
+            if (! empty) { nh = y; break }
+        }
+
+
+        return { nx, ny, nw, nh }
+    }
+
     setToClosestRectSide(pos, rect) {
         function distanceToLine(pointX, pointY, lineX1, lineY1, lineX2, lineY2) {
             let A = lineY2 - lineY1
