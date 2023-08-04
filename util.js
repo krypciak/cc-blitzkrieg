@@ -129,43 +129,43 @@ export class Util {
         const origWidth = arr[0].length
         const origHeight = arr.length
 
-        let nx
+        let x1
         for (let x = 0; x < origWidth; x++) {
             let empty = true
             for (let y = 0; y < origHeight; y++) {
                 if (arr[y][x] != 0) { empty = false; break }
             }
-            if (! empty) { nx = x; break }
+            if (! empty) { x1 = x; break }
         }
-        let ny
+        let y1
         for (let y = 0; y < origHeight; y++) {
             let empty = true
             for (let x = 0; x < origWidth; x++) {
                 if (arr[y][x] != 0) { empty = false; break }
             }
-            if (! empty) { ny = y; break }
+            if (! empty) { y1 = y; break }
         }
 
-        let nw
+        let x2
         for (let x = origWidth- 1; x >= 0; x--) {
             let empty = true
             for (let y = 0; y < origHeight; y++) {
                 if (arr[y][x] != 0) { empty = false; break }
             }
-            if (! empty) { nw = y; break }
+            if (! empty) { x2 = x; break }
         }
 
-        let nh
+        let y2
         for (let y = origHeight - 1; y >= 0; y--) {
             let empty = true
             for (let x = 0; x < origWidth; x++) {
                 if (arr[y][x] != 0) { empty = false; break }
             }
-            if (! empty) { nh = y; break }
+            if (! empty) { y2 = y; break }
         }
 
 
-        return { nx, ny, nw, nh }
+        return { x1, y1, x2, y2 }
     }
 
     setToClosestRectSide(pos, rect) {
