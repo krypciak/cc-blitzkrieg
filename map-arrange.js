@@ -250,14 +250,15 @@ export class MapArranger {
             baseMap = await blitzkrieg.selectionCopyManager.copySelToMap(baseMap, selMapData, sel,
                 xOffset, yOffset, newName, {
                     disableEntities: true,
-                    mergeLayers: true,
+                    mergeLayers: false,
                     removeCutscenes: true
                 })
 
-            // xOffset = xOffset_tmp
-            // if (++i >= 100) {
-            //     break
-            // }
+            xOffset = xOffset_tmp
+            if (++i >= 100) {
+                break
+            }
+            console.log(i)
         }
 
 

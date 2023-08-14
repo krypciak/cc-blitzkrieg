@@ -37,6 +37,13 @@ export class Selections {
         this._ready = true
     }
 
+    setSelHashMapEntry(mapName, entry) {
+        if (! entry.tempSel) {
+            entry.tempSel = new Selection(null)
+        }
+        this.selHashMap[mapName] = entry
+    }
+
     onNewMapEnter() {
         let mapName = ig.game.mapName.split('.').join('/')
         this.mapSels = this.selHashMap[mapName]
@@ -46,7 +53,7 @@ export class Selections {
                 tempSel: new Selection(mapName),
                 fileIndex: 0,
             }
-        this.selHashMap[mapName] = this.mapSels
+        this.setSelHashMapEntry(mapName, this.mapSels)
     }
 
     async create() {
@@ -210,13 +217,13 @@ export class Selections {
 
     checkForEvents(pos) {
         if (! this._ready) return
-        if (this.mapSels.sels !== undefined) {
+        if (this.mapSels.sels) {
             for (let i = 0; i < this.mapSels.sels.length; i++) {
                 this.checkSelForEvents(this.mapSels.sels[i], pos, i)
             }
         }
 
-        if (this.mapSels.tempSel !== undefined || this.mapSels.tempSel !== null) {
+        if (this.mapSels.tempSel) {
             this.checkSelForEvents(this.mapSels.tempSel, pos, this.mapSels.sels.length)
         }
     }
