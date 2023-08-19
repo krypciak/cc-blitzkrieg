@@ -215,6 +215,7 @@ export class SelectionCopyManager {
     mergeMapEntities(baseMap, selMap, sel, xOffset, yOffset,
         oldToNewLevelsMap, selLevelOffset, removeCutscenes, makePuzzlesUnique) {
         
+        let eventTriggerOffsetY = 0
         if (baseMap.entities === undefined && selMap.entities === undefined) {
             return []
         }
@@ -264,7 +265,8 @@ export class SelectionCopyManager {
                             y: entity.y,
                         })
                         x = xOffset
-                        y = yOffset
+                        y = yOffset + eventTriggerOffsetY
+                        eventTriggerOffsetY += 16
                     }
                     // check if entity doesn't clip out of the base map
                     if (x < baseMap.mapWidth * tilesize && y < baseMap.mapHeight * tilesize) {
