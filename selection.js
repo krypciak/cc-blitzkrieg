@@ -232,7 +232,12 @@ export class Selections {
     drawBox(rect, color) {
         let pos = { x: 0, y: 0 }
         ig.system.getScreenFromMapPos(pos, rect.x, rect.y)
-        new ig.SimpleColor(color).draw(pos.x, pos.y, rect.width, rect.height)
+        let w = rect.width, h = rect.height
+        if (blitzkrieg.selectionOutlines) {
+            w -= 2
+            h -= 2
+        }
+        new ig.SimpleColor(color).draw(pos.x, pos.y, w, h)
     }
 
     drawSelBoxes(sel, color) {

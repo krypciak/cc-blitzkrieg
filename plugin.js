@@ -236,6 +236,8 @@ export default class Blitzkrieg {
         blitzkrieg.bindKeys(blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)
         blitzkrieg.registerEvents()
 
+
+        blitzkrieg.selectionOutlines = false
         blitzkrieg.loaded = true
     }
 
