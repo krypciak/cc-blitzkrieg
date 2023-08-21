@@ -43,7 +43,7 @@ export class ChangeRecorder {
         this.selInstance.save()
     }
 
-    toogleRecording() {
+    toggleRecording() {
         if (this.recording) { this.stopRecording() }
         else { this.startRecording() }
     }

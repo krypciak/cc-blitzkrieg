@@ -127,17 +127,6 @@ export default class Blitzkrieg {
     bindingDeleteSel() {
         blitzkrieg.selectionInstance.delete()
     }
-    bindingRecord() {
-        blitzkrieg.selectionInstanceManager.recorder.toogleRecording()
-    }
-    bindingSolve() {
-        blitzkrieg.selectionInstanceManager.solve()
-    }
-    bindingToogleRender() {
-        blitzkrieg.puzzleSelections.toogleDrawing()
-        blitzkrieg.battleSelections.toogleDrawing()
-        blitzkrieg.bossSelections.toogleDrawing()
-    }
 
     async reloadLevel() {
         let pos = ig.copy(ig.game.playerEntity.coll.pos)
@@ -201,36 +190,37 @@ export default class Blitzkrieg {
         blitzkrieg.updateSelectionMode()
 
         blitzkrieg.keys = {
-            'selection-toogle':          { desc: 'Toogle selection mode',          func: blitzkrieg.selectionDialog,
-                key: ig.KEY.MINUS,         header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
-
             'puzzle-create':             { desc: 'Create a new entry',             func: blitzkrieg.bindingCreate,
                 key: ig.KEY.P,             header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
             'puzzle-selection-create':   { desc: 'Create a selection',             func: blitzkrieg.bindingCreateSel, 
                 key: ig.KEY.BRACKET_OPEN,  header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
             'puzzle-selection-delete':   { desc: 'Delete a selection/puzzle',      func: blitzkrieg.bindingDeleteSel, 
                 key: ig.KEY.BRACKET_CLOSE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
-            'puzzle-record-toogle':      { desc: 'Toogle game state recording',    func: blitzkrieg.bindingRecord,
-                key: ig.KEY._8,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
-            'selection-render-toogle':   { desc: 'Toogle selection rendering',     func: blitzkrieg.bindingToogleRender,
-                key: ig.KEY.SINGLE_QUOTE, header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
-
-            'puzzle-solve-fast':         { desc: 'Solve puzzle (instant)',        func: blitzkrieg.bindingSolve,
-                key: ig.KEY._7,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
 
             'puzzle-increse-speed':      { desc: 'Increse selection puzzle data',  func: blitzkrieg.puzzleSelectionManager.incSpeed, 
                 key: ig.KEY._0,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.puzzleSelectionManager },
             'puzzle-decrese-speed':      { desc: 'Decrese selection puzzle speed', func: blitzkrieg.puzzleSelectionManager.decSpeed, 
                 key: ig.KEY._9,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.puzzleSelectionManager },
-
-            'copy-selection':   { desc: 'copy selection', func: blitzkrieg.selectionCopyManager.copy, 
-                key: ig.KEY._6,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.selectionCopyManager },
-            //'arrange-maps':     { desc: 'arrange maps', func: blitzkrieg.mapArranger.arrange, 
-            //    key: ig.KEY._5,            header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg.mapArranger },
-            
-            'reload-level':     { desc: 'Reload level',   func: blitzkrieg.reloadLevel, 
-                key: ig.KEY.BACKSPACE,     header: 'blitzkrieg-keybindings', hasDivider: false, parent: blitzkrieg },
         }
+
+        // https://github.com/krypciak/cc-vim
+        if (vim) {
+            // insel = (ingame) => { return ingame && blitzkreg
+            vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', () => { blitzkrieg.reloadLevel() })
+            vim.addAlias('blitzkrieg', 'toggle-selection-render', '', 'ingame', () => { 
+                blitzkrieg.puzzleSelections.toggleDrawing()
+                blitzkrieg.battleSelections.toggleDrawing()
+                blitzkrieg.bossSelections.toggleDrawing()
+            })
+            vim.addAlias('blitzkrieg', 'toggle-selection-outlines', 'Show/hide selections', 'ingame', () => { blitzkrieg.selectionOutlines = !blitzkrieg.selectionOutlines })
+
+            const insel = (ingame) => { return ingame && blitzkrieg.selectionInstance.inSelStack.length() > 0 }
+            vim.addAlias('blitzkrieg', 'puzzle-solve', '', insel, () => { blitzkrieg.selectionInstanceManager.solve() })
+            vim.addAlias('blitzkrieg', 'record-start', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.startRecording() })
+            vim.addAlias('blitzkrieg', 'record-stop', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.stopRecording() })
+            vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
+        }
+
 
         blitzkrieg.setupTabs()
         blitzkrieg.bindKeys(blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)

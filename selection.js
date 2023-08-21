@@ -272,7 +272,7 @@ export class Selections {
         }
     }
 
-    toogleDrawing() {
+    toggleDrawing() {
         this.drawBoxes = ! this.drawBoxes
     }
 
