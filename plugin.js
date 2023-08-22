@@ -262,7 +262,7 @@ export default class Blitzkrieg {
         }
     }
 
-    async main() {
+    async poststart() {
         blitzkrieg.updateKeybindingLabels()
         blitzkrieg.adjustPuzzleAssistSlider()
         blitzkrieg.prepareTabFonts()
