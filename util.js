@@ -168,56 +168,6 @@ export class Util {
         return { x1, y1, x2, y2 }
     }
 
-    setToClosestRectSide(pos, rect) {
-        function distanceToLine(pointX, pointY, lineX1, lineY1, lineX2, lineY2) {
-            let A = lineY2 - lineY1
-            let B = lineX1 - lineX2
-            let C = lineX2 * lineY1 - lineX1 * lineY2
-        
-            let distance = Math.abs((A * pointX + B * pointY + C) / Math.sqrt(A * A + B * B))
-            return distance
-        }
-        let { x, y } = pos
-        let { x: x1, y: y1, width, height } = rect
-        
-        let x2 = x1 + width
-        let y2 = y1 + height
-
-        let distances = [
-            distanceToLine(x, y, x1, y1, x2, y1),
-            distanceToLine(x, y, x2, y1, x2, y2),
-            distanceToLine(x, y, x1, y2, x2, y2),
-            distanceToLine(x, y, x1, y1, x1, y2),
-        ]
-        let minDistance = Math.min(...distances)
-        let closestSideIndex = distances.indexOf(minDistance)
-        switch (closestSideIndex) {
-        case 0: pos.y = y1; break // Top side
-        case 1: pos.x = x2; break // Right side
-        case 2: pos.y = y2; break // Bottom side
-        case 3: pos.x = x1; break // Left side
-        }
-        return { distance: minDistance, side: closestSideIndex }
-    }
-
-    setToClosestSelSide(pos, sel) {
-        let minDist = 100000
-        let minSide
-        let minPos
-        for (let rect of sel.bb) {
-            let posCopy = ig.copy(pos)
-            let { distance, side } = this.setToClosestRectSide(posCopy, rect)
-            if (distance < minDist) {
-                minDist = distance
-                minSide = side
-                minPos = ig.copy(posCopy)
-            }
-        }
-        pos.x = minPos.x
-        pos.y = minPos.y
-        return minSide
-    }
-
     setSelPos(sel, xOffset, yOffset) {
         xOffset = Math.floor(xOffset/tilesize)*tilesize
         yOffset = Math.floor(yOffset/tilesize)*tilesize
