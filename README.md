@@ -1,3 +1,4 @@
+[![](https://tokei.rs/b1/github/krypciak/cc-blitzkrieg?type=javascriptt&label=JavaScript&style=flat)](https://github.com/krypciak/cc-blitzkrieg)
 # cc-blitzkrieg
 epic crosscode mod
 1. Solve and skips puzzles with one button
