@@ -277,18 +277,18 @@ export class Selections {
     }
 
     async save() {
-        let newMap = ig.copy(this.selHashMap)
-        for (let mapName in newMap) {
-            let obj = newMap[mapName]
+        // let newMap = ig.copy(this.selHashMap)
+        for (let mapName in this.selHashMap) {
+            let obj = this.selHashMap[mapName]
             if (obj.sels.length == 0 && obj.tempSel.bb.length == 0) {
-                delete newMap[mapName]
+                // delete newMap[mapName]
                 delete this.selHashMap[mapName]
             }
         }
         let saveObjects = []
         for (let i = 0; i < this.jsonfiles.length; i++) { saveObjects.push({}) }
-        for (let mapName in newMap) {
-            let mapsel = newMap[mapName]
+        for (let mapName in this.selHashMap) {
+            let mapsel = this.selHashMap[mapName]
             saveObjects[mapsel.fileIndex][mapName] = mapsel
         }
         for (let i = 0; i < this.jsonfiles.length; i++) {
