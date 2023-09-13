@@ -170,7 +170,8 @@ export class SelectionCopyManager {
 
         if (args.rePosition && typeof value == 'object') {
             switch (key) {
-            case 'position':
+            // removing position fixes movableplatforms
+            // case 'position':
             case 'value':
             case 'target':
             case 'newPos': {
