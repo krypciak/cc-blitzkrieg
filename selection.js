@@ -292,15 +292,21 @@ export class Selections {
             saveObjects[mapsel.fileIndex][mapName] = mapsel
         }
         for (let i = 0; i < this.jsonfiles.length; i++) {
+            const path = this.jsonfiles[i]
             let json = JSON.stringify(saveObjects[i])
-            fs.writeFileSync(this.jsonfiles[i], json)
+            try {
+                fs.writeFileSync(path, json)
+            } catch (err) { console.log(err) }
         }
     }
 
     async load(index) {
         try {
-            const json = fs.readFileSync(this.jsonfiles[index], 'utf8')
-            const obj = JSON.parse(json)
+            let path = this.jsonfiles[index]
+            if (path.startsWith('assets/')) { 
+                path = path.substring('assets/'.length)
+            }
+            const obj = await (await fetch(path)).json()
             for (let mapName in obj) {
                 obj[mapName].fileIndex = index
             }
@@ -313,9 +319,11 @@ export class Selections {
     }
 
     async loadAll() {
+        const promises = []
         for (let i = 0; i < this.jsonfiles.length; i++) {
-            this.load(i)
+            promises.push(this.load(i))
         }
+        Promise.all(promises)
     }
 }
 
