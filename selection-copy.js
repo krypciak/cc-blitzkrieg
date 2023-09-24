@@ -623,7 +623,7 @@ export class SelectionCopyManager {
 
             sel.bb.forEach((rect) => {
             // eslint-disable-next-line no-unused-vars
-                let { x1, y1, x2, y2, x3, y3, x4, y4 } = 
+                let { x1, y1, x2, y2, x3, y3 } = 
                     this.getMapLayerCords(rect, xTileOffset, yTileOffset, sel)
 
                 let subArray = blitzkrieg.util.createSubArray2d(layer.data, x1, y1, x2, y2,
@@ -720,10 +720,13 @@ export class SelectionCopyManager {
 
         if (options.uniqueSel) {
             let uniqueSel = options.uniqueSel
-            uniqueSel.data.startPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.startPos.level) + selLevelOffset]
-            uniqueSel.data.startPos.z = levels[parseInt(uniqueSel.data.startPos.level)].height + (uniqueSel.data.startPos.z % 16)
-            uniqueSel.data.endPos.level = oldToNewLevelsMap[parseInt(uniqueSel.data.endPos.level) + selLevelOffset]
-            uniqueSel.data.endPos.z = levels[parseInt(uniqueSel.data.endPos.level)].height + (uniqueSel.data.endPos.z % 16)
+            const zDiff = uniqueSel.data.startPos.z - oldToNewLevelsMap[parseInt(uniqueSel.data.startPos.level) + selLevelOffset]
+
+            for (const poslvl of [uniqueSel.data.startPos, uniqueSel.data.endPos]) {
+                poslvl.z -= zDiff
+                poslvl.y += zDiff
+                poslvl.level = oldToNewLevelsMap[parseInt(poslvl.level) + selLevelOffset]
+            }
         }
 
         let { lightLayer, collisionLayers, tileLayers, objectLayers, navLayers, mapWidth, mapHeight } =
