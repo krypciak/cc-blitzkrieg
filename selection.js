@@ -293,10 +293,11 @@ export class Selections {
         }
         for (let i = 0; i < this.jsonfiles.length; i++) {
             const path = this.jsonfiles[i]
+            if (path.includes('ccmod')) { continue }
             let json = JSON.stringify(saveObjects[i])
             try {
                 fs.writeFileSync(path, json)
-            } catch (err) { console.log(err) }
+            } catch (err) { }
         }
     }
 

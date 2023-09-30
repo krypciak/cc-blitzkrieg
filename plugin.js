@@ -225,7 +225,9 @@ export default class Blitzkrieg {
         blitzkrieg.setupTabs()
         blitzkrieg.bindKeys(blitzkrieg.keys, sc.OPTION_CATEGORY.BLITZKRIEG)
         blitzkrieg.registerEvents()
-
+    
+        blitzkrieg.mod.isCCL3 = blitzkrieg.mod.findAllAssets ? true : false
+        blitzkrieg.mod.isCCModPacked = blitzkrieg.mod.baseDirectory.endsWith('.ccmod/')
 
         blitzkrieg.selectionOutlines = false
         blitzkrieg.loaded = true
