@@ -5,9 +5,8 @@ name: Release pack
 # Controls when the workflow will run
 on:
     push:
-        tags:
-            - 'v*.*.*.*'
-    workflow_dispatch:
+        branches:
+            - main
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -22,11 +21,17 @@ jobs:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
 
-            - name: Extract version from commit name
+            - name: Check commit message
               id: check_commit_message
               run: |
-                echo "::set-output name=version::$(echo ${{ github.ref }} | sed 's/^refs\/tags\/v//')"
-
+                if [[ $(git log --format=%B -n 1 ${{ github.sha }}) =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                  echo "Commit message matches the pattern."
+                  echo "::set-output name=version::$(echo ${{ github.ref }} | sed 's/^refs\/tags\/v//')"
+                else
+                  echo "Commit message does not match the pattern."
+                  exit 1
+                fi
+                
             - name: Update package.json and ccmod.json
               run: | 
                 sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.check_commit_message.outputs.version }}\"/" package.json ccmod.json
