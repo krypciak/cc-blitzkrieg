@@ -129,6 +129,7 @@ export class SelectionCopyManager {
             // make puzzles unique
             // replace condition variables
             case 'condition':
+            case 'spawnCondition':
             case 'endCondition':
             case 'startCondition':
             case 'hideCondition':
