@@ -204,8 +204,7 @@ export default class Blitzkrieg {
         }
 
         // https://github.com/krypciak/cc-vim
-        if (vim) {
-            // insel = (ingame) => { return ingame && blitzkreg
+        if (window.vim) {
             vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', () => { blitzkrieg.reloadLevel() })
             vim.addAlias('blitzkrieg', 'toggle-selection-render', '', 'ingame', () => { 
                 blitzkrieg.puzzleSelections.toggleDrawing()
