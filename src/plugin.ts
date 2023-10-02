@@ -1,4 +1,4 @@
-import { Mod1 } from '@root/types'
+import { Mod1 } from './types'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -25,9 +25,18 @@ function addVimBindings() {
     }
 }
 
+interface BlitzkreigDebug {
+    selectionOutlines: boolean
+}
+
 export default class Blitzkrieg {
     dir: string
     mod: Mod1
+
+    debug: BlitzkreigDebug = {
+        selectionOutlines: true
+    }
+    selectionMode: string = 'puzzle'
 
     constructor(mod: Mod1) {
         this.dir = mod.baseDirectory
