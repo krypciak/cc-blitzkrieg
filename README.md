@@ -21,6 +21,8 @@ epic crosscode mod
 | [input-api](https://github.com/CCDirectLink/input-api)    | **_[Quick download](https://github.com/CCDirectLink/input-api/releases/latest)_** |  
   
 ### [cc-vim](https://github.com/krypciak/cc-vim) commands
+- `reload-level()` Reloads the current map without transition, keeps the current player position
+- `toggle-selection-render`
 
 ## Building
 ```bash
