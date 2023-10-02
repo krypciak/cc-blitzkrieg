@@ -1,9 +1,12 @@
-import { VimLogic } from '../node_modules/cc-vim/src/logic'
+import { VimLogic } from 'cc-vim/src/logic'
+import { Mod1 } from '@root/types'
 
 declare global {
     const vim: VimLogic
+    const blitzkrieg: Blitzkrieg
     interface Window {
         vim: VimLogic
+        blitzkrieg: Blitzkrieg
     }
 }
 
@@ -19,7 +22,7 @@ export default class Blitzkrieg {
     constructor(mod: Mod1) {
         this.dir = mod.baseDirectory
         this.mod = mod
-        window.dnggen = this
+        window.blitzkrieg = this
         this.mod.isCCL3 = mod.findAllAssets ? true : false
         this.mod.isCCModPacked = mod.baseDirectory.endsWith('.ccmod/')
     }
