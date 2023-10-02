@@ -1,17 +1,27 @@
-import { VimLogic } from 'cc-vim/src/logic'
 import { Mod1 } from '@root/types'
 
 declare global {
-    const vim: VimLogic
     const blitzkrieg: Blitzkrieg
     interface Window {
-        vim: VimLogic
         blitzkrieg: Blitzkrieg
     }
 }
 
 function addVimBindings() {
     if (window.vim) { /* optional dependency https://github.com/krypciak/cc-vim */
+        // vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', () => { blitzkrieg.reloadLevel() })
+        // vim.addAlias('blitzkrieg', 'toggle-selection-render', '', 'ingame', () => { 
+        //     blitzkrieg.puzzleSelections.toggleDrawing()
+        //     blitzkrieg.battleSelections.toggleDrawing()
+        //     blitzkrieg.bossSelections.toggleDrawing()
+        // })
+        // vim.addAlias('blitzkrieg', 'toggle-selection-outlines', 'Show/hide selections', 'ingame', () => { blitzkrieg.selectionOutlines = !blitzkrieg.selectionOutlines })
+
+        // const insel = (ingame) => { return ingame && blitzkrieg.selectionInstance.inSelStack.length() > 0 }
+        // vim.addAlias('blitzkrieg', 'puzzle-solve', '', insel, () => { blitzkrieg.selectionInstanceManager.solve() })
+        // vim.addAlias('blitzkrieg', 'record-start', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.startRecording() })
+        // vim.addAlias('blitzkrieg', 'record-stop', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.stopRecording() })
+        // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
     }
 }
 
