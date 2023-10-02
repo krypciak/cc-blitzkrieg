@@ -1,4 +1,8 @@
-node_modules
 package-lock.json
-icon.png~
+old
+old.txt
+plugin.js
 *.ccmod
+dist
+node_modules
+icon/icon.png~

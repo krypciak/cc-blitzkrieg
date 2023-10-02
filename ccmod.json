@@ -1,6 +1,6 @@
 {
 	"id": "cc-blitzkrieg",
-	"version": "0.3.5",
+	"version": "0.4.0",
 	"title": {
 		"en_US": "Blitzkrieg",
 		"de_DE": "Blitzkrieg",
@@ -20,7 +20,7 @@
 		"ko_KR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools"
 	},
 	"icons": {
-		"24": "icon.png"
+		"24": "icon/icon.png"
 	},
 	"plugin": "plugin.js",
 	"dependencies": {
