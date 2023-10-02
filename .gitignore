@@ -3,6 +3,6 @@ old
 old.txt
 plugin.js
 *.ccmod
+*.png~
 dist
 node_modules
-icon/icon.png~
