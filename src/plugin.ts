@@ -1,6 +1,8 @@
 import { TextNotification } from 'txtnoti'
 import { Mod1 } from './types'
 import { SelectionManager } from 'selection'
+import { isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from 'tab'
+import { PuzzleSelectionManager } from 'puzzle-selection'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -11,20 +13,31 @@ declare global {
 
 function addVimBindings() {
     if (window.vim) { /* optional dependency https://github.com/krypciak/cc-vim */
-        // vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', () => { blitzkrieg.reloadLevel() })
-        vim.addAlias('blitzkrieg', 'toggle-selection-render', '', 'ingame', () => { 
+        vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', async () => {
+            // let pos = ig.copy(ig.game.playerEntity.coll.pos)
+            // let map = ig.game.mapName.split('.').join('/')
+            // ig.game.loadLevel(await blitzkrieg.util.getMapObject(map, true), false, false)
+            // ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
+        })
+        
+        vim.addAlias('blitzkrieg', 'toggle-enabled', 'Toggle whether blitzkrieg is enabled or disabled', 'global', () => {
+            setBlitzkriegEnabled(! isBlitzkriegEnabled())
+        })
+        const condition = (ingame: boolean) => ingame && isBlitzkriegEnabled() as boolean
+        vim.addAlias('blitzkrieg', 'toggle-selection-render', 'Toggle selection rendering', condition, () => { 
             for (const key in blitzkrieg.sels) {
                 blitzkrieg.sels[key as keyof typeof blitzkrieg.sels].toggleDrawing()
             }
         })
-        vim.addAlias('blitzkrieg', 'toggle-selection-outlines', 'Show/hide selections', 'ingame', () => {
+        vim.addAlias('blitzkrieg', 'toggle-selection-outlines', 'Toggle selections', condition, () => {
             blitzkrieg.debug.selectionOutlines = !blitzkrieg.debug.selectionOutlines
         })
 
-        // const insel = (ingame) => { return ingame && blitzkrieg.selectionInstance.inSelStack.length() > 0 }
-        // vim.addAlias('blitzkrieg', 'puzzle-solve', '', insel, () => { blitzkrieg.selectionInstanceManager.solve() })
-        // vim.addAlias('blitzkrieg', 'record-start', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.startRecording() })
-        // vim.addAlias('blitzkrieg', 'record-stop', '', insel, () => { blitzkrieg.selectionInstanceManager.recorder.stopRecording() })
+        vim.addAlias('blitzkrieg', 'puzzle-solve', '', (ingame: boolean) => {
+            return ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
+        }, () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
+        // vim.addAlias('blitzkrieg', 'record-start', '', insel, () => { blitzkrieg.currSel.recorder.startRecording() })
+        // vim.addAlias('blitzkrieg', 'record-stop', '', insel, () => { blitzkrieg.currSel.recorder.stopRecording() })
         // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
     }
 }
@@ -37,6 +50,7 @@ export default class Blitzkrieg {
     dir: string
     mod: Mod1
     rhudmsg!: (title: string, message: string, timeout: number) => void
+    currSel!: SelectionManager
     sels!: {
         puzzle: SelectionManager
     }
@@ -57,7 +71,7 @@ export default class Blitzkrieg {
     registerSels() {
         ig.ENTITY.Player.inject({
             update(...args) {
-                Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
+                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
                 return this.parent(...args)
             }
         })
@@ -65,38 +79,31 @@ export default class Blitzkrieg {
         ig.Renderer2d.inject({
             drawPostLayerSprites(...args) {
                 this.parent(...args)
-                Object.values(blitzkrieg.sels).forEach(m => m.drawSelections())
+                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.drawSelections())
             }
         })
 
-        /*
         ig.Game.inject({
             loadLevel(...args) {
                 this.parent(...args)
-                Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEnter())
+                Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
             }
         })
-        */
     }
 
     async prestart() {
         addVimBindings()
         this.rhudmsg = TextNotification.rhudmsg
 
-        blitzkrieg.sels = {
-            puzzle: new SelectionManager(
-                'puzzle',
-                '#77000044',
-                '#ff222244',
-                [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ],
-                // blitzkrieg.puzzleSelectionManager.newSelEvent,
-                // blitzkrieg.puzzleSelectionManager.walkInEvent,
-                // blitzkrieg.puzzleSelectionManager.walkOutEvent,
-            )
+        this.sels = {
+            puzzle: new PuzzleSelectionManager()
         }
+        this.currSel = this.sels.puzzle
         this.registerSels()
+        setupTabs()
     }
 
     async poststart() {
+        prepareTabFonts()
     }
 }

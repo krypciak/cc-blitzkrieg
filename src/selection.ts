@@ -10,6 +10,7 @@ export interface Selection {
     bb: bareRect[]
     mapName: string
     sizeRect: bareRect
+    data?: unknown
 }
 
 export class SelectionMapEntry {
@@ -38,10 +39,18 @@ export class SelectionManager {
         public completeColor: string,
         public tempColor: string,
         public jsonFiles: string[],
-        public newSelEvent: ((sel: Selection) => Promise<void>) = async () => {},
-        public walkInEvent: ((sel: Selection) => Promise<void>) = async () => {},
-        public walkOutEvent: ((sel: Selection) => Promise<void>) = async () => {},
     ) { }
+
+    async newSelEvent(_: Selection): Promise<void> {}
+    async walkInEvent(_: Selection): Promise<void> {}
+    async walkOutEvent(_: Selection): Promise<void> {}
+    async onNewMapEntryEvent(): Promise<void> {
+        for (const sel of this.inSelStack.array) {
+            this.walkOutEvent(sel)
+        }
+        this.inSelStack = new Stack()
+
+    }
 
     setFileIndex(index: number) {
         this.fileIndex = index
@@ -165,6 +174,7 @@ export class SelectionManager {
             }
         }
     }
+
     checkSelForEvents(sel: Selection, vec: Vec2, i: number) {
         let isIn = isVecInRectArr(vec, sel.bb)
         
