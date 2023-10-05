@@ -1,6 +1,7 @@
 import { Rect, bareRect, isVecInRect, isVecInRectArr, reduceRectArr } from 'cc-map-util/rect'
 import { Point } from 'cc-map-util/src/pos'
 import { Stack, assert } from 'cc-map-util/util'
+import { FsUtil } from 'fsutil'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = true
@@ -11,17 +12,23 @@ export interface Selection {
     sizeRect: bareRect
 }
 
-export interface SelectionMapEntry {
-    sels: Selection[]
-    tempSel?: Omit<Selection, 'sizeRect'>,
-    fileIndex: number
+export class SelectionMapEntry {
+    constructor(
+        public sels: Selection[],
+        public fileIndex: number,
+        public tempSel?: Omit<Selection, 'sizeRect'>,
+    ) { }
+
+    toJSON(): object {
+        return { sels: this.sels }
+    }
 }
 
 export class SelectionManager {
     selMap: Record<string, SelectionMapEntry> = {}
     inSelStack: Stack<Selection> = new Stack()
     drawBoxes: boolean = defaultDrawBoxes
-    selectStep: number = 0
+    selectStep: number = -1
     fileIndex!: number
     tempPos!: Vec2
     selIndexes: number[] = [-1]
@@ -45,14 +52,14 @@ export class SelectionManager {
     }
 
     getCurrentEntry(): SelectionMapEntry {
-        return this.selMap[ig.game.mapName]
+        return this.selMap[ig.game.mapName?.replace(/\./g, '/')]
     }
 
     async selectionCreatorBegin() {
         /* waiting for pos */
         let setStep: boolean = true
         const entry = this.getCurrentEntry()
-        if (! entry) { this.selMap[ig.game.mapName] = { sels: [], fileIndex: this.fileIndex } }
+        if (! entry) { this.selMap[ig.game.mapName] = new SelectionMapEntry([], this.fileIndex) }
         if (entry.tempSel && entry.tempSel.bb.length > 0) {
             const obj = reduceRectArr(entry.tempSel.bb)
             const newSel: Selection = entry.tempSel as Selection
@@ -147,6 +154,17 @@ export class SelectionManager {
         this.selectStep++
     }
 
+    checkForEvents(pos: Vec2) {
+        const entry = this.getCurrentEntry()
+        if (entry) {
+            for (let i = 0; i < entry.sels.length; i++) {
+                this.checkSelForEvents(entry.sels[i], pos, i)
+            }
+            if (entry.tempSel) {
+                this.checkSelForEvents(entry.tempSel as Selection, pos, entry.sels.length)
+            }
+        }
+    }
     checkSelForEvents(sel: Selection, vec: Vec2, i: number) {
         let isIn = isVecInRectArr(vec, sel.bb)
         
@@ -187,6 +205,7 @@ export class SelectionManager {
         if (! this.drawBoxes || ! ig.perf.gui) { return }
 
         const entry = this.getCurrentEntry()
+        if (! entry) { return }
         for (const sel of entry.sels) {
             this.drawBoxArray(sel.bb, this.completeColor)
         }
@@ -212,8 +231,51 @@ export class SelectionManager {
         this.drawBoxes = ! this.drawBoxes
     }
 
-    save() {
+    async save() {
+        const saveObjects: Record<string, SelectionMapEntry>[] = []
+        for (let i = 0; i < this.jsonFiles.length; i++) {
+            saveObjects.push({})
+        }
+        for (const mapName in this.selMap) {
+            const selE: SelectionMapEntry = this.selMap[mapName]
+            saveObjects[selE.fileIndex][mapName] = selE
+        }
+        for (let i = 0; i < this.jsonFiles.length; i++) {
+            const path: string = this.jsonFiles[i]
+            if (path.includes('ccmod')) { continue }
+            try {
+                FsUtil.writeFileSync(path, saveObjects[i])
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
 
+    async load(index: number) {
+        try {
+            let path: string = this.jsonFiles[index]
+            if (path.startsWith('assets/')) { 
+                path = path.substring('assets/'.length)
+            }
+            const obj: Record<string, SelectionMapEntry> = await (await fetch(path)).json()
+            for (const mapName in obj) {
+                const entry: SelectionMapEntry = obj[mapName]
+                obj[mapName] = new SelectionMapEntry(entry.sels, index)
+            }
+            if (this.selMap) {
+                this.selMap = { ...this.selMap, ...obj }
+            }
+        } catch(error) {
+            /* file doesn't exist */
+        }
+    }
+
+    async loadAll() {
+        const promises = []
+        for (let i = 0; i < this.jsonFiles.length; i++) {
+            promises.push(this.load(i))
+        }
+        Promise.all(promises)
     }
 
 }

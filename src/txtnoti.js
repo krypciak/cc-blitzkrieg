@@ -1,5 +1,7 @@
 export class TextNotification {
+    static inited = false
     static init() {
+        if (TextNotification.inited) { return }
         sc.TextUpdateEntry = ig.GuiElementBase.extend({
             timer: 2,
             textGui: null,
@@ -62,7 +64,7 @@ export class TextNotification {
                     !this.hidden && this.contentEntries.length == 0 && this.hide()
                 }
             },
-            modelChanged: function (b, a, d) {
+            modelChanged: function (b, _, d) {
                 if (b == sc.model)
                     if (b.isReset()) {
                         this.clearContent()
@@ -78,11 +80,20 @@ export class TextNotification {
                 else this.addEntry(d)
             },
         })
+        TextNotification.inited = true
     }
 
-    static msg(title, message, timeout) {
-        var a = new sc.TextUpdateHud(title)
-        sc.gui.rightHudPanel.addHudBox(a)
-        a.addEntry(message, timeout)
+    static guimap = {}
+
+    static rhudmsg(title, message, timeout) {
+        if (! TextNotification.inited) { TextNotification.init() }
+        let gui
+        if (title in TextNotification.guimap) {
+            gui = TextNotification.guimap[title]
+        } else {
+            gui = TextNotification.guimap[title] = new sc.TextUpdateHud(title)
+            sc.gui.rightHudPanel.addHudBox(gui)
+        }
+        gui.addEntry(message, timeout)
     }
 }
