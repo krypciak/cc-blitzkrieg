@@ -1,8 +1,9 @@
 import { TextNotification } from 'txtnoti'
 import { Mod1 } from './types'
 import { SelectionManager } from 'selection'
-import { isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from 'tab'
+import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from 'tab'
 import { PuzzleSelectionManager } from 'puzzle-selection'
+import { InputKey, KeyBinder } from 'keybinder'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -42,6 +43,24 @@ function addVimBindings() {
     }
 }
 
+const kb: KeyBinder = new KeyBinder()
+function bindKeys() {
+    kb.addKey(new InputKey(
+        ig.KEY.P, 'selb-newentry', 'Create a new selection entry', getBlitzkriegTabIndex(), true, 'blitzkrieg', () => {
+            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorBegin()
+        }, null, false))
+    kb.addKey(new InputKey(
+        ig.KEY.BRACKET_OPEN, 'selb-select', 'Create a new selection in steps', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
+            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorSelect()
+        }, null, false))
+    kb.addKey(new InputKey(
+        ig.KEY.BRACKET_CLOSE, 'selb-destroy', 'Delete/Decunstruct a selection', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
+            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorDelete()
+        }, null, false))
+
+    kb.bind()
+}
+
 interface BlitzkreigDebug {
     selectionOutlines: boolean
 }
@@ -56,7 +75,7 @@ export default class Blitzkrieg {
     }
 
     debug: BlitzkreigDebug = {
-        selectionOutlines: true
+        selectionOutlines: false
     }
     selectionMode: string = 'puzzle'
 
@@ -86,7 +105,7 @@ export default class Blitzkrieg {
         ig.Game.inject({
             loadLevel(...args) {
                 this.parent(...args)
-                Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
+                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
             }
         })
     }
@@ -101,9 +120,14 @@ export default class Blitzkrieg {
         this.currSel = this.sels.puzzle
         this.registerSels()
         setupTabs()
+
+        bindKeys()
     }
 
     async poststart() {
         prepareTabFonts()
+
+        kb.addHeader('blitzkrieg', 'blitzkrieg')
+        kb.updateLabels()
     }
 }

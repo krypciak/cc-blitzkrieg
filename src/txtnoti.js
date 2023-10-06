@@ -27,7 +27,7 @@ export class TextNotification {
             },
             addEntry: function (text, timeout) {
                 var b = new sc.TextUpdateEntry(text, timeout)
-                this.contentEntries.length >= 3
+                this.contentEntries.length >= 10
                     ? this.delayedStack.push(b)
                     : this.pushContent(b, !sc.model.isCutscene())
                 this.hidden && !sc.model.isCutscene() && this.show()

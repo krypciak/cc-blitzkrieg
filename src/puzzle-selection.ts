@@ -1,6 +1,5 @@
 import { Selection, SelectionManager } from 'selection'
-import { waitForPositionKey } from './util'
-import { syncDialog } from './util'
+import { Util } from './util'
 
 enum PuzzleRoomType {
     WholeRoom = 0,
@@ -13,6 +12,7 @@ enum PuzzleCompletionType {
     GetTo = 1,
     Item = 2,
 }
+
 export interface PuzzleSelection extends Selection {
     data: {
         puzzleSpeed: number
@@ -30,6 +30,7 @@ export interface PuzzleSelection extends Selection {
         }
     }
 }
+
 export class PuzzleSelectionManager extends SelectionManager {
     incStep: number = 0.05
     changeModifiers: boolean = true
@@ -45,10 +46,11 @@ export class PuzzleSelectionManager extends SelectionManager {
     
     constructor() {
         super('puzzle', '#77000044', '#ff222244', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
+        this.setFileIndex(0)
     }
 
     updatePuzzleSpeed(sel: PuzzleSelection) {
-        const speed: number = (! sel || ! sel.data.puzzleSpeed) ? 1 : sel.data.puzzleSpeed
+        const speed: number = (! sel?.data?.puzzleSpeed) ? 1 : sel.data.puzzleSpeed
 
         if (this.changeSpeed && sc.options.get('assist-puzzle-speed') != speed) {
             sc.options.set('assist-puzzle-speed', speed) 
@@ -113,29 +115,27 @@ export class PuzzleSelectionManager extends SelectionManager {
 
     async finalizeSel(sel1: Selection) {
         const sel = sel1 as PuzzleSelection
-        // heat cold shock wave
-        sel.data['elements'] = [
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
-            sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
-        ]
-
         const scale: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-        const puzzleCompletionType: number = PuzzleCompletionType[await syncDialog('select puzzle \\c[3]completion type\\c[0]', Object.keys(PuzzleCompletionType)) as keyof typeof PuzzleCompletionType]
-        let puzzleType: number = PuzzleRoomType[await syncDialog('select puzzle \\c[3]type\\[0]', Object.keys(PuzzleRoomType)) as keyof typeof PuzzleRoomType]
+        const data: Partial<PuzzleSelection['data']> = {
+            type: PuzzleRoomType[await Util.syncDialog('select puzzle \\c[3]type\\c[0]', Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleRoomType],
+            completionType: PuzzleCompletionType[await Util.syncDialog('select puzzle \\c[3]completion type\\c[0]', Object.keys(PuzzleCompletionType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleCompletionType],
+            difficulty: parseInt(await Util.syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale)),
+            timeLength: parseInt(await Util.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
+            chapter: sc.model.player.chapter,
+            plotLine: ig.vars.storage.plot ? ig.vars.storage.plot.line : -1,
+            elements: [
+                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
+                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
+                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
+                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
+            ],
+        }
 
-        sel.data.difficulty = parseInt(await syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale))
-        sel.data.timeLength = parseInt(await syncDialog('Select puzzle \\c[3]length\\c[0]', scale))
-        sel.data.completionType = puzzleCompletionType
-        sel.data.type = puzzleType
-        sel.data.chapter = sc.model.player.chapter
-        sel.data.plotLine = ig.vars.storage.plot ? ig.vars.storage.plot.line : -1
-
-        blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 3)
-        sel.data.startPos = await waitForPositionKey()
-        blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 3)
-        sel.data.endPos = await waitForPositionKey()
+        blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 1)
+        data.startPos = await Util.waitForPositionKey()
+        blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
+        data.endPos = await Util.waitForPositionKey()
+        sel.data = data as PuzzleSelection['data']
     }
 
 

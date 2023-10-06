@@ -110,3 +110,7 @@ export function isBlitzkriegEnabled() {
 export function setBlitzkriegEnabled(bool) {
     sc.options.set(enableId, bool)
 }
+
+export function getBlitzkriegTabIndex() {
+    return sc.OPTION_CATEGORY[name]
+}
