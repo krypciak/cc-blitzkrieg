@@ -329,4 +329,26 @@ export class SelectionManager {
         sel.data.endPos = sel.data.startPos
         return sel
     }
+    static setSelPos(sel: Selection, offset: MapPoint) {
+
+        for (let i = 0; i < sel.bb.length; i++) {
+            const rect: bareRect = sel.bb[i]
+            sel.bb[i].x = offset.x + sel.sizeRect.x - rect.x
+            sel.bb[i].y = offset.y + sel.sizeRect.y - rect.y
+        }
+
+        if (sel.data.startPos) {
+            const nsp: EntityPoint = offset.to(EntityPoint)
+            Vec2.add(nsp, MapPoint.fromVec(Rect.new(MapRect, sel.sizeRect)).to(EntityPoint))
+            Vec2.sub(nsp, sel.data.startPos)
+        }
+        
+        if (sel.data.endPos) {
+            const nsp: EntityPoint = offset.to(EntityPoint)
+            Vec2.add(nsp, MapPoint.fromVec(Rect.new(MapRect, sel.sizeRect)).to(EntityPoint))
+            Vec2.sub(nsp, sel.data.endPos)
+        }
+
+        Vec2.assign(sel.sizeRect, offset)
+    }
 }
