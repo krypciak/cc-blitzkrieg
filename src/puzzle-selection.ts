@@ -205,7 +205,7 @@ export class PuzzleSelectionManager extends SelectionManager {
         blitzkrieg.rhudmsg('blitzkrieg', 'Solved puzzle', 2)
     }
 
-    getPuzzleSolveCondition(sel: PuzzleSelection) {
+    static getPuzzleSolveCondition(sel: PuzzleSelection) {
         if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
             throw new Error('no puzzle solution recorded')
         }

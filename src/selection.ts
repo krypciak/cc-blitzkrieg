@@ -317,4 +317,16 @@ export class SelectionManager {
         Promise.all(promises)
     }
 
+    static getSelFromRect(rect: MapRect, mapName: string, z: number) {
+        const sel: Selection = { bb: [ rect ], mapName, sizeRect: rect }
+        sel.data = {}
+        const epos: EntityPoint = MapPoint.fromVec(rect).to(EntityPoint)
+        sel.data.startPos = {
+            x: epos.x,
+            y: epos.y,
+            z,
+        }
+        sel.data.endPos = sel.data.startPos
+        return sel
+    }
 }

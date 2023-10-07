@@ -72,7 +72,8 @@ export default class Blitzkrieg {
     rhudmsg!: (title: string, message: string, timeout: number) => void
     currSel!: SelectionManager
     sels!: {
-        puzzle: SelectionManager
+        puzzle: PuzzleSelectionManager
+        battle: SelectionManager
     }
 
     debug: BlitzkreigDebug = {
@@ -119,7 +120,8 @@ export default class Blitzkrieg {
         this.rhudmsg = TextNotification.rhudmsg
 
         this.sels = {
-            puzzle: new PuzzleSelectionManager()
+            puzzle: new PuzzleSelectionManager(),
+            battle: new SelectionManager('battle', '#00770044', '#22ff2244', [ blitzkrieg.mod.baseDirectory + 'json/battleData.json' ]),
         }
         this.currSel = this.sels.puzzle
         this.registerSels()
