@@ -3,6 +3,7 @@ import { EntityPoint, MapPoint, Point } from 'cc-map-util/src/pos'
 import { Stack, assert } from 'cc-map-util/util'
 import { FsUtil } from 'fsutil'
 import { Util } from './util'
+import { ChangeRecorder } from 'change-record'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = true
@@ -11,7 +12,7 @@ export interface Selection {
     bb: bareRect[]
     mapName: string
     sizeRect: bareRect
-    data?: unknown
+    data?: any
 }
 
 export class SelectionMapEntry {
@@ -34,6 +35,7 @@ export class SelectionManager {
     fileIndex!: number
     tempPos!: Vec2
     selIndexes: number[] = [-1]
+    recorder?: ChangeRecorder
 
     constructor(
         public name: string,
@@ -77,7 +79,6 @@ export class SelectionManager {
             entry = this.getCurrentEntry()
         }
         if (entry.tempSel && entry.tempSel.bb.length > 0) {
-            debugger
             const obj = reduceRectArr(entry.tempSel.bb)
             const newSel: Selection = entry.tempSel as Selection
             newSel.bb = obj.rects
@@ -109,13 +110,13 @@ export class SelectionManager {
         const entry = this.getCurrentEntry()
         entry.sels = entry.sels.filter(sel => {
             const ok: boolean = isVecInRectArr(mpos, sel.bb)
-            if (! ok) { deletedAnything = true }
+            if (ok) { deletedAnything = true }
             return ! ok
         })
         if (entry.tempSel) {
             entry.tempSel.bb = entry.tempSel.bb.filter(rect => {
                 const ok: boolean = isVecInRect(mpos, rect)
-                if (! ok) { deletedAnything = true }
+                if (ok) { deletedAnything = true }
                 return ! ok
             })
         }
@@ -168,8 +169,6 @@ export class SelectionManager {
             entry.tempSel.bb.push(Rect.fromTwoPoints(this.tempPos as Point, mpos as Point))
             this.selIndexes.push(-1)
             this.tempPos = Vec2.createC(0, 0)
-
-            this.save()
         } else { throw new Error() }
 
         this.selectStep++

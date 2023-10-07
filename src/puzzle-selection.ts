@@ -1,5 +1,6 @@
 import { Selection, SelectionManager } from 'selection'
 import { Util } from './util'
+import { ChangeRecorder } from 'change-record'
 
 enum PuzzleRoomType {
     WholeRoom = 0,
@@ -45,8 +46,9 @@ export class PuzzleSelectionManager extends SelectionManager {
     ])
     
     constructor() {
-        super('puzzle', '#77000044', '#ff222244', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
+        super('puzzle', '#77000022', '#ff222222', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
         this.setFileIndex(0)
+        this.recorder = new ChangeRecorder(10)
     }
 
     updatePuzzleSpeed(sel: PuzzleSelection) {
@@ -135,7 +137,7 @@ export class PuzzleSelectionManager extends SelectionManager {
         data.startPos = await Util.waitForPositionKey()
         blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
         data.endPos = await Util.waitForPositionKey()
-        sel.data = data as PuzzleSelection['data']
+        sel.data = { ...sel.data, ...data }
     }
 
 
@@ -169,7 +171,6 @@ export class PuzzleSelectionManager extends SelectionManager {
                 const action = log[i]
 
                 const splittedPath = action[1].split('.')
-                splittedPath.shift()
                 let value = ig.vars.storage
                 for (let i = 0; i < splittedPath.length - 1; i++) {
                     if (! value.hasOwnProperty(splittedPath[i])) {
@@ -185,7 +186,6 @@ export class PuzzleSelectionManager extends SelectionManager {
             const intervalID = setInterval(async () => {
                 const action = log[solveArrayIndex]
                 const splittedPath = action[1].split('.')
-                splittedPath.shift()
                 let value = ig.vars.storage
                 for (let i = 0; i < splittedPath.length - 1; i++) {
                     value = value[splittedPath[i]]

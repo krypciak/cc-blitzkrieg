@@ -34,11 +34,11 @@ function addVimBindings() {
             blitzkrieg.debug.selectionOutlines = !blitzkrieg.debug.selectionOutlines
         })
 
-        vim.addAlias('blitzkrieg', 'puzzle-solve', '', (ingame: boolean) => {
-            return ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
-        }, () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
-        // vim.addAlias('blitzkrieg', 'record-start', '', insel, () => { blitzkrieg.currSel.recorder.startRecording() })
-        // vim.addAlias('blitzkrieg', 'record-stop', '', insel, () => { blitzkrieg.currSel.recorder.stopRecording() })
+        vim.addAlias('blitzkrieg', 'puzzle-solve', '', (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle',
+            () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
+        vim.addAlias('blitzkrieg', 'record-start', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
+            () => { blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel, blitzkrieg.currSel.inSelStack.peek()) })
+        vim.addAlias('blitzkrieg', 'record-stop', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording, () => { blitzkrieg.currSel.recorder!.stopRecording() })
         // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
     }
 }
@@ -108,6 +108,8 @@ export default class Blitzkrieg {
                 isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
             }
         })
+
+        Object.values(blitzkrieg.sels).forEach(m => m.recorder?.injectRecordingPrestart())
     }
 
     async prestart() {
