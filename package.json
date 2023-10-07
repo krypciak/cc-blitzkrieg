@@ -5,7 +5,8 @@
     "scripts": {
         "start": "esbuild --target=es2018 --format=esm --platform=node --bundle --sourcemap=inline --outfile=plugin.js src/plugin.ts",
         "watch": "esbuild --target=es2018 --format=esm --platform=node --bundle --sourcemap=inline --watch --outfile=plugin.js src/plugin.ts",
-        "build": "esbuild --target=es2018 --format=esm --platform=node --bundle --outfile='plugin.js' 'src/plugin.ts'"
+        "build": "esbuild --target=es2018 --format=esm --platform=node --bundle --outfile='plugin.js' 'src/plugin.ts'",
+        "types": "tsc --declaration; rm ./cc-blitzkrieg-types/*.js; rm ./cc-blitzkrieg-types/prettier/ -r"
     },
     "types": "dist/index.d.ts",
     "author": "krypek",
