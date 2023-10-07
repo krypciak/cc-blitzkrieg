@@ -63,6 +63,7 @@ function bindKeys() {
 
 interface BlitzkreigDebug {
     selectionOutlines: boolean
+    prettifySels: boolean
 }
 
 export default class Blitzkrieg {
@@ -75,7 +76,8 @@ export default class Blitzkrieg {
     }
 
     debug: BlitzkreigDebug = {
-        selectionOutlines: false
+        selectionOutlines: false,
+        prettifySels: true,
     }
     selectionMode: string = 'puzzle'
 

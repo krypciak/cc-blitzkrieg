@@ -4,6 +4,9 @@ import { Stack, assert } from 'cc-map-util/util'
 import { FsUtil } from 'fsutil'
 import { Util } from './util'
 import { ChangeRecorder } from 'change-record'
+import * as prettier from './prettier/standalone.mjs'
+import prettierPluginBabel from './prettier/babel.mjs'
+import prettierPluginEstree from './prettier/estree.mjs'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = true
@@ -269,7 +272,18 @@ export class SelectionManager {
             const path: string = this.jsonFiles[i]
             if (path.includes('ccmod')) { continue }
             try {
-                FsUtil.writeFileSync(path, saveObjects[i])
+                let content: string = JSON.stringify(saveObjects[i])
+                if (blitzkrieg.debug.prettifySels) {
+                    content = await prettier.format(content, { 
+                        parser: 'json',
+                        plugins: [prettierPluginBabel, prettierPluginEstree],
+                        tabWidth: 4,
+                        semi: false,
+                        printWidth: 200,
+                        bracketSameLine: true,
+                    })
+                }
+                FsUtil.writeFileSync(path, content)
             } catch (err) {
                 console.log(err)
             }

@@ -27,9 +27,9 @@ export class FsUtil {
         }
     }
     
-    static writeFile(path: string, obj: object): Promise<void> {
+    static writeFile(path: string, obj: any): Promise<void> {
         return new Promise((resolve, reject) => {
-            fs.writeFile(path, JSON.stringify(obj), (err: Error) => {
+            fs.writeFile(path, typeof obj === 'string' ? obj : JSON.stringify(obj), (err: Error) => {
                 if (err) {
                     console.error('error writing file:', err)
                     reject()
@@ -39,8 +39,8 @@ export class FsUtil {
             })
         })
     }
-    static writeFileSync(path: string, obj: object) {
-        fs.writeFileSync(path, JSON.stringify(obj))
+    static writeFileSync(path: string, obj: any) {
+        fs.writeFileSync(path, typeof obj === 'string' ? obj : JSON.stringify(obj))
     }
 
     static readFileSync(path: string): string {
