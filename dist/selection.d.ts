@@ -1,7 +1,7 @@
 import { bareRect } from 'cc-map-util/rect';
 import { MapPoint } from 'cc-map-util/src/pos';
 import { Stack } from 'cc-map-util/util';
-import { ChangeRecorder } from 'change-record';
+import { ChangeRecorder } from './change-record';
 export interface Selection {
     bb: bareRect[];
     mapName: string;

@@ -1,6 +1,6 @@
-import { Selection, SelectionManager } from 'selection'
+import { Selection, SelectionManager } from './selection'
 import { Util } from './util'
-import { ChangeRecorder } from 'change-record'
+import { ChangeRecorder } from './change-record'
 
 export enum PuzzleRoomType {
     WholeRoom = 0,

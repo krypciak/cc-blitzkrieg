@@ -1,5 +1,5 @@
 import { Mod1 } from './types';
-import { SelectionManager } from 'selection';
+import { SelectionManager } from './selection';
 declare global {
     const blitzkrieg: Blitzkrieg;
     interface Window {

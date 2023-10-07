@@ -1,9 +1,9 @@
-import { TextNotification } from 'txtnoti'
+import { TextNotification } from './txtnoti'
 import { Mod1 } from './types'
-import { SelectionManager } from 'selection'
-import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from 'tab'
-import { PuzzleSelectionManager } from 'puzzle-selection'
-import { InputKey, KeyBinder } from 'keybinder'
+import { SelectionManager } from './selection'
+import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from './tab'
+import { PuzzleSelectionManager } from './puzzle-selection'
+import { InputKey, KeyBinder } from './keybinder'
 
 declare global {
     const blitzkrieg: Blitzkrieg

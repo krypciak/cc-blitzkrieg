@@ -1,5 +1,5 @@
-import { PuzzleSelection } from 'puzzle-selection';
-import { Selection, SelectionManager } from 'selection';
+import { PuzzleSelection } from './puzzle-selection';
+import { Selection, SelectionManager } from './selection';
 export declare class ChangeRecorder {
     tps: number;
     recording: boolean;

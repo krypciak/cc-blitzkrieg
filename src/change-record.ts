@@ -1,6 +1,6 @@
 import { assert } from 'cc-map-util/src/util'
-import { PuzzleSelection } from 'puzzle-selection'
-import { Selection, SelectionManager } from 'selection'
+import { PuzzleSelection } from './puzzle-selection'
+import { Selection, SelectionManager } from './selection'
 
 export class ChangeRecorder {
     recording: boolean = false

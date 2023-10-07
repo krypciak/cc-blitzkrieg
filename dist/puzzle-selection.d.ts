@@ -1,10 +1,10 @@
-import { Selection, SelectionManager } from 'selection';
-declare enum PuzzleRoomType {
+import { Selection, SelectionManager } from './selection';
+export declare enum PuzzleRoomType {
     WholeRoom = 0,
     AddWalls = 1,
     Dis = 2
 }
-declare enum PuzzleCompletionType {
+export declare enum PuzzleCompletionType {
     Normal = 0,
     GetTo = 1,
     Item = 2
@@ -50,4 +50,3 @@ export declare class PuzzleSelectionManager extends SelectionManager {
     solveSel(sel: PuzzleSelection, delay?: number): void;
     getPuzzleSolveCondition(sel: PuzzleSelection): string;
 }
-export {};
