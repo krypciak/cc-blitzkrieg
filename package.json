@@ -7,6 +7,7 @@
         "watch": "esbuild --target=es2018 --format=esm --platform=node --bundle --sourcemap=inline --watch --outfile=plugin.js src/plugin.ts",
         "build": "esbuild --target=es2018 --format=esm --platform=node --bundle --outfile='plugin.js' 'src/plugin.ts'"
     },
+    "types": "dist/index.d.ts",
     "author": "krypek",
     "license": "GPLv3",
     "devDependencies": {

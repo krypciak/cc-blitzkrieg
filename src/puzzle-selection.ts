@@ -2,13 +2,13 @@ import { Selection, SelectionManager } from 'selection'
 import { Util } from './util'
 import { ChangeRecorder } from 'change-record'
 
-enum PuzzleRoomType {
+export enum PuzzleRoomType {
     WholeRoom = 0,
     AddWalls = 1,
     Dis = 2,
 }
 
-enum PuzzleCompletionType {
+export enum PuzzleCompletionType {
     Normal = 0,
     GetTo = 1,
     Item = 2,
