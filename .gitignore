@@ -4,8 +4,6 @@ old.txt
 plugin.js
 *.ccmod
 *.png~
-dist/*.js
-dist/*.js.map
 dist/prettier/*
 node_modules
 js
