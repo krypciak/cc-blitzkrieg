@@ -4,17 +4,14 @@ import { Stack, assert } from 'cc-map-util/util'
 import { FsUtil } from './fsutil'
 import { Util } from './util'
 import { ChangeRecorder } from './change-record'
-import * as prettier from './prettier/standalone.mjs'
-import prettierPluginBabel from './prettier/babel.mjs'
-import prettierPluginEstree from './prettier/estree.mjs'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = true
 
 export interface Selection {
-    bb: bareRect[]
+    bb: MapRect[]
     mapName: string
-    sizeRect: bareRect
+    sizeRect: MapRect
     data?: any
 }
 
@@ -36,7 +33,7 @@ export class SelectionManager {
     drawBoxes: boolean = defaultDrawBoxes
     selectStep: number = -1
     fileIndex!: number
-    tempPos!: Vec2
+    tempPos!: MapPoint
     selIndexes: number[] = [-1]
     recorder?: ChangeRecorder
 
@@ -97,7 +94,7 @@ export class SelectionManager {
         if (setStep) {
             this.selectStep = 0
         }
-        this.tempPos = Vec2.createC(0, 0)
+        this.tempPos = new MapPoint(0, 0)
     }
 
     selectionCreatorDelete() {
@@ -138,7 +135,7 @@ export class SelectionManager {
         entry.tempSel = ig.copy(sel)
         entry.sels.splice(entry.sels.indexOf(sel), 1)
 
-        this.tempPos = Vec2.createC(0, 0)
+        this.tempPos = new MapPoint(0, 0)
         this.selectStep = 0
 
         this.save()
@@ -169,9 +166,9 @@ export class SelectionManager {
             }
             const entry = this.getCurrentEntry()
             assert(entry.tempSel)
-            entry.tempSel.bb.push(Rect.fromTwoPoints(this.tempPos as Point, mpos as Point))
+            entry.tempSel.bb.push(MapRect.fromTwoPoints(this.tempPos, mpos))
             this.selIndexes.push(-1)
-            this.tempPos = Vec2.createC(0, 0)
+            this.tempPos = new MapPoint(0, 0)
         } else { throw new Error() }
 
         this.selectStep++
@@ -274,14 +271,7 @@ export class SelectionManager {
             try {
                 let content: string = JSON.stringify(saveObjects[i])
                 if (blitzkrieg.debug.prettifySels) {
-                    content = await prettier.format(content, { 
-                        parser: 'json',
-                        plugins: [prettierPluginBabel, prettierPluginEstree],
-                        tabWidth: 4,
-                        semi: false,
-                        printWidth: 200,
-                        bracketSameLine: true,
-                    })
+                    content = await blitzkrieg.prettifyJson(content)
                 }
                 FsUtil.writeFileSync(path, content)
             } catch (err) {
@@ -299,6 +289,11 @@ export class SelectionManager {
             const obj: Record<string, SelectionMapEntry> = await (await fetch(path)).json()
             for (const mapName in obj) {
                 const entry: SelectionMapEntry = obj[mapName]
+                entry.sels = entry.sels.map(s => {
+                    s.sizeRect = Rect.new(MapRect, s.sizeRect)
+                    s.bb = s.bb.map(r => Rect.new(MapRect, r))
+                    return s
+                })
                 obj[mapName] = new SelectionMapEntry(entry.sels, index)
             }
             if (this.selMap) {
@@ -314,7 +309,7 @@ export class SelectionManager {
         for (let i = 0; i < this.jsonFiles.length; i++) {
             promises.push(this.load(i))
         }
-        Promise.all(promises)
+        return Promise.all(promises)
     }
 
     static getSelFromRect(rect: MapRect, mapName: string, z: number) {
@@ -329,23 +324,23 @@ export class SelectionManager {
         sel.data.endPos = sel.data.startPos
         return sel
     }
-    static setSelPos(sel: Selection, offset: MapPoint) {
 
+    static setSelPos(sel: Selection, offset: MapPoint) {
         for (let i = 0; i < sel.bb.length; i++) {
-            const rect: bareRect = sel.bb[i]
+            const rect: MapRect = sel.bb[i]
             sel.bb[i].x = offset.x + sel.sizeRect.x - rect.x
             sel.bb[i].y = offset.y + sel.sizeRect.y - rect.y
         }
 
         if (sel.data.startPos) {
             const nsp: EntityPoint = offset.to(EntityPoint)
-            Vec2.add(nsp, MapPoint.fromVec(Rect.new(MapRect, sel.sizeRect)).to(EntityPoint))
+            Vec2.add(nsp, sel.sizeRect.to(EntityRect))
             Vec2.sub(nsp, sel.data.startPos)
         }
         
         if (sel.data.endPos) {
             const nsp: EntityPoint = offset.to(EntityPoint)
-            Vec2.add(nsp, MapPoint.fromVec(Rect.new(MapRect, sel.sizeRect)).to(EntityPoint))
+            Vec2.add(nsp, sel.sizeRect.to(EntityRect))
             Vec2.sub(nsp, sel.data.endPos)
         }
 

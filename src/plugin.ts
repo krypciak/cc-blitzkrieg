@@ -4,6 +4,10 @@ import { SelectionManager } from './selection'
 import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from './tab'
 import { PuzzleSelectionManager } from './puzzle-selection'
 import { InputKey, KeyBinder } from './keybinder'
+import { BlitzkriegMapUtil } from './map-sel-copy'
+import * as prettier from './prettier/standalone.mjs'
+import prettierPluginBabel from './prettier/babel.mjs'
+import prettierPluginEstree from './prettier/estree.mjs'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -75,6 +79,7 @@ export default class Blitzkrieg {
         puzzle: PuzzleSelectionManager
         battle: SelectionManager
     }
+    mapUtil!: BlitzkriegMapUtil
 
     debug: BlitzkreigDebug = {
         selectionOutlines: false,
@@ -118,6 +123,7 @@ export default class Blitzkrieg {
     async prestart() {
         addVimBindings()
         this.rhudmsg = TextNotification.rhudmsg
+        this.mapUtil = new BlitzkriegMapUtil()
 
         this.sels = {
             puzzle: new PuzzleSelectionManager(),
@@ -135,5 +141,17 @@ export default class Blitzkrieg {
 
         kb.addHeader('blitzkrieg', 'blitzkrieg')
         kb.updateLabels()
+    }
+
+    async prettifyJson(json: string, printWidth: number = 200, tabWidth: number = 4) {
+        return await prettier.format(json, { 
+            parser: 'json',
+            plugins: [prettierPluginBabel, prettierPluginEstree],
+            tabWidth,
+            semi: false,
+            printWidth,
+            bracketSameLine: true,
+        })
+
     }
 }

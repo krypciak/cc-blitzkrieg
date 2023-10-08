@@ -8,3 +8,4 @@ dist/*.js
 dist/*.js.map
 dist/prettier/*
 node_modules
+js
