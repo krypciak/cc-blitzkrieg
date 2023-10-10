@@ -1,14 +1,15 @@
 import { TextNotification } from './txtnoti'
 import { Mod1 } from './types'
-import { SelectionManager } from './selection'
+import { SelectionManager, SelectionMapEntry } from './selection'
 import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from './tab'
-import { PuzzleSelectionManager } from './puzzle-selection'
+import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './puzzle-selection'
 import { InputKey, KeyBinder } from './keybinder'
 import { BlitzkriegMapUtil } from './map-sel-copy'
+import { FsUtil } from './fsutil'
+
 import * as prettier from './prettier/standalone.mjs'
 import prettierPluginBabel from './prettier/babel.mjs'
 import prettierPluginEstree from './prettier/estree.mjs'
-import { FsUtil } from './fsutil'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -157,5 +158,10 @@ export default class Blitzkrieg {
 
     /* global classes */
     FsUtil = FsUtil
+    SelectionManager = SelectionManager
+    SelectionMapEntry = SelectionMapEntry
+    PuzzleSelectionManager = PuzzleSelectionManager
+    PuzzleCompletionType = PuzzleCompletionType
+    PuzzleRoomType = PuzzleRoomType
     /* global classes end */
 }
