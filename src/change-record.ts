@@ -36,7 +36,6 @@ export class ChangeRecorder {
 
     startRecording(selM: SelectionManager, startingSel: Selection) {
         this.selM = selM
-        debugger
         assert(startingSel)
         this.startingSel = startingSel
         this.currentRecord = {

@@ -8,6 +8,7 @@ import { BlitzkriegMapUtil } from './map-sel-copy'
 import * as prettier from './prettier/standalone.mjs'
 import prettierPluginBabel from './prettier/babel.mjs'
 import prettierPluginEstree from './prettier/estree.mjs'
+import { FsUtil } from 'fsutil'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -86,6 +87,10 @@ export default class Blitzkrieg {
         prettifySels: true,
     }
     selectionMode: string = 'puzzle'
+
+    /* global classes */
+    FsUtil = FsUtil
+    /* global classes end */
 
     constructor(mod: Mod1) {
         this.dir = mod.baseDirectory

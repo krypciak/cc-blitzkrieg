@@ -20,15 +20,5 @@
         "esbuild": "^0.18.15",
         "typescript": "^5.2.2",
         "ultimate-crosscode-typedefs": "github:krypciak/ultimate-crosscode-typedefs"
-    },
-    "exports": {
-        "./fsutil": "./dist/fsutil.js"
-    },
-    "typesVersions": {
-        "*": {
-            "fsutil": [
-                "dist/fsutil.d.ts"
-            ]
-        }
     }
 }

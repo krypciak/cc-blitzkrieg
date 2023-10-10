@@ -58,5 +58,4 @@ export class FsUtil {
     static basename(path1: string): string {
         return path.basename(path1)
     }
-
 }

@@ -7,3 +7,4 @@ plugin.js
 dist/prettier/*
 node_modules
 js
+dist
