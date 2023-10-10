@@ -29,8 +29,6 @@ epic crosscode mod
 git clone https://github.com/krypciak/cc-blitzkrieg
 cd cc-blitzkrieg
 npm install
-# you can switch to the main branch if you want
-# git checkout main
 npm run start
 # this should return no errors (hopefully)
 npx tsc
