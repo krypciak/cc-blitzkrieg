@@ -1,12 +1,20 @@
 import { MapRect, bareRect } from 'cc-map-util/rect';
 import { MapPoint } from 'cc-map-util/src/pos';
 import { Stack } from 'cc-map-util/util';
-import { ChangeRecorder } from './change-record';
+import { IChangeRecorder } from './change-record';
 export interface Selection {
     bb: MapRect[];
     mapName: string;
     sizeRect: MapRect;
-    data?: any;
+    data: {
+        recordLog?: any;
+        endPos?: Vec3 & {
+            level: number;
+        };
+        startPos?: Vec3 & {
+            level: number;
+        };
+    };
 }
 export declare class SelectionMapEntry {
     sels: Selection[];
@@ -27,7 +35,7 @@ export declare class SelectionManager {
     fileIndex: number;
     tempPos: MapPoint;
     selIndexes: number[];
-    recorder?: ChangeRecorder;
+    recorder?: IChangeRecorder;
     constructor(name: string, completeColor: string, tempColor: string, jsonFiles: string[]);
     newSelEvent(_: Selection): Promise<void>;
     walkInEvent(_: Selection): Promise<void>;

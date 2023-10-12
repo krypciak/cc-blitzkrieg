@@ -1,6 +1,6 @@
 import { Selection, SelectionManager } from './selection'
 import { Util } from './util'
-import { ChangeRecorder } from './change-record'
+import { PuzzleChangeRecorder } from './puzzle-recorder'
 
 export enum PuzzleRoomType {
     WholeRoom = 0,
@@ -12,6 +12,13 @@ export enum PuzzleCompletionType {
     Normal = 0,
     GetTo = 1,
     Item = 2,
+}
+
+export interface PuzzleSelectionStep {
+    log: ([/* frame */ number, /* var path */ string, /* value */ any])[]
+    pos: Vec3 & { level: number }
+    shootAngle?: number /* in degrees */
+    element: sc.ELEMENT
 }
 
 export interface PuzzleSelection extends Selection {
@@ -27,7 +34,7 @@ export interface PuzzleSelection extends Selection {
         endPos: Vec3 & { level: number }
         elements: [boolean, boolean, boolean, boolean]
         recordLog?: {
-            log: ([/* frame */ number, /* var path */ string, /* value */ any])[]
+            steps: PuzzleSelectionStep[]
         }
     }
 }
@@ -48,7 +55,7 @@ export class PuzzleSelectionManager extends SelectionManager {
     constructor() {
         super('puzzle', '#77000022', '#ff222222', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
         this.setFileIndex(0)
-        this.recorder = new ChangeRecorder(10)
+        this.recorder = new PuzzleChangeRecorder(10)
     }
 
     updatePuzzleSpeed(sel: PuzzleSelection) {
@@ -134,6 +141,7 @@ export class PuzzleSelectionManager extends SelectionManager {
         }
 
         blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 1)
+        debugger
         data.startPos = await Util.waitForPositionKey()
         blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
         data.endPos = await Util.waitForPositionKey()
@@ -154,7 +162,7 @@ export class PuzzleSelectionManager extends SelectionManager {
             }
         }
 
-        if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
+        if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             if (yell) {
                 blitzkrieg.rhudmsg('blitzkrieg', 'No puzzle solution recorded!', 5)
             }
@@ -164,61 +172,64 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     solveSel(sel: PuzzleSelection, delay: number = 0) {
-        const log = sel.data.recordLog!.log
+        for (const log of sel.data.recordLog!.steps.map(s => s.log)) {
+            if (delay == 0) {
+                for (let i = 0; i < log.length; i++) {
+                    const action = log[i]
 
-        if (delay == 0) {
-            for (let i = 0; i < log.length; i++) {
-                const action = log[i]
-
-                const splittedPath = action[1].split('.')
-                let value = ig.vars.storage
-                for (let i = 0; i < splittedPath.length - 1; i++) {
-                    if (! value.hasOwnProperty(splittedPath[i])) {
-                        value[splittedPath[i]] = {}
+                    const splittedPath = action[1].split('.')
+                    let value = ig.vars.storage
+                    for (let i = 0; i < splittedPath.length - 1; i++) {
+                        if (! value.hasOwnProperty(splittedPath[i])) {
+                            value[splittedPath[i]] = {}
+                        }
+                        value = value[splittedPath[i]]
                     }
-                    value = value[splittedPath[i]]
-                }
 
-                value[splittedPath[splittedPath.length - 1]] = action[2]
+                    value[splittedPath[splittedPath.length - 1]] = action[2]
+                }
+            } else {
+                let solveArrayIndex = 0
+                const intervalID = setInterval(async () => {
+                    const action = log[solveArrayIndex]
+                    const splittedPath = action[1].split('.')
+                    let value = ig.vars.storage
+                    for (let i = 0; i < splittedPath.length - 1; i++) {
+                        value = value[splittedPath[i]]
+                    }
+
+                    value[splittedPath[splittedPath.length - 1]] = action[2]
+
+                    ig.game.varsChangedDeferred()
+
+                    solveArrayIndex++
+                    if (solveArrayIndex == log.length) {
+                        clearInterval(intervalID)
+                    }
+                }, 1000 / delay)
             }
-        } else {
-            let solveArrayIndex = 0
-            const intervalID = setInterval(async () => {
-                const action = log[solveArrayIndex]
-                const splittedPath = action[1].split('.')
-                let value = ig.vars.storage
-                for (let i = 0; i < splittedPath.length - 1; i++) {
-                    value = value[splittedPath[i]]
-                }
-
-                value[splittedPath[splittedPath.length - 1]] = action[2]
-
-                ig.game.varsChangedDeferred()
-
-                solveArrayIndex++
-                if (solveArrayIndex == log.length) {
-                    clearInterval(intervalID)
-                }
-            }, 1000 / delay)
         }
         ig.game.varsChangedDeferred()
         blitzkrieg.rhudmsg('blitzkrieg', 'Solved puzzle', 2)
     }
 
     static getPuzzleSolveCondition(sel: PuzzleSelection) {
-        if (! sel.data.recordLog || sel.data.recordLog.log.length == 0) {
+        if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             throw new Error('no puzzle solution recorded')
         }
 
-        const log = sel.data.recordLog.log
-        for (let i = log.length - 1; i >= 0; i--) {
-            let action = log[i]
-            // let frame = action[0]
-            let path = action[1]
-            // let value = action[2]
-            // console.log(path, value)
-            if (path.startsWith('.maps')) { continue }
-            return path.substring(1)
+        const steps = sel.data.recordLog.steps
+        for (let h = steps.length - 1; h >= 0; h--) {
+            const log = steps[h].log
+            for (let i = log.length - 1; i >= 0; i--) {
+                let action = log[i]
+                // let frame = action[0]
+                let path = action[1]
+                // let value = action[2]
+                // console.log(path, value)
+                if (path.startsWith('.maps')) { continue }
+                return path.substring(1)
+            }
         }
         throw new Error('puzzle solution empty somehow?')
     }

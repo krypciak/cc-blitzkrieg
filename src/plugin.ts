@@ -40,8 +40,10 @@ function addVimBindings() {
             blitzkrieg.debug.selectionOutlines = !blitzkrieg.debug.selectionOutlines
         })
 
-        vim.addAlias('blitzkrieg', 'puzzle-solve', '', (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle',
+        const isInPuzzleSel = (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
+        vim.addAlias('blitzkrieg', 'puzzle-solve', '', isInPuzzleSel,
             () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
+
         vim.addAlias('blitzkrieg', 'record-start', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
             () => { blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel, blitzkrieg.currSel.inSelStack.peek()) })
         vim.addAlias('blitzkrieg', 'record-stop', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording, () => { blitzkrieg.currSel.recorder!.stopRecording() })

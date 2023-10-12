@@ -9,6 +9,14 @@ export declare enum PuzzleCompletionType {
     GetTo = 1,
     Item = 2
 }
+export interface PuzzleSelectionStep {
+    log: ([/* frame */ number, /* var path */ string, /* value */ any])[];
+    pos: Vec3 & {
+        level: number;
+    };
+    shootAngle?: number;
+    element: sc.ELEMENT;
+}
 export interface PuzzleSelection extends Selection {
     data: {
         puzzleSpeed: number;
@@ -26,7 +34,7 @@ export interface PuzzleSelection extends Selection {
         };
         elements: [boolean, boolean, boolean, boolean];
         recordLog?: {
-            log: ([/* frame */ number, /* var path */ string, /* value */ any])[];
+            steps: PuzzleSelectionStep[];
         };
     };
 }

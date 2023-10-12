@@ -3,7 +3,7 @@ import { EntityPoint, MapPoint, Point } from 'cc-map-util/src/pos'
 import { Stack, assert } from 'cc-map-util/util'
 import { FsUtil } from './fsutil'
 import { Util } from './util'
-import { ChangeRecorder } from './change-record'
+import { IChangeRecorder } from './change-record'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = true
@@ -12,7 +12,11 @@ export interface Selection {
     bb: MapRect[]
     mapName: string
     sizeRect: MapRect
-    data?: any
+    data: {
+        recordLog?: any
+        endPos?: Vec3 & { level: number }
+        startPos?: Vec3 & { level: number }
+    }
 }
 
 export class SelectionMapEntry {
@@ -35,7 +39,7 @@ export class SelectionManager {
     fileIndex!: number
     tempPos!: MapPoint
     selIndexes: number[] = [-1]
-    recorder?: ChangeRecorder
+    recorder?: IChangeRecorder
 
     constructor(
         public name: string,
@@ -90,7 +94,7 @@ export class SelectionManager {
             entry.tempSel = undefined
             this.save()
         }
-        entry.tempSel = { bb: [], mapName: ig.game.mapName.replace(/\./g, '/') }
+        entry.tempSel = { bb: [], mapName: ig.game.mapName.replace(/\./g, '/'), data: {} }
         if (setStep) {
             this.selectStep = 0
         }
@@ -313,13 +317,14 @@ export class SelectionManager {
     }
 
     static getSelFromRect(rect: MapRect, mapName: string, z: number) {
-        const sel: Selection = { bb: [ rect ], mapName, sizeRect: rect }
+        const sel: Selection = { bb: [ rect ], mapName, sizeRect: rect, data: {} }
         sel.data = {}
         const epos: EntityPoint = MapPoint.fromVec(rect).to(EntityPoint)
         sel.data.startPos = {
             x: epos.x,
             y: epos.y,
             z,
+            level: 0,
         }
         sel.data.endPos = sel.data.startPos
         return sel
@@ -332,16 +337,18 @@ export class SelectionManager {
             sel.bb[i].y = offset.y + sel.sizeRect.y - rect.y
         }
 
-        if (sel.data.startPos) {
-            const nsp: EntityPoint = offset.to(EntityPoint)
-            Vec2.add(nsp, sel.sizeRect.to(EntityRect))
-            Vec2.sub(nsp, sel.data.startPos)
-        }
-        
-        if (sel.data.endPos) {
-            const nsp: EntityPoint = offset.to(EntityPoint)
-            Vec2.add(nsp, sel.sizeRect.to(EntityRect))
-            Vec2.sub(nsp, sel.data.endPos)
+        if (sel.data) {
+            if (sel.data.startPos) {
+                const nsp: EntityPoint = offset.to(EntityPoint)
+                Vec2.add(nsp, sel.sizeRect.to(EntityRect))
+                Vec2.sub(nsp, sel.data.startPos)
+            }
+            
+            if (sel.data.endPos) {
+                const nsp: EntityPoint = offset.to(EntityPoint)
+                Vec2.add(nsp, sel.sizeRect.to(EntityRect))
+                Vec2.sub(nsp, sel.data.endPos)
+            }
         }
 
         Vec2.assign(sel.sizeRect, offset)

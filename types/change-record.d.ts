@@ -1,9 +1,16 @@
-import { PuzzleSelection } from './puzzle-selection';
 import { Selection, SelectionManager } from './selection';
-export declare class ChangeRecorder {
+export interface IChangeRecorder {
+    startRecording(selM: SelectionManager, startingSel: Selection): void;
+    stopRecording(): void;
+    injectRecordingPrestart(): void;
+    recording: boolean;
+}
+export declare class ChangeRecorder implements IChangeRecorder {
     tps: number;
     recording: boolean;
-    currentRecord: PuzzleSelection['data']['recordLog'];
+    currentRecord: {
+        log: ([/* frame */ number, /* var path */ string, /* value */ any])[];
+    };
     loopIndex: number;
     selM: SelectionManager;
     startingSel: Selection;
