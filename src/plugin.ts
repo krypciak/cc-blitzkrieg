@@ -136,6 +136,18 @@ export default class Blitzkrieg {
         setupTabs()
 
         bindKeys()
+
+        ig.ENTITY.Crosshair.inject({
+            init(...args) {
+                this.parent(...args)
+                ig.game.playerEntityCrosshairInstance = this
+            },
+            deferredUpdate(): void {
+                this.parent()
+                const radians = Math.atan2(this._aimDir.y, this._aimDir.x)
+                ig.game.playerEntity.aimDegrees = (radians * 180) / Math.PI
+            }
+        })
     }
 
     async poststart() {

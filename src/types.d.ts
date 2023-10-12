@@ -21,6 +21,8 @@ export {}
 declare global {
     namespace ig {
         interface Game {
+            playerEntityCrosshairInstance: ig.ENTITY.Crosshair
+
             preloadLevel(this: this, mapName: string): void
             levels: { height: number }[] /* not correct but good enough for me */
         }
@@ -31,10 +33,24 @@ declare global {
             new (): Renderer2d
         }
         var Renderer2d: Renderer2dConstructor
+
+        namespace ENTITY {
+            interface Player {
+                aimDegrees: number /* set by this mod */
+            }
+            interface Crosshair extends ig.Class {
+                _aimDir: Vec2
+                deferredUpdate(this: this): void
+            }
+            interface CrosshairConstructor extends ImpactClass<Crosshair> {
+                new (a: unknown, b: unknown, c: unknown, d: unknown): Crosshair
+            }
+            var Crosshair: CrosshairConstructor
+        }
     }
     namespace sc {
         interface OptionModel {
-            set(this: this, option: string, value: any)
+            set(this: this, option: string, value: any): void
         }
         interface ItemBuff extends sc.StatChange {
             itemID: number
