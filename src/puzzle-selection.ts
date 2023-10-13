@@ -141,7 +141,6 @@ export class PuzzleSelectionManager extends SelectionManager {
         }
 
         blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 1)
-        debugger
         data.startPos = await Util.waitForPositionKey()
         blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
         data.endPos = await Util.waitForPositionKey()
