@@ -226,8 +226,8 @@ export class PuzzleSelectionManager extends SelectionManager {
                 let path = action[1]
                 // let value = action[2]
                 // console.log(path, value)
-                if (path.startsWith('.maps')) { continue }
-                return path.substring(1)
+                if (path.startsWith('maps')) { continue }
+                return path
             }
         }
         throw new Error('puzzle solution empty somehow?')
