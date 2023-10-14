@@ -3,7 +3,7 @@ import { Selection, SelectionManager } from './selection'
 
 export interface IChangeRecorder {
     startRecording(selM: SelectionManager, startingSel: Selection): void
-    stopRecording(): void
+    stopRecording(purge?: boolean): void
     injectRecordingPrestart(): void
     recording: boolean
 }
@@ -67,12 +67,14 @@ export class ChangeRecorder implements IChangeRecorder {
         }, 1000 / this.tps)
     }
 
-    stopRecording() {
+    stopRecording(purge?: boolean) {
         this.recording = false
         blitzkrieg.rhudmsg('blitzkrieg', 'Stopped recording', 2)
 
         this.startingSel.data ??= {}
-        this.startingSel.data.recordLog = this.currentRecord
-        this.selM.save()
+        if (! purge) {
+            this.startingSel.data.recordLog = this.currentRecord
+            this.selM.save()
+        }
     }
 }

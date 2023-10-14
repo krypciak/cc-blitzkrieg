@@ -59,5 +59,7 @@ declare global {
             new (effectArr: string[], duration: number, itemId: number): ItemBuff
         }
         var ItemBuff: ItemBuffConstructor
+
+        var ASSIST_PUZZLE_SPEED: any
     }
 }

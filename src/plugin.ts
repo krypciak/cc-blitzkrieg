@@ -21,10 +21,10 @@ declare global {
 function addVimBindings() {
     if (window.vim) { /* optional dependency https://github.com/krypciak/cc-vim */
         vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', async () => {
-            // let pos = ig.copy(ig.game.playerEntity.coll.pos)
-            // let map = ig.game.mapName.split('.').join('/')
-            // ig.game.loadLevel(await blitzkrieg.util.getMapObject(map, true), false, false)
-            // ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
+            let pos = ig.copy(ig.game.playerEntity.coll.pos)
+            let map = ig.game.mapName.split('.').join('/')
+            ig.game.loadLevel(await blitzkrieg.mapUtil.getMapObject(map, true), false, false)
+            ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
         })
         
         vim.addAlias('blitzkrieg', 'toggle-enabled', 'Toggle whether blitzkrieg is enabled or disabled', 'global', () => {
@@ -43,11 +43,49 @@ function addVimBindings() {
         const isInPuzzleSel = (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
         vim.addAlias('blitzkrieg', 'puzzle-solve', '', isInPuzzleSel,
             () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
+        vim.addAlias('blitzkrieg', 'puzzle-set-speed', '', isInPuzzleSel,
+            (speed: string) => { (blitzkrieg.currSel as PuzzleSelectionManager).setSpeed(parseFloat(speed)) }, [
+                { type: 'number', description: 'Speed value' }
+        ])
 
         vim.addAlias('blitzkrieg', 'record-start', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
             () => { blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel, blitzkrieg.currSel.inSelStack.peek()) })
-        vim.addAlias('blitzkrieg', 'record-stop', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording, () => { blitzkrieg.currSel.recorder!.stopRecording() })
+        vim.addAlias('blitzkrieg', 'record-stop', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording,
+            (purge: string) => { blitzkrieg.currSel.recorder!.stopRecording(purge as unknown as boolean) }, [
+            { type: 'boolean', description: 'Leave empty to save data' }])
+
         // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
+    }
+}
+
+function adjustPuzzleAssistSlider() {
+    sc.ASSIST_PUZZLE_SPEED = {
+        LOW5: 0.5,
+        LOW4: 0.6,
+        LOW3: 0.7,
+        LOW2: 0.8,
+        LOW1: 0.9,
+        NORM: 1,
+        HIGH1: 1.1,
+        HIGH2: 1.2,
+        HIGH3: 1.3,
+        HIGH4: 1.4,
+        HIGH5: 1.5,
+        HIGH6: 1.6,
+        HIGH7: 1.7,
+        HIGH8: 1.8,
+        HIGH9: 1.9,
+        HIGH10: 2,
+    }
+    sc.OPTIONS_DEFINITION['assist-puzzle-speed'] = {
+        type: 'OBJECT_SLIDER',
+        data: sc.ASSIST_PUZZLE_SPEED,
+        init: sc.ASSIST_PUZZLE_SPEED.NORM,
+        cat: sc.OPTION_CATEGORY.ASSISTS,
+        fill: true,
+        showPercentage: true,
+        hasDivider: true,
+        header: 'puzzle',
     }
 }
 
@@ -126,6 +164,7 @@ export default class Blitzkrieg {
 
     async prestart() {
         addVimBindings()
+        adjustPuzzleAssistSlider()
         this.rhudmsg = TextNotification.rhudmsg
         this.mapUtil = new BlitzkriegMapUtil()
 

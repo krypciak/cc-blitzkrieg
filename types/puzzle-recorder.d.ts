@@ -14,5 +14,5 @@ export declare class PuzzleChangeRecorder implements IChangeRecorder {
     injectRecordingPrestart(): void;
     private nextStep;
     startRecording(selM: PuzzleSelectionManager, startingSel: PuzzleSelection): void;
-    stopRecording(): void;
+    stopRecording(purge?: boolean): void;
 }

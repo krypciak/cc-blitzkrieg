@@ -87,13 +87,15 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         }, 1000 / this.tps)
     }
 
-    stopRecording() {
+    stopRecording(purge?: boolean) {
         this.recording = false
         blitzkrieg.rhudmsg('blitzkrieg', 'Stopped recording', 2)
 
-        this.startingSel.data.recordLog = {
-            steps: this.currentRecord.steps as PuzzleSelectionStep[]
+        if (! purge) {
+            this.startingSel.data.recordLog = {
+                steps: this.currentRecord.steps as PuzzleSelectionStep[]
+            }
+            this.selM.save()
         }
-        this.selM.save()
     }
 }

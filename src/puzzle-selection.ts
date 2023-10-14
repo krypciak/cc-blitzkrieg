@@ -90,8 +90,15 @@ export class PuzzleSelectionManager extends SelectionManager {
             }
         }
     }
+
+    setSpeed(val: number) {
+        if (isNaN(val)) { return }
+        const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
+        sel.data.puzzleSpeed = val
+        this.updatePuzzleSpeed(sel)
+    }
     
-    async walkInEvent(sel: Selection) {
+    async walkInEvent(sel: PuzzleSelection) {
         this.updatePuzzleSpeed(sel as PuzzleSelection)
 
         if (this.changeModifiers) {
