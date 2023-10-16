@@ -1,30 +1,13 @@
-const name = 'blitzkrieg'
+import { categoryName } from './options'
 const displayName = 'Blitzkrieg'
-
-const descriptionId = 'blitzkrieg-description'
-const enableId = 'blitzkrieg-enable'
-const headerGeneralId = 'blitzkrieg-general'
 
 export function setupTabs() {
     /* borrowed from https://github.com/CCDirectLink/CCLoader/blob/master/assets/mods/simplify/mod.js */
-    sc.OPTION_CATEGORY[name] = Object.keys(sc.OPTION_CATEGORY).length
-    sc.OptionsTabBox.prototype.tabs[name] = null
+    sc.OPTION_CATEGORY[categoryName] = Object.keys(sc.OPTION_CATEGORY).length
+    sc.OptionsTabBox.prototype.tabs[categoryName] = null
 
     // const tab = sc.OPTION_CATEGORY[name]
 
-    sc.OPTIONS_DEFINITION[descriptionId] = {
-        type: 'INFO',
-        data: `options.${descriptionId}.description`,
-        cat: sc.OPTION_CATEGORY[name],
-    }
-
-    sc.OPTIONS_DEFINITION[enableId] = {
-        type: 'CHECKBOX',
-        init: true,
-        cat: sc.OPTION_CATEGORY[name],
-        header: headerGeneralId,
-        hasDivider: true
-    }
     sc.OptionsTabBox.inject({
         init(...args) {
             this.parent(...args)
@@ -76,41 +59,24 @@ export function prepareTabFonts() {
     // const font = sc.fontsystem.font
     const icons = new ig.Font('media/blitzkrieg-icons.png', 16, 2000)
     const page = iconSet.push(icons) - 1
-    let iconMapping = { [name]: [0,0] }
-    iconMapping[name][0] = page
+    let iconMapping = { [categoryName]: [0,0] }
+    iconMapping[categoryName][0] = page
     
     
-    mapping[name] = iconMapping[name]
-    if (indexMapping.indexOf(name) == -1) {
-        indexMapping.push(name)
-    }
-    
-    ig.lang.labels.sc.gui.options[descriptionId] = {
-        description: '\\c[3]https://github.com/krypciak/cc-blitzkrieg\\c[0]'
-    }
-    ig.lang.labels.sc.gui.options.headers[headerGeneralId] = 'general'
-    ig.lang.labels.sc.gui.options[enableId] = {
-        name: 'Enable the mod',
-        description: 'Enables/Disables the entire functionality of the mod'
+    mapping[categoryName] = iconMapping[categoryName]
+    if (indexMapping.indexOf(categoryName) == -1) {
+        indexMapping.push(categoryName)
     }
 }
 
 function setupTabEvent(tabBox) {
-    ig.lang.labels.sc.gui.menu.option[name] = displayName
+    ig.lang.labels.sc.gui.menu.option[categoryName] = displayName
     /* borrowed from https://github.com/CCDirectLink/CCLoader/blob/master/assets/mods/simplify/mod.js */
-    tabBox.tabs[name] = tabBox._createTabButton.call(tabBox, name, tabBox.tabArray.length, sc.OPTION_CATEGORY[name])
+    tabBox.tabs[categoryName] = tabBox._createTabButton.call(tabBox, categoryName, tabBox.tabArray.length, sc.OPTION_CATEGORY[categoryName])
     tabBox._rearrangeTabs.call(tabBox)
 
 }
 
-export function isBlitzkriegEnabled() {
-    return sc.options.get(enableId)
-}
-
-export function setBlitzkriegEnabled(bool) {
-    sc.options.set(enableId, bool)
-}
-
 export function getBlitzkriegTabIndex() {
-    return sc.OPTION_CATEGORY[name]
+    return sc.OPTION_CATEGORY[categoryName]
 }

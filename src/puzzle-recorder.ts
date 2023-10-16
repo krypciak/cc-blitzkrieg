@@ -3,25 +3,53 @@ import { IChangeRecorder } from './change-record'
 import { PuzzleSelection, PuzzleSelectionManager, PuzzleSelectionStep } from './puzzle-selection'
 import { assert } from 'cc-map-util/src/util'
 
+export type RecordedPuzzleElementsEntities = 'BounceBlock' | 'BounceSwitch'
+
 export class PuzzleChangeRecorder implements IChangeRecorder {
     recording: boolean = false
     currentRecord!: {
         steps: Partial<PuzzleSelectionStep>[]
     }
-    loopIndex: number = -1
+    _loopIndex: number = -1
+    get loopIndex(): number {
+        return Math.round(this._loopIndex / sc.options.get('assist-puzzle-speed'))
+    }
+    set loopIndex(value: number) {
+        this._loopIndex = value
+    }
     selM!: PuzzleSelectionManager
     startingSel!: PuzzleSelection
-    constructor(
-        public tps: number,
-    ) {}
+    tps: number = 30
+
+    recordIgnoreSet = new Set([
+        'playerVar.input.melee',
+        'gamepad.active'
+    ])
+
+    constructor() { }
 
     currentStepIndex: number = -1
+
+    currentStep() {
+        return this.currentRecord?.steps[this.currentStepIndex]
+    }
+
+    pushLog(path: string, value: any): void
+    pushLog(action: string, pos: Vec2, type: RecordedPuzzleElementsEntities): void
+    pushLog(action: string, pos: Vec2, type?: RecordedPuzzleElementsEntities) {
+        if (type) {
+            this.currentStep().log!.push([this.loopIndex, pos, type!, action!])
+        } else {
+            this.currentStep().log!.push([this.loopIndex, /* var path */ action, /* value */ pos])
+        }
+    }
+    
 
     injectRecordingPrestart() {
         const self = this
         ig.Vars.inject({
             set(path: string, value) {
-                if (self.recording) {
+                if (self.recording && !self.recordIgnoreSet.has(path)) {
                     const prev = ig.vars.get(path)
                     let changed: boolean = false
                     if (typeof value === 'object') {
@@ -30,8 +58,9 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                         changed = prev !== value
                     }
                     if (changed) {
-                        self.currentRecord.steps[self.currentStepIndex].log!.push([self.loopIndex, path, value])
+                        self.pushLog('.' + path, value)
                     }
+
                 }
                 this.parent(path, value)
             },
@@ -45,14 +74,40 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                 }
             }
         })
+
+        ig.ENTITY.BounceBlock.inject({
+            ballHit(e: ig.Entity, pos: Vec2): boolean {
+                if (self.recording && e.isBall && !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
+                    pos && !Vec2.isZero(pos) && !this.blockState) {
+
+                    self.pushLog('on', Vec2.create(this.coll.pos), 'BounceBlock')
+                }
+                return this.parent(e, pos)
+            },
+            onGroupResolve(hide?: boolean) {
+                if (self.recording) {
+                    self.pushLog('resolve', Vec2.create(this.coll.pos), 'BounceBlock')
+                }
+                this.parent(hide)
+            },
+        })
+        ig.ENTITY.BounceSwitch.inject({
+            onGroupResolve() {
+                if (self.recording) { self.pushLog('resolve', Vec2.create(this.coll.pos), 'BounceSwitch') }
+                this.parent()
+            },
+        })
     }
+
+    split() { this.currentStep().split = true }
 
     private nextStep() {
         if (this.currentStepIndex >= 0) {
-            const step = this.currentRecord.steps[this.currentStepIndex]
+            const step = this.currentStep()
             step.element = sc.model.player.currentElementMode
             step.pos = Object.assign(Vec3.create(ig.game.playerEntity.coll.pos), { level: Util.getLevelFromZ(ig.game.playerEntity.coll.pos.z) })
             step.shootAngle = ig.game.playerEntity.aimDegrees
+            step.endFrame = this.loopIndex
         }
         this.currentStepIndex = this.currentRecord.steps.push({
             log: []
@@ -83,7 +138,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                 blitzkrieg.rhudmsg('blitzkrieg', 'Stopping game state recording (entered gui)', 2)
                 return
             }
-            self.loopIndex++
+            self._loopIndex++
         }, 1000 / this.tps)
     }
 

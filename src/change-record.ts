@@ -33,7 +33,7 @@ export class ChangeRecorder implements IChangeRecorder {
                         changed = prev !== value
                     }
                     if (changed) {
-                        self.currentRecord.log.push([self.loopIndex, path, value])
+                        self.currentRecord.log.push([self.loopIndex, '.' + path, value])
                     }
                 }
                 this.parent(path, value)

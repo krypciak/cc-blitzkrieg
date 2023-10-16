@@ -1,6 +1,7 @@
 import { Selection, SelectionManager } from './selection'
 import { Util } from './util'
-import { PuzzleChangeRecorder } from './puzzle-recorder'
+import { PuzzleChangeRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder'
+import { assertBool } from 'cc-map-util/src/util'
 
 export enum PuzzleRoomType {
     WholeRoom = 0,
@@ -15,10 +16,15 @@ export enum PuzzleCompletionType {
 }
 
 export interface PuzzleSelectionStep {
-    log: ([/* frame */ number, /* var path */ string, /* value */ any])[]
+    log: 
+        (([/* frame */ number, /* var path */ string, /* value */ any]) |
+         ([/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string])
+        )[]
     pos: Vec3 & { level: number }
     shootAngle?: number /* in degrees */
     element: sc.ELEMENT
+    endFrame: number
+    split?: boolean
 }
 
 export interface PuzzleSelection extends Selection {
@@ -39,23 +45,33 @@ export interface PuzzleSelection extends Selection {
     }
 }
 
+// @ts-expect-error
+function isBounceBlock(e: ig.Entity, type: string): e is ig.ENTITY.BounceBlock { return type == 'BounceBlock' }
+function isBounceSwitch(e: ig.Entity, type: string): e is ig.ENTITY.BounceSwitch { return type == 'BounceSwitch' }
+
 export class PuzzleSelectionManager extends SelectionManager {
+    recorder: PuzzleChangeRecorder
     incStep: number = 0.05
     changeModifiers: boolean = true
     changeSpeed: boolean = true
     fakeBuffItemId: number = 2137420
     modifiersActive: boolean = false
     fakeBuffActive: boolean = false
-
-    recordIgnoreSet = new Set([
-        '.playerVar.input.melee',
-        '.gamepad.active'
-    ])
     
     constructor() {
         super('puzzle', '#77000022', '#ff222222', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
         this.setFileIndex(0)
-        this.recorder = new PuzzleChangeRecorder(10)
+        this.recorder = new PuzzleChangeRecorder()
+
+        ig.Game.inject({
+            spawnEntity(entity, x, y, z, settings, showAppearEffects) {
+                const ret = this.parent(entity, x, y, z, settings, showAppearEffects)
+                if (settings?.oldPos) {
+                    ret.oldPos = settings.oldPos
+                }
+                return ret
+            },
+        })
     }
 
     updatePuzzleSpeed(sel: PuzzleSelection) {
@@ -154,7 +170,6 @@ export class PuzzleSelectionManager extends SelectionManager {
         sel.data = { ...sel.data, ...data }
     }
 
-
     solve() {
         const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
         if (! sel) { return }
@@ -178,12 +193,13 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     solveSel(sel: PuzzleSelection, delay: number = 0) {
+        if (delay != 0) { throw new Error('not implemented') }
         for (const log of sel.data.recordLog!.steps.map(s => s.log)) {
-            if (delay == 0) {
-                for (let i = 0; i < log.length; i++) {
-                    const action = log[i]
-
-                    const splittedPath = action[1].split('.')
+            for (let i = 0; i < log.length; i++) {
+                const action = log[i]
+                if (action.length == 3) {
+                    assertBool(action[1].startsWith('.'))
+                    const splittedPath = action[1].substring(1).split('.')
                     let value = ig.vars.storage
                     for (let i = 0; i < splittedPath.length - 1; i++) {
                         if (! value.hasOwnProperty(splittedPath[i])) {
@@ -191,32 +207,56 @@ export class PuzzleSelectionManager extends SelectionManager {
                         }
                         value = value[splittedPath[i]]
                     }
-
                     value[splittedPath[splittedPath.length - 1]] = action[2]
+                } else {
+                    const type = action[2]
+                    const pos: Vec2 = action[1]
+                    const act: string = action[3]
+                    const e: ig.Entity = PuzzleSelectionManager.getEntityByPos(pos)
+                    if (isBounceBlock(e, type)) {
+                        if (act == 'on') {
+                            sc.combat.showHitEffect(e, e.coll.pos, sc.ATTACK_TYPE.HEAVY, sc.ELEMENT.NEUTRAL, false, false, true)
+                            e.effects.spawnOnTarget('bounceHit', e)
+                            e.setCurrentAnim('on')
+                        }
+                        if (act == 'resolve') { e.onGroupResolve(true) }
+                    } else if (isBounceSwitch(e, type)) {
+                        if (act == 'resolve') { e.onGroupResolve() }
+                    }
                 }
-            } else {
-                let solveArrayIndex = 0
-                const intervalID = setInterval(async () => {
-                    const action = log[solveArrayIndex]
-                    const splittedPath = action[1].split('.')
-                    let value = ig.vars.storage
-                    for (let i = 0; i < splittedPath.length - 1; i++) {
-                        value = value[splittedPath[i]]
-                    }
-
-                    value[splittedPath[splittedPath.length - 1]] = action[2]
-
-                    ig.game.varsChangedDeferred()
-
-                    solveArrayIndex++
-                    if (solveArrayIndex == log.length) {
-                        clearInterval(intervalID)
-                    }
-                }, 1000 / delay)
             }
+            // let solveArrayIndex = 0
+            // const intervalID = setInterval(async () => {
+            //     const action = log[solveArrayIndex]
+            //     if (action.length !== 3) { return }
+            //     const splittedPath = action[1].split('.')
+            //     let value = ig.vars.storage
+            //     for (let i = 0; i < splittedPath.length - 1; i++) {
+            //         value = value[splittedPath[i]]
+            //     }
+
+            //     value[splittedPath[splittedPath.length - 1]] = action[2]
+
+            //     ig.game.varsChangedDeferred()
+
+            //     solveArrayIndex++
+            //     if (solveArrayIndex == log.length) {
+            //         clearInterval(intervalID)
+            //     }
+            // }, 1000 / delay)
         }
         ig.game.varsChangedDeferred()
         blitzkrieg.rhudmsg('blitzkrieg', 'Solved puzzle', 2)
+    }
+
+    static getEntityByPos(pos: Vec2): ig.Entity {
+        for (const e of ig.game.entities) {
+            const epos: Vec2 = e.oldPos ?? e.coll.pos
+            if (Vec2.equal(epos, pos)) {
+                return e
+            }
+        }
+        throw new Error('didnt find')
     }
 
     static getPuzzleSolveCondition(sel: PuzzleSelection) {
@@ -229,6 +269,7 @@ export class PuzzleSelectionManager extends SelectionManager {
             const log = steps[h].log
             for (let i = log.length - 1; i >= 0; i--) {
                 let action = log[i]
+                if (action.length !== 3) { continue }
                 // let frame = action[0]
                 let path = action[1]
                 // let value = action[2]

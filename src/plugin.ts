@@ -1,7 +1,7 @@
 import { TextNotification } from './txtnoti'
 import { Mod1 } from './types'
 import { SelectionManager, SelectionMapEntry } from './selection'
-import { getBlitzkriegTabIndex, isBlitzkriegEnabled, prepareTabFonts, setBlitzkriegEnabled, setupTabs } from './tab'
+import { getBlitzkriegTabIndex, prepareTabFonts, setupTabs } from './tab'
 import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './puzzle-selection'
 import { InputKey, KeyBinder } from './keybinder'
 import { BlitzkriegMapUtil } from './map-sel-copy'
@@ -10,6 +10,8 @@ import { FsUtil } from './fsutil'
 import * as prettier from './prettier/standalone.mjs'
 import prettierPluginBabel from './prettier/babel.mjs'
 import prettierPluginEstree from './prettier/estree.mjs'
+import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
+import { MenuOptions } from './options'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -27,10 +29,7 @@ function addVimBindings() {
             ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
         })
         
-        vim.addAlias('blitzkrieg', 'toggle-enabled', 'Toggle whether blitzkrieg is enabled or disabled', 'global', () => {
-            setBlitzkriegEnabled(! isBlitzkriegEnabled())
-        })
-        const condition = (ingame: boolean) => ingame && isBlitzkriegEnabled() as boolean
+        const condition = (ingame: boolean) => ingame && MenuOptions.blitzkriegEnabled as boolean
         vim.addAlias('blitzkrieg', 'toggle-selection-render', 'Toggle selection rendering', condition, () => { 
             for (const key in blitzkrieg.sels) {
                 blitzkrieg.sels[key as keyof typeof blitzkrieg.sels].toggleDrawing()
@@ -58,50 +57,24 @@ function addVimBindings() {
     }
 }
 
-function adjustPuzzleAssistSlider() {
-    sc.ASSIST_PUZZLE_SPEED = {
-        LOW5: 0.5,
-        LOW4: 0.6,
-        LOW3: 0.7,
-        LOW2: 0.8,
-        LOW1: 0.9,
-        NORM: 1,
-        HIGH1: 1.1,
-        HIGH2: 1.2,
-        HIGH3: 1.3,
-        HIGH4: 1.4,
-        HIGH5: 1.5,
-        HIGH6: 1.6,
-        HIGH7: 1.7,
-        HIGH8: 1.8,
-        HIGH9: 1.9,
-        HIGH10: 2,
-    }
-    sc.OPTIONS_DEFINITION['assist-puzzle-speed'] = {
-        type: 'OBJECT_SLIDER',
-        data: sc.ASSIST_PUZZLE_SPEED,
-        init: sc.ASSIST_PUZZLE_SPEED.NORM,
-        cat: sc.OPTION_CATEGORY.ASSISTS,
-        fill: true,
-        showPercentage: true,
-        hasDivider: true,
-        header: 'puzzle',
-    }
-}
-
 const kb: KeyBinder = new KeyBinder()
 function bindKeys() {
     kb.addKey(new InputKey(
         ig.KEY.P, 'selb-newentry', 'Create a new selection entry', getBlitzkriegTabIndex(), true, 'blitzkrieg', () => {
-            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorBegin()
+            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorBegin()
         }, null, false))
     kb.addKey(new InputKey(
         ig.KEY.BRACKET_OPEN, 'selb-select', 'Create a new selection in steps', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
-            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorSelect()
+            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorSelect()
         }, null, false))
     kb.addKey(new InputKey(
         ig.KEY.BRACKET_CLOSE, 'selb-destroy', 'Delete/Decunstruct a selection', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
-            isBlitzkriegEnabled() && blitzkrieg.currSel.selectionCreatorDelete()
+            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorDelete()
+        }, null, false))
+    kb.addKey(new InputKey(
+        ig.KEY.O, 'recorder-split', 'Split puzzle recording', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
+            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.recorder?.recording &&
+                blitzkrieg.currSel.name == 'puzzle' && (blitzkrieg.currSel as PuzzleSelectionManager).recorder.split()
         }, null, false))
 
     kb.bind()
@@ -140,7 +113,7 @@ export default class Blitzkrieg {
     registerSels() {
         ig.ENTITY.Player.inject({
             update(...args) {
-                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
+                MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
                 return this.parent(...args)
             }
         })
@@ -148,14 +121,14 @@ export default class Blitzkrieg {
         ig.Renderer2d.inject({
             drawPostLayerSprites(...args) {
                 this.parent(...args)
-                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.drawSelections())
+                MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.drawSelections())
             }
         })
 
         ig.Game.inject({
             loadLevel(...args) {
                 this.parent(...args)
-                isBlitzkriegEnabled() && Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
+                MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
             }
         })
 
@@ -164,7 +137,7 @@ export default class Blitzkrieg {
 
     async prestart() {
         addVimBindings()
-        adjustPuzzleAssistSlider()
+        puzzleAssistSpeedInitPrestart()
         this.rhudmsg = TextNotification.rhudmsg
         this.mapUtil = new BlitzkriegMapUtil()
 
@@ -175,6 +148,7 @@ export default class Blitzkrieg {
         this.currSel = this.sels.puzzle
         this.registerSels()
         setupTabs()
+        MenuOptions.initPrestart()
 
         bindKeys()
 
@@ -193,8 +167,9 @@ export default class Blitzkrieg {
 
     async poststart() {
         prepareTabFonts()
+        MenuOptions.initPoststart()
 
-        kb.addHeader('blitzkrieg', 'blitzkrieg')
+        kb.addHeader('blitzkrieg', 'keybindings')
         kb.updateLabels()
     }
 

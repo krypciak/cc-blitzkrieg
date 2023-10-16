@@ -1,4 +1,5 @@
 import { Selection, SelectionManager } from './selection';
+import { PuzzleChangeRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder';
 export declare enum PuzzleRoomType {
     WholeRoom = 0,
     AddWalls = 1,
@@ -10,12 +11,14 @@ export declare enum PuzzleCompletionType {
     Item = 2
 }
 export interface PuzzleSelectionStep {
-    log: ([/* frame */ number, /* var path */ string, /* value */ any])[];
+    log: (([/* frame */ number, /* var path */ string, /* value */ any]) | ([/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string]))[];
     pos: Vec3 & {
         level: number;
     };
     shootAngle?: number;
     element: sc.ELEMENT;
+    endFrame: number;
+    split?: boolean;
 }
 export interface PuzzleSelection extends Selection {
     data: {
@@ -39,13 +42,13 @@ export interface PuzzleSelection extends Selection {
     };
 }
 export declare class PuzzleSelectionManager extends SelectionManager {
+    recorder: PuzzleChangeRecorder;
     incStep: number;
     changeModifiers: boolean;
     changeSpeed: boolean;
     fakeBuffItemId: number;
     modifiersActive: boolean;
     fakeBuffActive: boolean;
-    recordIgnoreSet: Set<string>;
     constructor();
     updatePuzzleSpeed(sel: PuzzleSelection): void;
     createFakeBuff(): void;
@@ -57,5 +60,6 @@ export declare class PuzzleSelectionManager extends SelectionManager {
     finalizeSel(sel1: Selection): Promise<void>;
     solve(): void;
     solveSel(sel: PuzzleSelection, delay?: number): void;
+    static getEntityByPos(pos: Vec2): ig.Entity;
     static getPuzzleSolveCondition(sel: PuzzleSelection): string;
 }
