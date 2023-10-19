@@ -2,7 +2,8 @@ import { Selection, SelectionManager } from './selection';
 export interface IChangeRecorder {
     startRecording(selM: SelectionManager, startingSel: Selection): void;
     stopRecording(purge?: boolean): void;
-    injectRecordingPrestart(): void;
+    initPrestart(): void;
+    initPoststart(): void;
     recording: boolean;
 }
 export declare class ChangeRecorder implements IChangeRecorder {
@@ -15,7 +16,8 @@ export declare class ChangeRecorder implements IChangeRecorder {
     selM: SelectionManager;
     startingSel: Selection;
     constructor(tps: number);
-    injectRecordingPrestart(): void;
+    initPoststart(): void;
+    initPrestart(): void;
     startRecording(selM: SelectionManager, startingSel: Selection): void;
     stopRecording(purge?: boolean): void;
 }

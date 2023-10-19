@@ -21,6 +21,8 @@ export {}
 declare global {
     namespace ig {
         interface Game {
+            now: number /* set by this mod */
+
             playerEntityCrosshairInstance: ig.ENTITY.Crosshair
 
             preloadLevel(this: this, mapName: string): void

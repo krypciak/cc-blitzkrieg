@@ -4,7 +4,8 @@ import { Selection, SelectionManager } from './selection'
 export interface IChangeRecorder {
     startRecording(selM: SelectionManager, startingSel: Selection): void
     stopRecording(purge?: boolean): void
-    injectRecordingPrestart(): void
+    initPrestart(): void
+    initPoststart(): void
     recording: boolean
 }
 
@@ -20,7 +21,9 @@ export class ChangeRecorder implements IChangeRecorder {
         public tps: number,
     ) {}
 
-    injectRecordingPrestart() {
+    initPoststart(): void { }
+
+    initPrestart() {
         const self = this
         ig.Vars.inject({
             set(path: string, value) {

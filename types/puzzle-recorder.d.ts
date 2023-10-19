@@ -16,7 +16,8 @@ export declare class PuzzleChangeRecorder implements IChangeRecorder {
     currentStep(): Partial<PuzzleSelectionStep>;
     pushLog(path: string, value: any): void;
     pushLog(action: string, pos: Vec2, type: RecordedPuzzleElementsEntities): void;
-    injectRecordingPrestart(): void;
+    initPrestart(): void;
+    initPoststart(): void;
     split(): void;
     private nextStep;
     startRecording(selM: PuzzleSelectionManager, startingSel: PuzzleSelection): void;

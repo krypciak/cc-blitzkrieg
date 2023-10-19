@@ -132,7 +132,9 @@ export default class Blitzkrieg {
             }
         })
 
-        Object.values(blitzkrieg.sels).forEach(m => m.recorder?.injectRecordingPrestart())
+        Object.values(blitzkrieg.sels).forEach(m => {
+            m.recorder?.initPrestart()
+        })
     }
 
     async prestart() {
@@ -171,6 +173,10 @@ export default class Blitzkrieg {
 
         kb.addHeader('blitzkrieg', 'keybindings')
         kb.updateLabels()
+
+        Object.values(blitzkrieg.sels).forEach(m => {
+            m.recorder?.initPoststart()
+        })
     }
 
     async prettifyJson(json: string, printWidth: number = 200, tabWidth: number = 4) {

@@ -12,7 +12,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
     }
     startTime!: number
     get loopIndex(): number {
-        const now = sc.stats.getMap('player', 'playtime') * 1000
+        const now = ig.game.now
         if (! this.startTime) { this.startTime = now  }
         const diff = now - this.startTime
         const res = Math.round(diff * sc.options.get('assist-puzzle-speed'))
@@ -43,9 +43,8 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
             this.currentStep().log!.push([this.loopIndex, /* var path */ action, /* value */ pos])
         }
     }
-    
 
-    injectRecordingPrestart() {
+    initPrestart() {
         const self = this
         ig.Vars.inject({
             set(path: string, value) {
@@ -74,6 +73,15 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                 }
             }
         })
+        ig.Game.inject({
+            update() {
+                this.parent()
+                if (!this.paused && !ig.loading && !sc.model.isTitle()) {
+                    ig.game.now += ig.system.tick*1000
+                }
+            },
+
+        })
 
         ig.ENTITY.BounceBlock.inject({
             ballHit(e: ig.Entity, pos: Vec2): boolean {
@@ -97,6 +105,10 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                 this.parent()
             },
         })
+    }
+
+    initPoststart() {
+        ig.game.now = 0
     }
 
     split() { this.currentStep().split = true }
