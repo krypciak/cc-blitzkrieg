@@ -2,32 +2,446 @@
     "rhombus-dng/room-1-5": {
         "sels": [
             {
-                "bb": [{ "x": 30, "y": 7, "width": 10, "height": 15 }],
+                "bb": [{ "x": 29, "y": 7, "width": 13, "height": 16 }],
                 "mapName": "rhombus-dng/room-1-5",
                 "data": {
-                    "type": 0,
-                    "completionType": 1,
-                    "difficulty": 2,
-                    "timeLength": 2,
+                    "type": 1,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
                     "chapter": 1,
                     "plotLine": 900,
                     "elements": [true, true, true, true],
-                    "startPos": { "x": 616.49, "y": 232, "z": 0, "level": 0 },
-                    "endPos": { "x": 485.43, "y": 230.66, "z": 0, "level": 0 },
+                    "startPos": { "x": 631.44, "y": 232, "z": 0, "level": 0 },
+                    "endPos": { "x": 479.2, "y": 232, "z": 0, "level": 0 },
                     "recordLog": {
                         "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 590.56, "y": 230.89, "z": 0, "level": 0 }, "shootAngle": 87.47942552709084 },
+                            { "log": [], "element": 0, "pos": { "x": 591.36, "y": 232, "z": 0, "level": 0 }, "shootAngle": 88.77559343887758, "endFrame": 174 },
                             {
                                 "log": [
-                                    [26, "map.bounceSolved1", true],
-                                    [26, "map._entity24_triggered", true],
-                                    [36, "map.wallDown", true]
+                                    [178, { "x": 596, "y": 308 }, "BounceBlock", "on"],
+                                    [184, { "x": 500, "y": 308 }, "BounceBlock", "on"],
+                                    [195, { "x": 500, "y": 148 }, "BounceBlock", "on"],
+                                    [197, { "x": 548, "y": 148 }, "BounceBlock", "on"],
+                                    [202, ".map.bounceSolved1", true],
+                                    [202, { "x": 596, "y": 308 }, "BounceBlock", "resolve"],
+                                    [202, { "x": 548, "y": 148 }, "BounceBlock", "resolve"],
+                                    [202, { "x": 500, "y": 148 }, "BounceBlock", "resolve"],
+                                    [202, { "x": 500, "y": 308 }, "BounceBlock", "resolve"],
+                                    [202, { "x": 548, "y": 228 }, "BounceSwitch", "resolve"],
+                                    [203, ".map._entity24_triggered", true],
+                                    [234, ".map.wallDown", true]
                                 ]
                             }
                         ]
                     }
                 },
-                "sizeRect": { "x": 30, "y": 7, "width": 40, "height": 22 }
+                "sizeRect": { "x": 29, "y": 7, "width": 42, "height": 23 }
+            },
+            {
+                "bb": [{ "x": 2, "y": 1, "width": 25, "height": 24 }],
+                "mapName": "rhombus-dng/room-1-5",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 4,
+                    "plotLine": 6170,
+                    "elements": [true, true, false, false],
+                    "startPos": { "x": 384.93, "y": 241.53, "z": 0, "level": 0 },
+                    "endPos": { "x": 325.91, "y": 241.53, "z": 0, "level": 0 },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 334.34, "y": 235.6, "z": 0, "level": 0 }, "shootAngle": 223.24890142116774, "endFrame": 0 },
+                            {
+                                "log": [
+                                    [90, { "x": 292, "y": 180 }, "BounceBlock", "on"],
+                                    [242, { "x": 244, "y": 260 }, "BounceBlock", "on"],
+                                    [395, { "x": 196, "y": 180 }, "BounceBlock", "on"],
+                                    [528, ".map.bounceSolved2", true],
+                                    [528, { "x": 244, "y": 260 }, "BounceBlock", "resolve"],
+                                    [528, { "x": 196, "y": 180 }, "BounceBlock", "resolve"],
+                                    [528, { "x": 292, "y": 180 }, "BounceBlock", "resolve"],
+                                    [528, { "x": 140, "y": 228 }, "BounceSwitch", "resolve"],
+                                    [534, ".map._entity27_triggered", true],
+                                    [1451, ".map.platformUp", true]
+                                ],
+                                "element": 0,
+                                "pos": { "x": 245.12, "y": 140.4, "z": 32, "level": 1 },
+                                "shootAngle": 0.7837537789384896,
+                                "endFrame": 14776
+                            },
+                            {
+                                "log": [
+                                    [14938, { "x": 340, "y": 132 }, "BounceBlock", "on"],
+                                    [15341, { "x": 340, "y": 324 }, "BounceBlock", "on"],
+                                    [15758, { "x": 148, "y": 324 }, "BounceBlock", "on"],
+                                    [16143, ".map.bounceSolved3", true],
+                                    [16143, { "x": 340, "y": 132 }, "BounceBlock", "resolve"],
+                                    [16143, { "x": 340, "y": 324 }, "BounceBlock", "resolve"],
+                                    [16143, { "x": 148, "y": 324 }, "BounceBlock", "resolve"],
+                                    [16143, { "x": 148, "y": 132 }, "BounceSwitch", "resolve"],
+                                    [16148, ".map._entity28_triggered", true],
+                                    [17176, ".map.doorOpen", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 2, "y": 1, "width": 27, "height": 25 }
+            }
+        ]
+    },
+    "arid-dng/second/f4/center": {
+        "sels": [
+            {
+                "bb": [{ "x": 0, "y": 0, "width": 80, "height": 79 }],
+                "mapName": "arid-dng/second/f4/center",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 9,
+                    "plotLine": 30100,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 629.51, "y": 144, "z": 0, "level": 1 },
+                    "endPos": { "x": 152.65, "y": 455.35, "z": 0, "level": 1 },
+                    "puzzleSpeed": 0.8,
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 2, "pos": { "x": 633, "y": 647, "z": 0, "level": 1 }, "shootAngle": -89.40863861805333, "endFrame": 48 },
+                            {
+                                "log": [[74, { "x": 628, "y": 484 }, "BounceBlock", "on"]],
+                                "element": 2,
+                                "pos": { "x": 633, "y": 647, "z": 0, "level": 1 },
+                                "shootAngle": -30.68255637105614,
+                                "endFrame": 79
+                            },
+                            {
+                                "log": [[115, { "x": 724, "y": 484 }, "BounceBlock", "on"]],
+                                "element": 2,
+                                "pos": { "x": 795.68, "y": 523.27, "z": 0, "level": 1 },
+                                "shootAngle": -46.14077089308461,
+                                "endFrame": 130
+                            },
+                            { "log": [], "element": 2, "pos": { "x": 804.06, "y": 523.13, "z": 0, "level": 1 }, "shootAngle": -98.16453296998895, "endFrame": 158 },
+                            { "log": [], "element": 2, "pos": { "x": 804.06, "y": 523.13, "z": 0, "level": 1 }, "shootAngle": -90.16510637079126, "endFrame": 180 },
+                            {
+                                "log": [
+                                    [196, { "x": 836, "y": 580 }, "BounceBlock", "on"],
+                                    [233, ".tmp.oven1", true],
+                                    [345, { "x": 1108, "y": 484 }, "BounceBlock", "on"]
+                                ],
+                                "element": 3,
+                                "pos": { "x": 829, "y": 648, "z": 0, "level": 1 },
+                                "shootAngle": -0.4345077987702774,
+                                "endFrame": 444
+                            },
+                            {
+                                "log": [
+                                    [445, { "x": 996, "y": 548 }, "BounceBlock", "on"],
+                                    [470, ".tmp.oven1", false],
+                                    [559, { "x": 884, "y": 692 }, "BounceBlock", "on"]
+                                ],
+                                "element": 3,
+                                "pos": { "x": 858.9, "y": 932.57, "z": 0, "level": 1 },
+                                "shootAngle": -18.837957106646336,
+                                "endFrame": 605
+                            },
+                            { "log": [], "element": 3, "pos": { "x": 841.67, "y": 932.57, "z": 0, "level": 1 }, "shootAngle": -67.61720411213874, "endFrame": 631 },
+                            { "log": [], "element": 3, "pos": { "x": 841.67, "y": 932.57, "z": 0, "level": 1 }, "shootAngle": -67.61720411213874, "endFrame": 636 },
+                            { "log": [], "element": 3, "pos": { "x": 841.67, "y": 932.57, "z": 0, "level": 1 }, "shootAngle": -68.07100349482775, "endFrame": 644 },
+                            {
+                                "log": [[666, { "x": 1140, "y": 676 }, "BounceBlock", "on"]],
+                                "element": 3,
+                                "pos": { "x": 825.49, "y": 914.24, "z": 0, "level": 1 },
+                                "shootAngle": -44.29145840786346,
+                                "endFrame": 686
+                            },
+                            {
+                                "log": [[706, { "x": 1140, "y": 788 }, "BounceBlock", "on"]],
+                                "element": 3,
+                                "pos": { "x": 1086.05, "y": 920, "z": 0, "level": 1 },
+                                "shootAngle": -85.79838605734976,
+                                "endFrame": 784
+                            },
+                            {
+                                "log": [
+                                    [815, { "x": 884, "y": 772 }, "BounceBlock", "on"],
+                                    [856, ".tmp.teslaBarrier", true],
+                                    [923, { "x": 884, "y": 1044 }, "BounceBlock", "on"],
+                                    [1004, { "x": 1076, "y": 1044 }, "BounceBlock", "on"],
+                                    [1031, { "x": 1076, "y": 964 }, "BounceBlock", "on"]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 954.25, "y": 1083.19, "z": 0, "level": 1 },
+                                "shootAngle": 179.82972844626747,
+                                "endFrame": 1069
+                            },
+                            {
+                                "log": [
+                                    [1075, ".tmp.propeller", true],
+                                    [1146, { "x": 804, "y": 964 }, "BounceBlock", "on"]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 638.78, "y": 1011.05, "z": 0, "level": 1 },
+                                "shootAngle": 18.517685952231155,
+                                "endFrame": 1178
+                            },
+                            {
+                                "log": [[1200, { "x": 804, "y": 1108 }, "BounceBlock", "on"]],
+                                "element": 1,
+                                "pos": { "x": 638.78, "y": 1011.05, "z": 0, "level": 1 },
+                                "shootAngle": 1.3666656834155269,
+                                "endFrame": 1201
+                            },
+                            { "log": [], "element": 1, "pos": { "x": 638.78, "y": 1011.05, "z": 0, "level": 1 }, "shootAngle": -61.870679057036476, "endFrame": 1225 },
+                            {
+                                "log": [
+                                    [1228, { "x": 740, "y": 1108 }, "BounceBlock", "on"],
+                                    [1235, ".tmp.teslaBarrier", false]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 638.78, "y": 1011.05, "z": 0, "level": 1 },
+                                "shootAngle": -121.56067102929316,
+                                "endFrame": 1258
+                            },
+                            {
+                                "log": [[1295, { "x": 740, "y": 932 }, "BounceBlock", "on"]],
+                                "element": 1,
+                                "pos": { "x": 568.74, "y": 1011.05, "z": 0, "level": 1 },
+                                "shootAngle": 86.05106027313478,
+                                "endFrame": 1334
+                            },
+                            {
+                                "log": [
+                                    [1373, ".tmp.heatPole", true],
+                                    [1389, { "x": 516, "y": 932 }, "BounceBlock", "on"],
+                                    [1455, ".tmp.propeller", false],
+                                    [1456, { "x": 516, "y": 1108 }, "BounceBlock", "on"]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 277.34, "y": 997.02, "z": 0, "level": 1 },
+                                "shootAngle": 49.23665562969726,
+                                "endFrame": 1551
+                            },
+                            {
+                                "log": [
+                                    [1553, { "x": 404, "y": 1028 }, "BounceBlock", "on"],
+                                    [1581, { "x": 340, "y": 964 }, "BounceBlock", "on"],
+                                    [1609, ".tmp.heatPole", false]
+                                ],
+                                "element": 4,
+                                "pos": { "x": 277.34, "y": 997.02, "z": 0, "level": 1 },
+                                "shootAngle": -98.78851262690746,
+                                "endFrame": 1646
+                            },
+                            {
+                                "log": [
+                                    [1714, { "x": 468, "y": 1060 }, "BounceBlock", "on"],
+                                    [1769, { "x": 468, "y": 932 }, "BounceBlock", "on"]
+                                ],
+                                "element": 4,
+                                "pos": { "x": 223, "y": 904, "z": 1, "level": 1 },
+                                "shootAngle": 179.80236296437786,
+                                "endFrame": 1881
+                            },
+                            {
+                                "log": [[1918, { "x": 100, "y": 932 }, "BounceBlock", "on"]],
+                                "element": 4,
+                                "pos": { "x": 243, "y": 776, "z": 1, "level": 1 },
+                                "shootAngle": -138.60239144000607,
+                                "endFrame": 1960
+                            },
+                            { "log": [], "element": 4, "pos": { "x": 243, "y": 776, "z": 1, "level": 1 }, "shootAngle": -137.1640789688781, "endFrame": 1966 },
+                            {
+                                "log": [[1971, { "x": 100, "y": 804 }, "BounceBlock", "on"]],
+                                "element": 4,
+                                "pos": { "x": 243, "y": 776, "z": 1, "level": 1 },
+                                "shootAngle": -136.41576468432962,
+                                "endFrame": 1973
+                            },
+                            {
+                                "log": [[2080, { "x": 372, "y": 804 }, "BounceBlock", "on"]],
+                                "element": 4,
+                                "pos": { "x": 217.17, "y": 776, "z": 0, "level": 1 },
+                                "shootAngle": -88.51655307968208,
+                                "endFrame": 2084
+                            },
+                            {
+                                "log": [[2148, { "x": 372, "y": 644 }, "BounceBlock", "on"]],
+                                "element": 4,
+                                "pos": { "x": 169, "y": 616, "z": 1, "level": 1 },
+                                "shootAngle": -90.26885942713979,
+                                "endFrame": 2171
+                            },
+                            { "log": [], "element": 4, "pos": { "x": 169, "y": 616, "z": 1, "level": 1 }, "shootAngle": -90.26147911237653, "endFrame": 2179 },
+                            { "log": [], "element": 4, "pos": { "x": 169, "y": 616, "z": 1, "level": 1 }, "shootAngle": -90.25586032371436, "endFrame": 2185 },
+                            {
+                                "log": [[2240, { "x": 132, "y": 640 }, "BounceBlock", "on"]],
+                                "element": 4,
+                                "pos": { "x": 147.77, "y": 591.15, "z": 0, "level": 1 },
+                                "shootAngle": -48.45523268314683,
+                                "endFrame": 2274
+                            },
+                            {
+                                "log": [
+                                    [2290, { "x": 132, "y": 532 }, "BounceBlock", "on"],
+                                    [2348, ".tmp.waveBarrier", true],
+                                    [2354, { "x": 308, "y": 532 }, "BounceBlock", "on"],
+                                    [2388, { "x": 292, "y": 612 }, "BounceBlock", "on"],
+                                    [2431, { "x": 436, "y": 612 }, "BounceBlock", "on"],
+                                    [2444, { "x": 436, "y": 436 }, "BounceBlock", "on"],
+                                    [2461, { "x": 628, "y": 452 }, "BounceBlock", "on"],
+                                    [2479, ".map.finalSwitch", true],
+                                    [2479, { "x": 628, "y": 452 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 436, "y": 436 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 436, "y": 612 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 292, "y": 612 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 132, "y": 532 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 132, "y": 640 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 372, "y": 644 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 372, "y": 804 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 100, "y": 804 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 100, "y": 932 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 468, "y": 932 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 468, "y": 1060 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 340, "y": 964 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 404, "y": 1028 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 516, "y": 1108 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 516, "y": 932 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 740, "y": 932 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 740, "y": 1108 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 804, "y": 1108 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 804, "y": 964 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 1076, "y": 964 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 1076, "y": 1044 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 884, "y": 1044 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 884, "y": 772 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 1140, "y": 788 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 1140, "y": 676 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 884, "y": 692 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 996, "y": 548 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 1108, "y": 484 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 836, "y": 580 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 724, "y": 484 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 308, "y": 532 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 628, "y": 484 }, "BounceBlock", "resolve"],
+                                    [2479, { "x": 628, "y": 228 }, "BounceSwitch", "resolve"],
+                                    [2479, ".map._entity227_triggered", true],
+                                    [2479, ".tmp.waveBarrier", false],
+                                    [2536, ".tmp.elevatorOff", true],
+                                    [2536, ".tmp.designer", true],
+                                    [2541, ".tmp.designer", false],
+                                    [2545, ".tmp.elevatorOff", false]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 0, "width": 80, "height": 79 }
+            }
+        ]
+    },
+    "heat-dng/f4/room-01": {
+        "sels": [
+            {
+                "bb": [{ "x": 11, "y": 2, "width": 64, "height": 34 }],
+                "mapName": "heat-dng/f4/room-01",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 4,
+                    "plotLine": 6150,
+                    "elements": [true, true, false, false],
+                    "startPos": { "x": 207.48, "y": 339.44, "z": 0, "level": 1 },
+                    "endPos": { "x": 689.47, "y": 162.06, "z": 0, "level": 1 },
+                    "puzzleSpeed": 1,
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 2, "pos": { "x": 696.75, "y": 385.33, "z": 0, "level": 1 }, "shootAngle": 269.8728235325402, "endFrame": 0 },
+                            { "log": [], "element": 2, "pos": { "x": 624.35, "y": 385.33, "z": 0, "level": 1 }, "shootAngle": 269.86541857068204, "endFrame": 1148 },
+                            {
+                                "log": [[1791, { "x": 516, "y": 292 }, "BounceBlock", "on"]],
+                                "element": 2,
+                                "pos": { "x": 624.35, "y": 385.33, "z": 0, "level": 1 },
+                                "shootAngle": 269.87088604248186,
+                                "endFrame": 1948
+                            },
+                            {
+                                "log": [[2340, { "x": 516, "y": 228 }, "BounceBlock", "on"]],
+                                "element": 2,
+                                "pos": { "x": 624.35, "y": 385.33, "z": 0, "level": 1 },
+                                "shootAngle": 182.74328607536987,
+                                "endFrame": 2893
+                            },
+                            {
+                                "log": [
+                                    [3364, ".tmp.steam1", true],
+                                    [4023, ".map.coldOn", true],
+                                    [4838, { "x": 292, "y": 228 }, "BounceBlock", "on"]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 496, "y": 365.33, "z": 0, "level": 1 },
+                                "shootAngle": 178.1932244037041,
+                                "endFrame": 6635
+                            },
+                            {
+                                "log": [
+                                    [6651, ".map.coldOn", false],
+                                    [6978, { "x": 292, "y": 436 }, "BounceBlock", "on"],
+                                    [7379, ".tmp.steam1", false],
+                                    [7538, ".map.heatOn", true]
+                                ],
+                                "element": 1,
+                                "pos": { "x": 496, "y": 365.33, "z": 0, "level": 1 },
+                                "shootAngle": 74.27176442366039,
+                                "endFrame": 8363
+                            },
+                            { "log": [], "element": 1, "pos": { "x": 496, "y": 365.33, "z": 0, "level": 1 }, "shootAngle": 48.9935509775878, "endFrame": 8952 },
+                            { "log": [], "element": 1, "pos": { "x": 496, "y": 365.33, "z": 0, "level": 1 }, "shootAngle": 36.81402791859682, "endFrame": 9568 },
+                            { "log": [], "element": 2, "pos": { "x": 783.06, "y": 392.27, "z": 0, "level": 1 }, "shootAngle": 29.52896763378601, "endFrame": 12110 },
+                            { "log": [], "element": 2, "pos": { "x": 777.02, "y": 392.27, "z": 0, "level": 1 }, "shootAngle": 264.37223409719667, "endFrame": 12990 },
+                            { "log": [], "element": 2, "pos": { "x": 777.02, "y": 392.27, "z": 0, "level": 1 }, "shootAngle": 267.0583912319637, "endFrame": 13674 },
+                            {
+                                "log": [
+                                    [13935, { "x": 868, "y": 372 }, "BounceBlock", "on"],
+                                    [15597, { "x": 1092, "y": 372 }, "BounceBlock", "on"],
+                                    [15718, { "x": 1092, "y": 436 }, "BounceBlock", "on"],
+                                    [15909, ".tmp.steam2", true],
+                                    [16048, { "x": 948, "y": 436 }, "BounceBlock", "on"],
+                                    [16482, { "x": 948, "y": 228 }, "BounceBlock", "on"],
+                                    [16811, { "x": 1092, "y": 228 }, "BounceBlock", "on"],
+                                    [16932, { "x": 1092, "y": 292 }, "BounceBlock", "on"],
+                                    [17434, { "x": 868, "y": 292 }, "BounceBlock", "on"],
+                                    [17555, { "x": 868, "y": 228 }, "BounceBlock", "on"],
+                                    [17922, ".map.doneFINALLY", true],
+                                    [17926, { "x": 868, "y": 372 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 948, "y": 436 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 1092, "y": 372 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 1092, "y": 292 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 948, "y": 228 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 1092, "y": 228 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 868, "y": 292 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 868, "y": 228 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 516, "y": 292 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 1092, "y": 436 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 292, "y": 436 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 516, "y": 228 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 292, "y": 228 }, "BounceBlock", "resolve"],
+                                    [17926, { "x": 692, "y": 232 }, "BounceSwitch", "resolve"],
+                                    [17940, ".map._entity170_triggered", true],
+                                    [18858, ".map.doorOpen", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 11, "y": 2, "width": 75, "height": 36 }
             }
         ]
     }

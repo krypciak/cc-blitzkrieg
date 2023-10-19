@@ -10,16 +10,16 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
     currentRecord!: {
         steps: Partial<PuzzleSelectionStep>[]
     }
-    _loopIndex: number = -1
+    startTime!: number
     get loopIndex(): number {
-        return Math.round(this._loopIndex / sc.options.get('assist-puzzle-speed'))
-    }
-    set loopIndex(value: number) {
-        this._loopIndex = value
+        const now = sc.stats.getMap('player', 'playtime') * 1000
+        if (! this.startTime) { this.startTime = now  }
+        const diff = now - this.startTime
+        const res = Math.round(diff * sc.options.get('assist-puzzle-speed'))
+        return res
     }
     selM!: PuzzleSelectionManager
     startingSel!: PuzzleSelection
-    tps: number = 30
 
     recordIgnoreSet = new Set([
         'playerVar.input.melee',
@@ -121,25 +121,11 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         this.currentRecord = {
             steps: []
         }
+        this.startTime = 0
         this.currentStepIndex = -1
         this.nextStep()
-        this.loopIndex = 0
         this.recording = true
         blitzkrieg.rhudmsg('blitzkrieg', 'Started recording for game state changes', 2)
-
-        const self = this
-        const intervalID = setInterval(async () => {
-            if (! self.recording) {
-                clearInterval(intervalID)
-                return
-            }
-            if (! ig.perf.gui) {
-                clearInterval(intervalID)
-                blitzkrieg.rhudmsg('blitzkrieg', 'Stopping game state recording (entered gui)', 2)
-                return
-            }
-            self._loopIndex++
-        }, 1000 / this.tps)
     }
 
     stopRecording(purge?: boolean) {

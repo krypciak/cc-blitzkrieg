@@ -6,12 +6,10 @@ export declare class PuzzleChangeRecorder implements IChangeRecorder {
     currentRecord: {
         steps: Partial<PuzzleSelectionStep>[];
     };
-    _loopIndex: number;
+    startTime: number;
     get loopIndex(): number;
-    set loopIndex(value: number);
     selM: PuzzleSelectionManager;
     startingSel: PuzzleSelection;
-    tps: number;
     recordIgnoreSet: Set<string>;
     constructor();
     currentStepIndex: number;

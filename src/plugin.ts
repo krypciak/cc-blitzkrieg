@@ -160,7 +160,7 @@ export default class Blitzkrieg {
             deferredUpdate(): void {
                 this.parent()
                 const radians = Math.atan2(this._aimDir.y, this._aimDir.x)
-                ig.game.playerEntity.aimDegrees = (radians * 180) / Math.PI
+                ig.game.playerEntity.aimDegrees = ((radians * 180) / Math.PI + 360) % 360
             }
         })
     }
