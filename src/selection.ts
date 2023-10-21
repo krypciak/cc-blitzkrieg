@@ -6,7 +6,7 @@ import { Util } from './util'
 import { IChangeRecorder } from './change-record'
 
 const tilesize: number = 16
-const defaultDrawBoxes: boolean = true
+const defaultDrawBoxes: boolean = false
 
 export interface Selection {
     bb: MapRect[]
@@ -56,7 +56,7 @@ export class SelectionManager {
             this.walkOutEvent(sel)
         }
         this.inSelStack = new Stack()
-
+        this.selIndexes = [-1]
     }
 
     setFileIndex(index: number) {

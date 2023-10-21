@@ -1,5 +1,5 @@
-const fs: any = (0, eval)('require("fs")')
-const path: any = (0, eval)('require("path")')
+const fs: typeof import('fs') = (0, eval)('require("fs")')
+const path: typeof import('path') = (0, eval)('require("path")')
 
 export class FsUtil {
     static mkdirs(path: string) {
@@ -29,7 +29,7 @@ export class FsUtil {
     
     static writeFile(path: string, obj: any): Promise<void> {
         return new Promise((resolve, reject) => {
-            fs.writeFile(path, typeof obj === 'string' ? obj : JSON.stringify(obj), (err: Error) => {
+            fs.writeFile(path, typeof obj === 'string' ? obj : JSON.stringify(obj), (err: any) => {
                 if (err) {
                     console.error('error writing file:', err)
                     reject()
@@ -44,7 +44,7 @@ export class FsUtil {
     }
 
     static readFileSync(path: string): string {
-        return fs.readFileSync(path)
+        return fs.readFileSync(path).toString()
     }
     
     static doesFileExist(path: string): boolean {

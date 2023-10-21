@@ -145,9 +145,35 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         blitzkrieg.rhudmsg('blitzkrieg', 'Stopped recording', 2)
 
         if (! purge) {
-            this.startingSel.data.recordLog = {
-                steps: this.currentRecord.steps as PuzzleSelectionStep[]
-            }
+            const steps: PuzzleSelectionStep[] = this.currentRecord.steps as PuzzleSelectionStep[]
+            const stepMultishotMergeDist: number = 200 /* in ms */
+            const stepMultishotMergeAngleDist: number = 3
+
+            const mergedSteps: PuzzleSelectionStep[] = steps.reduce((acc: PuzzleSelectionStep[], curr: PuzzleSelectionStep) => {
+                const last: PuzzleSelectionStep = acc.last()
+                let fail: boolean = true
+                if (last && last.shootAngle && curr.shootAngle) {
+                    const diff = curr.endFrame - (last.lastShotFrame ?? last.endFrame)
+
+                    const angleDiff = Math.abs(last.shootAngle - curr.shootAngle)
+                    const angleDist: number = Math.min(angleDiff, 360 - angleDiff)
+
+                    // console.log(curr, 'frameDiff:', diff, 'angleDiff:', angleDiff)
+                    if (diff <= stepMultishotMergeDist && angleDist <= stepMultishotMergeAngleDist && curr.element == last.element) {
+                        last.shotCount ??= 0
+                        last.shotCount++
+                        last.lastShotFrame = curr.endFrame
+                        last.log.push(...curr.log)
+                        fail = false
+                    }
+                } 
+                if (fail) {
+                    acc.push(curr)
+                }
+                return acc
+            }, [])
+
+            this.startingSel.data.recordLog = { steps: mergedSteps }
             this.selM.save()
         }
     }

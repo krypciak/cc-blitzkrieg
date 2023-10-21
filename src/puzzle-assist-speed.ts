@@ -35,19 +35,18 @@ export function puzzleAssistSpeedInitPrestart() {
     adjustPuzzleAssistSlider()
 
     ig.ENTITY.Compressor.inject({
-            createCompressorBall() {
-            if (! MenuOptions.puzzleElementAdjustEnabled) { this.parent() }
-                var a = this.getCenter()
-                if (this.currentElement == sc.ELEMENT.SHOCK)
-                    this.compressorBall = ig.game.spawnEntity(sc.CompressedShockEntity, a.x, a.y, this.coll.pos.z + 12, ({ speed: this.ballSpeed * sc.options.get("assist-puzzle-speed"), fastMode: this.fastMode }) as ig.Entity.Settings)
-                else if (this.currentElement == sc.ELEMENT.WAVE)
-                    this.compressorBall = ig.game.spawnEntity(sc.CompressedWaveEntity, a.x, a.y, this.coll.pos.z + 12, ({ speed: this.ballSpeed * sc.options.get("assist-puzzle-speed"), fastMode: this.fastMode }) as ig.Entity.Settings)
+        createCompressorBall() {
+            if (! MenuOptions.puzzleElementAdjustEnabled) { return this.parent() }
+            const pos: Vec2 = this.getCenter()
+            if (this.currentElement == sc.ELEMENT.SHOCK)
+                this.compressorBall = ig.game.spawnEntity(sc.CompressedShockEntity, pos.x, pos.y, this.coll.pos.z + 12, ({ speed: this.ballSpeed * sc.options.get("assist-puzzle-speed"), fastMode: this.fastMode }) as ig.Entity.Settings)
+            else if (this.currentElement == sc.ELEMENT.WAVE)
+                this.compressorBall = ig.game.spawnEntity(sc.CompressedWaveEntity, pos.x, pos.y, this.coll.pos.z + 12, ({ speed: this.ballSpeed * sc.options.get("assist-puzzle-speed"), fastMode: this.fastMode }) as ig.Entity.Settings)
         },
     })
 
     ig.ENTITY.BounceBlock.inject({
         ballHit(e: ig.Entity, pos: Vec2): boolean {
-
             if (MenuOptions.puzzleElementAdjustEnabled && isBall(e) &&
                 !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) && pos && !Vec2.isZero(pos) && !this.blockState) {
 

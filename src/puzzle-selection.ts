@@ -25,6 +25,8 @@ export interface PuzzleSelectionStep {
     element: sc.ELEMENT
     endFrame: number
     split?: boolean
+    shotCount?: number
+    lastShotFrame?: number
 }
 
 export interface PuzzleSelection extends Selection {
@@ -259,7 +261,7 @@ export class PuzzleSelectionManager extends SelectionManager {
         throw new Error('didnt find')
     }
 
-    static getPuzzleSolveCondition(sel: PuzzleSelection) {
+    static getPuzzleSolveCondition(sel: PuzzleSelection): string | undefined {
         if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             throw new Error('no puzzle solution recorded')
         }
@@ -278,6 +280,6 @@ export class PuzzleSelectionManager extends SelectionManager {
                 return path
             }
         }
-        throw new Error('puzzle solution empty somehow?')
+        return undefined
     }
 }

@@ -19,6 +19,8 @@ export interface PuzzleSelectionStep {
     element: sc.ELEMENT;
     endFrame: number;
     split?: boolean;
+    shotCount?: number;
+    lastShotFrame?: number;
 }
 export interface PuzzleSelection extends Selection {
     data: {
@@ -61,5 +63,5 @@ export declare class PuzzleSelectionManager extends SelectionManager {
     solve(): void;
     solveSel(sel: PuzzleSelection, delay?: number): void;
     static getEntityByPos(pos: Vec2): ig.Entity;
-    static getPuzzleSolveCondition(sel: PuzzleSelection): string;
+    static getPuzzleSolveCondition(sel: PuzzleSelection): string | undefined;
 }
