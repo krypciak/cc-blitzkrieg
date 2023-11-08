@@ -19,7 +19,8 @@ export class Util {
                 return parseInt(i)
             }
         }
-        throw new Error('level not found')
+        console.log('WARN: level not found')
+        return 0
     }
 
     static waitingForPos: boolean = false

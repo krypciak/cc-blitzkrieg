@@ -38,7 +38,7 @@ export class SelectionManager {
     selectStep: number = -1
     fileIndex!: number
     tempPos!: MapPoint
-    selIndexes: number[] = [-1]
+    selIndexes: (number | undefined)[] = []
     recorder?: IChangeRecorder
 
     constructor(
@@ -56,7 +56,7 @@ export class SelectionManager {
             this.walkOutEvent(sel)
         }
         this.inSelStack = new Stack()
-        this.selIndexes = [-1]
+        this.selIndexes = []
     }
 
     setFileIndex(index: number) {
@@ -171,7 +171,7 @@ export class SelectionManager {
             const entry = this.getCurrentEntry()
             assert(entry.tempSel)
             entry.tempSel.bb.push(MapRect.fromTwoPoints(this.tempPos, mpos))
-            this.selIndexes.push(-1)
+            this.selIndexes.push(undefined)
             this.tempPos = new MapPoint(0, 0)
         } else { throw new Error() }
 
@@ -196,17 +196,17 @@ export class SelectionManager {
         
         /* trigger walk in and out events only once */
         if (isIn) {
-            if (this.selIndexes[i] == -1) {
+            if (this.selIndexes[i] === undefined) {
                 this.selIndexes[i] = i
                 this.inSelStack.push(sel)
                 this.walkInEvent(sel)
             }
         } else {
-            if (this.selIndexes[i] != -1) {
+            if (this.selIndexes[i] !== undefined) {
                 this.inSelStack.shift()
                 this.walkOutEvent(sel)
             }
-            this.selIndexes[i] = -1
+            this.selIndexes[i] = undefined
         }
     }
 

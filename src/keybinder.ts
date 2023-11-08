@@ -42,7 +42,7 @@ export class InputKey {
     }
     updateLabel() {
         if (this.global) {
-            ig.game.addons.preUpdate.push(this);
+            ig.game.addons.preUpdate.push(this)
         }
         ig.lang.labels.sc.gui.options.controls.keys[this.name] = this.description
     }

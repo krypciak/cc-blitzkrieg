@@ -80,7 +80,6 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                     ig.game.now += ig.system.tick*1000
                 }
             },
-
         })
 
         ig.ENTITY.BounceBlock.inject({
@@ -111,10 +110,21 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         ig.game.now = 0
     }
 
-    split() { this.currentStep().split = true }
+    split() {
+        const step = this.currentStep()
+        if (step.split) {
+            delete step.split
+            this.nextStep()
+            delete step.shootAngle
+        } else {
+            blitzkrieg.rhudmsg('blitzkrieg', 'Split', 1)
+            step.split = true
+        }
+    }
 
     private nextStep() {
         if (this.currentStepIndex >= 0) {
+            blitzkrieg.rhudmsg('blitzkrieg', 'Next step', 1)
             const step = this.currentStep()
             step.element = sc.model.player.currentElementMode
             step.pos = Object.assign(Vec3.create(ig.game.playerEntity.coll.pos), { level: Util.getLevelFromZ(ig.game.playerEntity.coll.pos.z) })

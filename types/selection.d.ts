@@ -34,7 +34,7 @@ export declare class SelectionManager {
     selectStep: number;
     fileIndex: number;
     tempPos: MapPoint;
-    selIndexes: number[];
+    selIndexes: (number | undefined)[];
     recorder?: IChangeRecorder;
     constructor(name: string, completeColor: string, tempColor: string, jsonFiles: string[]);
     newSelEvent(_: Selection): Promise<void>;

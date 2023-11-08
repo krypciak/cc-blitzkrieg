@@ -261,7 +261,7 @@ export class PuzzleSelectionManager extends SelectionManager {
         throw new Error('didnt find')
     }
 
-    static getPuzzleSolveCondition(sel: PuzzleSelection): string | undefined {
+    static getPuzzleSolveCondition(sel: PuzzleSelection): [string, any] | undefined {
         if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             throw new Error('no puzzle solution recorded')
         }
@@ -276,10 +276,10 @@ export class PuzzleSelectionManager extends SelectionManager {
                 let path = action[1]
                 // let value = action[2]
                 // console.log(path, value)
-                if (path.startsWith('maps')) { continue }
-                return path
+                if (path.startsWith('.maps') || path.startsWith('.plot.line')) { continue }
+                return [path, action[2]]
             }
         }
-        return undefined
+        return
     }
 }
