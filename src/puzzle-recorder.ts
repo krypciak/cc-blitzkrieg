@@ -83,13 +83,14 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         })
 
         ig.ENTITY.BounceBlock.inject({
-            ballHit(e: ig.Entity, pos: Vec2): boolean {
+            ballHit(e: ig.Entity, ...args: unknown[]): boolean {
+                const pos: Vec2 = args[0] as Vec2
                 if (self.recording && e.isBall && !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
                     pos && !Vec2.isZero(pos) && !this.blockState) {
 
                     self.pushLog('on', Vec2.create(this.coll.pos), 'BounceBlock')
                 }
-                return this.parent(e, pos)
+                return this.parent!(e, ...args)!
             },
             onGroupResolve(hide?: boolean) {
                 if (self.recording) {

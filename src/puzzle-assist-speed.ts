@@ -46,7 +46,8 @@ export function puzzleAssistSpeedInitPrestart() {
     })
 
     ig.ENTITY.BounceBlock.inject({
-        ballHit(e: ig.Entity, pos: Vec2): boolean {
+        ballHit(e: ig.Entity, ...rest: unknown[]): boolean {
+            const pos: Vec2 = rest[0] as Vec2
             if (MenuOptions.puzzleElementAdjustEnabled && isBall(e) &&
                 !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) && pos && !Vec2.isZero(pos) && !this.blockState) {
 
@@ -57,7 +58,7 @@ export function puzzleAssistSpeedInitPrestart() {
                     }
                 }
             }
-            return this.parent(e, pos)
+            return this.parent!(e, ...rest)!
         },
     })
 }

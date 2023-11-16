@@ -47,7 +47,6 @@ export interface PuzzleSelection extends Selection {
     }
 }
 
-// @ts-expect-error
 function isBounceBlock(e: ig.Entity, type: string): e is ig.ENTITY.BounceBlock { return type == 'BounceBlock' }
 function isBounceSwitch(e: ig.Entity, type: string): e is ig.ENTITY.BounceSwitch { return type == 'BounceSwitch' }
 
