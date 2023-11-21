@@ -43,14 +43,25 @@ export class FsUtil {
         fs.writeFileSync(path, typeof obj === 'string' ? obj : JSON.stringify(obj))
     }
 
-    static readFileSync(path: string): string {
-        return fs.readFileSync(path).toString()
+    static async readFileResponse(path: string): Promise<Response> {
+        if (path.startsWith('assets/')) { path = path.substring('assets/'.length) }
+        return fetch(path)
+    }
+    static async readFile(path: string): Promise<string> {
+        return (await this.readFileResponse(path)).text()
+    }
+    static async readFileJson(path: string): Promise<any> {
+        return (await this.readFileResponse(path)).json()
     }
     
     static doesFileExist(path: string): boolean {
         return fs.existsSync(path)
     }
     
+    static async copyFile(from: string, dest: string): Promise<void> {
+        return FsUtil.writeFile(dest, await FsUtil.readFile(from))
+    }
+
     static listFiles(path: string): string[] {
         return fs.readdirSync(path)
     }

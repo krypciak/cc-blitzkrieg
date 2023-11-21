@@ -287,10 +287,7 @@ export class SelectionManager {
     async load(index: number) {
         try {
             let path: string = this.jsonFiles[index]
-            if (path.startsWith('assets/')) { 
-                path = path.substring('assets/'.length)
-            }
-            const obj: Record<string, SelectionMapEntry> = await (await fetch(path)).json()
+            const obj: Record<string, SelectionMapEntry> = await FsUtil.readFileJson(path)
             for (const mapName in obj) {
                 const entry: SelectionMapEntry = obj[mapName]
                 entry.sels = entry.sels.map(s => {
