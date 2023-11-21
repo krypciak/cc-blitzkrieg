@@ -17,6 +17,7 @@ export default class Blitzkrieg {
     dir: string;
     mod: Mod1;
     rhudmsg: (title: string, message: string, timeout: number) => void;
+    syncDialog: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>;
     currSel: SelectionManager;
     sels: {
         puzzle: PuzzleSelectionManager;

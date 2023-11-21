@@ -1,11 +1,11 @@
 export class Util {
-    static async syncDialog(text: string, buttons: string[]): Promise<string> {
+    static async syncDialog<T extends readonly string[]>(text: string, buttons: T): Promise<T[number]> {
         sc.BUTTON_TYPE.SMALL.valueOf = () => {
             return sc.BUTTON_TYPE.SMALL.height
         }
         return new Promise((resolve) => {
-            const popup = new sc.ModalButtonInteract(text, null, buttons, (button) => {
-                resolve(button.text!.toString())
+            const popup = new sc.ModalButtonInteract(text, null, buttons.map(e => e), (button) => {
+                resolve(button.text!.toString() as T[number])
             })
             ig.gui.addGuiElement(popup)
             popup.show()

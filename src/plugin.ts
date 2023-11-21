@@ -12,6 +12,7 @@ import prettierPluginBabel from './prettier/babel.mjs'
 import prettierPluginEstree from './prettier/estree.mjs'
 import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
 import { MenuOptions } from './options'
+import { Util } from './util'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -89,6 +90,7 @@ export default class Blitzkrieg {
     dir: string
     mod: Mod1
     rhudmsg!: (title: string, message: string, timeout: number) => void
+    syncDialog!: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>
     currSel!: SelectionManager
     sels!: {
         puzzle: PuzzleSelectionManager
@@ -142,6 +144,7 @@ export default class Blitzkrieg {
         puzzleAssistSpeedInitPrestart()
         this.rhudmsg = TextNotification.rhudmsg
         this.mapUtil = new BlitzkriegMapUtil()
+        this.syncDialog = Util.syncDialog
 
         this.sels = {
             puzzle: new PuzzleSelectionManager(),

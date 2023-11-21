@@ -148,12 +148,13 @@ export class PuzzleSelectionManager extends SelectionManager {
 
     async finalizeSel(sel1: Selection) {
         const sel = sel1 as PuzzleSelection
-        const scale: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        const scale: readonly string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] as const
+
         const data: Partial<PuzzleSelection['data']> = {
-            type: PuzzleRoomType[await Util.syncDialog('select puzzle \\c[3]type\\c[0]', Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleRoomType],
+            type: PuzzleRoomType[await blitzkrieg.syncDialog('select puzzle \\c[3]type\\c[0]', Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleRoomType],
             completionType: PuzzleCompletionType[await Util.syncDialog('select puzzle \\c[3]completion type\\c[0]', Object.keys(PuzzleCompletionType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleCompletionType],
-            difficulty: parseInt(await Util.syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale)),
-            timeLength: parseInt(await Util.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
+            difficulty: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale)),
+            timeLength: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
             chapter: sc.model.player.chapter,
             plotLine: ig.vars.storage.plot ? ig.vars.storage.plot.line : -1,
             elements: [
