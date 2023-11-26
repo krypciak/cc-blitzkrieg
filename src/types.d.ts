@@ -22,7 +22,6 @@ declare global {
     namespace ig {
         interface Game {
             now: number /* set by this mod */
-            playerEntityCrosshairInstance: ig.ENTITY.Crosshair
             levels: { height: number }[] /* not correct but good enough for me */
         }
         namespace Entity {
