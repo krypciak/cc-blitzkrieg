@@ -14,8 +14,8 @@ export class Util {
     
     static getLevelFromZ(z: number): number {
         for (const i in ig.game.levels) {
-            if (ig.game.levels[i].height + 5 >= z &&
-                ig.game.levels[i].height - 5 <= z) {
+            if (ig.game.levels[i].height! + 5 >= z &&
+                ig.game.levels[i].height! - 5 <= z) {
                 return parseInt(i)
             }
         }

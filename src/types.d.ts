@@ -22,7 +22,6 @@ declare global {
     namespace ig {
         interface Game {
             now: number /* set by this mod */
-            levels: { height: number }[] /* not correct but good enough for me */
         }
         namespace Entity {
             interface Settings {
