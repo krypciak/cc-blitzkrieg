@@ -25,7 +25,6 @@
 	"plugin": "plugin.js",
 	"dependencies": {
 		"input-api": ">=1.0.0",
-		"crosscode": ">=1.4.0",
-		"post-game": ">=1.4.0"
+		"crosscode": ">=1.4.0"
 	}
 }
