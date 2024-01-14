@@ -34,7 +34,7 @@ function isBall(e: ig.Entity): e is ig.ENTITY.Ball { return !!e.isBall }
 export function puzzleAssistSpeedInitPrestart() {
     adjustPuzzleAssistSlider()
 
-    ig.ENTITY.Compressor.inject({
+    ig.ENTITY.Compressor?.inject({
         createCompressorBall() {
             if (! MenuOptions.puzzleElementAdjustEnabled) { return this.parent() }
             const pos: Vec2 = this.getCenter()
@@ -45,7 +45,7 @@ export function puzzleAssistSpeedInitPrestart() {
         },
     })
 
-    ig.ENTITY.BounceBlock.inject({
+    ig.ENTITY.BounceBlock?.inject({
         ballHit(e: ig.Entity, ...rest: unknown[]): boolean {
             const pos: Vec2 = rest[0] as Vec2
             if (MenuOptions.puzzleElementAdjustEnabled && isBall(e) &&
