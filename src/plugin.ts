@@ -23,13 +23,6 @@ declare global {
 
 function addVimBindings() {
     if (window.vim) { /* optional dependency https://github.com/krypciak/cc-vim */
-        vim.addAlias('blitzkrieg', 'reload-level', '', 'ingame', async () => {
-            let pos = ig.copy(ig.game.playerEntity.coll.pos)
-            let map = ig.game.mapName.split('.').join('/')
-            ig.game.loadLevel(await blitzkrieg.mapUtil.getMapObject(map, true), false, false)
-            ig.game.playerEntity.setPos(pos.x, pos.y, pos.z)
-        })
-        
         const condition = (ingame: boolean) => ingame && MenuOptions.blitzkriegEnabled as boolean
         vim.addAlias('blitzkrieg', 'toggle-selection-render', 'Toggle selection rendering', condition, () => { 
             for (const key in blitzkrieg.sels) {
