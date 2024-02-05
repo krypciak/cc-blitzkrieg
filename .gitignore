@@ -4,6 +4,7 @@ old.txt
 plugin.js
 *.ccmod
 *.png~
+*.kra~
 dist/prettier/*
 node_modules
 js
