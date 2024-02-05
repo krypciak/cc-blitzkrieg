@@ -11,7 +11,7 @@ export declare enum PuzzleCompletionType {
     Item = 2
 }
 export interface PuzzleSelectionStep {
-    log: (([/* frame */ number, /* var path */ string, /* value */ any]) | ([/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string]))[];
+    log: ([/* frame */ number, /* var path */ string, /* value */ any] | [/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string])[];
     pos: Vec3 & {
         level: number;
     };

@@ -13,7 +13,9 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
     startTime!: number
     get loopIndex(): number {
         const now = ig.game.now
-        if (! this.startTime) { this.startTime = now  }
+        if (!this.startTime) {
+            this.startTime = now
+        }
         const diff = now - this.startTime
         const res = Math.round(diff * sc.options.get('assist-puzzle-speed'))
         return res
@@ -21,12 +23,9 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
     selM!: PuzzleSelectionManager
     startingSel!: PuzzleSelection
 
-    recordIgnoreSet = new Set([
-        'playerVar.input.melee',
-        'gamepad.active'
-    ])
+    recordIgnoreSet = new Set(['playerVar.input.melee', 'gamepad.active'])
 
-    constructor() { }
+    constructor() {}
 
     currentStepIndex: number = -1
 
@@ -59,7 +58,6 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                     if (changed) {
                         self.pushLog('.' + path, value)
                     }
-
                 }
                 this.parent(path, value)
             },
@@ -71,13 +69,13 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                 if (self.recording && sc.control.thrown()) {
                     self.nextStep()
                 }
-            }
+            },
         })
         ig.Game.inject({
             update() {
                 this.parent()
                 if (!this.paused && !ig.loading && !sc.model.isTitle()) {
-                    ig.game.now += ig.system.tick*1000
+                    ig.game.now += ig.system.tick * 1000
                 }
             },
         })
@@ -85,9 +83,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         ig.ENTITY.BounceBlock.inject({
             ballHit(e: ig.Entity, ...args: unknown[]): boolean {
                 const pos: Vec2 = args[0] as Vec2
-                if (self.recording && e.isBall && !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
-                    pos && !Vec2.isZero(pos) && !this.blockState) {
-
+                if (self.recording && e.isBall && !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) && pos && !Vec2.isZero(pos) && !this.blockState) {
                     self.pushLog('on', Vec2.create(this.coll.pos), 'BounceBlock')
                 }
                 return this.parent!(e, ...args)!
@@ -101,7 +97,9 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         })
         ig.ENTITY.BounceSwitch.inject({
             onGroupResolve() {
-                if (self.recording) { self.pushLog('resolve', Vec2.create(this.coll.pos), 'BounceSwitch') }
+                if (self.recording) {
+                    self.pushLog('resolve', Vec2.create(this.coll.pos), 'BounceSwitch')
+                }
                 this.parent()
             },
         })
@@ -132,9 +130,10 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
             step.shootAngle = ig.game.playerEntity.aimDegrees
             step.endFrame = this.loopIndex
         }
-        this.currentStepIndex = this.currentRecord.steps.push({
-            log: []
-        }) - 1
+        this.currentStepIndex =
+            this.currentRecord.steps.push({
+                log: [],
+            }) - 1
     }
 
     startRecording(selM: PuzzleSelectionManager, startingSel: PuzzleSelection) {
@@ -142,7 +141,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         assert(startingSel)
         this.startingSel = startingSel
         this.currentRecord = {
-            steps: []
+            steps: [],
         }
         this.startTime = 0
         this.currentStepIndex = -1
@@ -155,7 +154,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
         this.recording = false
         blitzkrieg.rhudmsg('blitzkrieg', 'Stopped recording', 2)
 
-        if (! purge) {
+        if (!purge) {
             const steps: PuzzleSelectionStep[] = this.currentRecord.steps as PuzzleSelectionStep[]
             const stepMultishotMergeDist: number = 200 /* in ms */
             const stepMultishotMergeAngleDist: number = 3
@@ -177,7 +176,7 @@ export class PuzzleChangeRecorder implements IChangeRecorder {
                         last.log.push(...curr.log)
                         fail = false
                     }
-                } 
+                }
                 if (fail) {
                     acc.push(curr)
                 }

@@ -12,16 +12,14 @@ export interface IChangeRecorder {
 export class ChangeRecorder implements IChangeRecorder {
     recording: boolean = false
     currentRecord!: {
-        log: ([/* frame */ number, /* var path */ string, /* value */ any])[]
+        log: [/* frame */ number, /* var path */ string, /* value */ any][]
     }
     loopIndex: number = -1
     selM!: SelectionManager
     startingSel!: Selection
-    constructor(
-        public tps: number,
-    ) {}
+    constructor(public tps: number) {}
 
-    initPoststart(): void { }
+    initPoststart(): void {}
 
     initPrestart() {
         const self = this
@@ -57,11 +55,11 @@ export class ChangeRecorder implements IChangeRecorder {
 
         const self = this
         const intervalID = setInterval(async () => {
-            if (! self.recording) {
+            if (!self.recording) {
                 clearInterval(intervalID)
                 return
             }
-            if (! ig.perf.gui) {
+            if (!ig.perf.gui) {
                 clearInterval(intervalID)
                 blitzkrieg.rhudmsg('blitzkrieg', 'Stopping game state recording (entered gui)', 2)
                 return
@@ -75,7 +73,7 @@ export class ChangeRecorder implements IChangeRecorder {
         blitzkrieg.rhudmsg('blitzkrieg', 'Stopped recording', 2)
 
         this.startingSel.data ??= {}
-        if (! purge) {
+        if (!purge) {
             this.startingSel.data.recordLog = this.currentRecord
             this.selM.save()
         }

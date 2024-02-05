@@ -10,7 +10,7 @@ export declare class ChangeRecorder implements IChangeRecorder {
     tps: number;
     recording: boolean;
     currentRecord: {
-        log: ([/* frame */ number, /* var path */ string, /* value */ any])[];
+        log: [/* frame */ number, /* var path */ string, /* value */ any][];
     };
     loopIndex: number;
     selM: SelectionManager;

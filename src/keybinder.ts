@@ -10,8 +10,8 @@ export class InputKey {
         public header: string,
         public onPress: () => void,
         public parent: any,
-        public global: boolean) {
-
+        public global: boolean
+    ) {
         this.id = 'keys-' + name
     }
 
@@ -31,12 +31,12 @@ export class InputKey {
             header: key.header,
         }
 
-        if (! key.global) {
+        if (!key.global) {
             ig.ENTITY.Player.inject({
                 update(...args) {
                     key.checkForKeyPress()
                     return this.parent(...args)
-                }
+                },
             })
         }
     }

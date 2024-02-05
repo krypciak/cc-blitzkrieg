@@ -30,7 +30,7 @@ export default class Blitzkrieg {
     registerSels(): void;
     prestart(): Promise<void>;
     poststart(): Promise<void>;
-    prettifyJson(json: string, printWidth?: number, tabWidth?: number): Promise<any>;
+    prettifyJson(json: string, printWidth?: number, tabWidth?: number): Promise<string>;
     FsUtil: typeof FsUtil;
     SelectionManager: typeof SelectionManager;
     SelectionMapEntry: typeof SelectionMapEntry;

@@ -7,12 +7,13 @@ import { InputKey, KeyBinder } from './keybinder'
 import { BlitzkriegMapUtil } from './map-sel-copy'
 import { FsUtil } from './fsutil'
 
-import * as prettier from './prettier/standalone.mjs'
-import prettierPluginBabel from './prettier/babel.mjs'
-import prettierPluginEstree from './prettier/estree.mjs'
 import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
 import { MenuOptions } from './options'
 import { Util } from './util'
+
+import * as prettier from 'prettier/standalone'
+import prettierPluginBabel from 'prettier/plugins/babel'
+import prettierPluginEstree from 'prettier/plugins/estree'
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -22,9 +23,10 @@ declare global {
 }
 
 function addVimBindings() {
-    if (window.vim) { /* optional dependency https://github.com/krypciak/cc-vim */
-        const condition = (ingame: boolean) => ingame && MenuOptions.blitzkriegEnabled as boolean
-        vim.addAlias('blitzkrieg', 'toggle-selection-render', 'Toggle selection rendering', condition, () => { 
+    if (window.vim) {
+        /* optional dependency https://github.com/krypciak/cc-vim */
+        const condition = (ingame: boolean) => ingame && (MenuOptions.blitzkriegEnabled as boolean)
+        vim.addAlias('blitzkrieg', 'toggle-selection-render', 'Toggle selection rendering', condition, () => {
             for (const key in blitzkrieg.sels) {
                 blitzkrieg.sels[key as keyof typeof blitzkrieg.sels].toggleDrawing()
             }
@@ -34,18 +36,39 @@ function addVimBindings() {
         })
 
         const isInPuzzleSel = (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
-        vim.addAlias('blitzkrieg', 'puzzle-solve', '', isInPuzzleSel,
-            () => { (blitzkrieg.currSel as PuzzleSelectionManager).solve() })
-        vim.addAlias('blitzkrieg', 'puzzle-set-speed', '', isInPuzzleSel,
-            (speed: string) => { (blitzkrieg.currSel as PuzzleSelectionManager).setSpeed(parseFloat(speed)) }, [
-                { type: 'number', description: 'Speed value' }
-        ])
+        vim.addAlias('blitzkrieg', 'puzzle-solve', '', isInPuzzleSel, () => {
+            ;(blitzkrieg.currSel as PuzzleSelectionManager).solve()
+        })
+        vim.addAlias(
+            'blitzkrieg',
+            'puzzle-set-speed',
+            '',
+            isInPuzzleSel,
+            (speed: string) => {
+                ;(blitzkrieg.currSel as PuzzleSelectionManager).setSpeed(parseFloat(speed))
+            },
+            [{ type: 'number', description: 'Speed value' }]
+        )
 
-        vim.addAlias('blitzkrieg', 'record-start', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
-            () => { blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel, blitzkrieg.currSel.inSelStack.peek()) })
-        vim.addAlias('blitzkrieg', 'record-stop', '', (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording,
-            (purge: string) => { blitzkrieg.currSel.recorder!.stopRecording(purge as unknown as boolean) }, [
-            { type: 'boolean', description: 'Leave empty to save data' }])
+        vim.addAlias(
+            'blitzkrieg',
+            'record-start',
+            '',
+            (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
+            () => {
+                blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel, blitzkrieg.currSel.inSelStack.peek())
+            }
+        )
+        vim.addAlias(
+            'blitzkrieg',
+            'record-stop',
+            '',
+            (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder?.recording,
+            (purge: string) => {
+                blitzkrieg.currSel.recorder!.stopRecording(purge as unknown as boolean)
+            },
+            [{ type: 'boolean', description: 'Leave empty to save data' }]
+        )
 
         // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
     }
@@ -53,23 +76,69 @@ function addVimBindings() {
 
 const kb: KeyBinder = new KeyBinder()
 function bindKeys() {
-    kb.addKey(new InputKey(
-        ig.KEY.P, 'selb-newentry', 'Create a new selection entry', getBlitzkriegTabIndex(), true, 'blitzkrieg', () => {
-            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorBegin()
-        }, null, false))
-    kb.addKey(new InputKey(
-        ig.KEY.BRACKET_OPEN, 'selb-select', 'Create a new selection in steps', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
-            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorSelect()
-        }, null, false))
-    kb.addKey(new InputKey(
-        ig.KEY.BRACKET_CLOSE, 'selb-destroy', 'Delete/Decunstruct a selection', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
-            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorDelete()
-        }, null, false))
-    kb.addKey(new InputKey(
-        ig.KEY.O, 'recorder-split', 'Split puzzle recording', getBlitzkriegTabIndex(), false, 'blitzkrieg', () => {
-            MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.recorder?.recording &&
-                blitzkrieg.currSel.name == 'puzzle' && (blitzkrieg.currSel as PuzzleSelectionManager).recorder.split()
-        }, null, false))
+    kb.addKey(
+        new InputKey(
+            ig.KEY.P,
+            'selb-newentry',
+            'Create a new selection entry',
+            getBlitzkriegTabIndex(),
+            true,
+            'blitzkrieg',
+            () => {
+                MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorBegin()
+            },
+            null,
+            false
+        )
+    )
+    kb.addKey(
+        new InputKey(
+            ig.KEY.BRACKET_OPEN,
+            'selb-select',
+            'Create a new selection in steps',
+            getBlitzkriegTabIndex(),
+            false,
+            'blitzkrieg',
+            () => {
+                MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorSelect()
+            },
+            null,
+            false
+        )
+    )
+    kb.addKey(
+        new InputKey(
+            ig.KEY.BRACKET_CLOSE,
+            'selb-destroy',
+            'Delete/Decunstruct a selection',
+            getBlitzkriegTabIndex(),
+            false,
+            'blitzkrieg',
+            () => {
+                MenuOptions.blitzkriegEnabled && blitzkrieg.currSel.selectionCreatorDelete()
+            },
+            null,
+            false
+        )
+    )
+    kb.addKey(
+        new InputKey(
+            ig.KEY.O,
+            'recorder-split',
+            'Split puzzle recording',
+            getBlitzkriegTabIndex(),
+            false,
+            'blitzkrieg',
+            () => {
+                MenuOptions.blitzkriegEnabled &&
+                    blitzkrieg.currSel.recorder?.recording &&
+                    blitzkrieg.currSel.name == 'puzzle' &&
+                    (blitzkrieg.currSel as PuzzleSelectionManager).recorder.split()
+            },
+            null,
+            false
+        )
+    )
 
     kb.bind()
 }
@@ -110,21 +179,21 @@ export default class Blitzkrieg {
             update(...args) {
                 MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
                 return this.parent(...args)
-            }
+            },
         })
 
         ig.Renderer2d.inject({
             drawPostLayerSprites(...args) {
                 this.parent(...args)
                 MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.drawSelections())
-            }
+            },
         })
 
         ig.Game.inject({
             loadLevel(...args) {
                 this.parent(...args)
                 MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.onNewMapEntryEvent())
-            }
+            },
         })
 
         Object.values(blitzkrieg.sels).forEach(m => {
@@ -141,7 +210,7 @@ export default class Blitzkrieg {
 
         this.sels = {
             puzzle: new PuzzleSelectionManager(),
-            battle: new SelectionManager('battle', '#00770044', '#22ff2244', [ blitzkrieg.mod.baseDirectory + 'json/battleData.json' ]),
+            battle: new SelectionManager('battle', '#00770044', '#22ff2244', [blitzkrieg.mod.baseDirectory + 'json/battleData.json']),
         }
         this.currSel = this.sels.puzzle
         this.registerSels()
@@ -155,7 +224,7 @@ export default class Blitzkrieg {
                 this.parent()
                 const radians = Math.atan2(this._aimDir.y, this._aimDir.x)
                 ig.game.playerEntity.aimDegrees = ((radians * 180) / Math.PI + 360) % 360
-            }
+            },
         })
     }
 
@@ -172,7 +241,7 @@ export default class Blitzkrieg {
     }
 
     async prettifyJson(json: string, printWidth: number = 200, tabWidth: number = 4) {
-        return await prettier.format(json, { 
+        return await prettier.format(json, {
             parser: 'json',
             plugins: [prettierPluginBabel, prettierPluginEstree],
             tabWidth,

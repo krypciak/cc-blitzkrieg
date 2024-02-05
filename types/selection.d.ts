@@ -1,6 +1,6 @@
-import { MapRect, bareRect } from 'cc-map-util/rect';
+import { MapRect, bareRect } from 'cc-map-util/src/rect';
 import { MapPoint } from 'cc-map-util/src/pos';
-import { Stack } from 'cc-map-util/util';
+import { Stack } from 'cc-map-util/src/util';
 import { IChangeRecorder } from './change-record';
 export interface Selection {
     bb: MapRect[];

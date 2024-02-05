@@ -1,5 +1,5 @@
 import { Selection } from './selection';
-import { EntityRecArgs, MapCopyOptions } from 'cc-map-util/map-copy';
+import { EntityRecArgs, MapCopyOptions } from 'cc-map-util/src/map-copy';
 import { MapPoint } from 'cc-map-util/src/pos';
 export declare class BlitzkriegMapUtil {
     copySelMapAreaTo(baseMap: sc.MapModel.Map, selMap: sc.MapModel.Map, sel: Selection, offset: MapPoint, filters: EntityRecArgs['filters'], options: MapCopyOptions): sc.MapModel.Map;

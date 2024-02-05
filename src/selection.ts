@@ -1,6 +1,6 @@
-import { EntityRect, MapRect, Rect, bareRect, isVecInRect, isVecInRectArr, reduceRectArr } from 'cc-map-util/rect'
+import { EntityRect, MapRect, Rect, bareRect, isVecInRect, isVecInRectArr, reduceRectArr } from 'cc-map-util/src/rect'
 import { EntityPoint, MapPoint, Point } from 'cc-map-util/src/pos'
-import { Stack, assert } from 'cc-map-util/util'
+import { Stack, assert } from 'cc-map-util/src/util'
 import { FsUtil } from './fsutil'
 import { Util } from './util'
 import { IChangeRecorder } from './change-record'
@@ -23,8 +23,8 @@ export class SelectionMapEntry {
     constructor(
         public sels: Selection[],
         public fileIndex: number,
-        public tempSel?: Omit<Selection, 'sizeRect'>,
-    ) { }
+        public tempSel?: Omit<Selection, 'sizeRect'>
+    ) {}
 
     toJSON(): object {
         return { sels: this.sels }
@@ -45,8 +45,8 @@ export class SelectionManager {
         public name: string,
         public completeColor: string,
         public tempColor: string,
-        public jsonFiles: string[],
-    ) { }
+        public jsonFiles: string[]
+    ) {}
 
     async newSelEvent(_: Selection): Promise<void> {}
     async walkInEvent(_: Selection): Promise<void> {}
@@ -78,7 +78,7 @@ export class SelectionManager {
         }
         let setStep: boolean = true
         let entry = this.getCurrentEntry()
-        if (! entry) {
+        if (!entry) {
             this.setMapEntry(ig.game.mapName, new SelectionMapEntry([], this.fileIndex))
             entry = this.getCurrentEntry()
         }
@@ -103,29 +103,29 @@ export class SelectionManager {
 
     selectionCreatorDelete() {
         const pos: EntityPoint = new EntityPoint(0, 0)
-        ig.system.getMapFromScreenPos(
-            pos,
-            sc.control.getMouseX(),
-            sc.control.getMouseY()
-        )
+        ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
         const mpos: MapPoint = pos.to(MapPoint)
 
         let deletedAnything: boolean = false
         const entry = this.getCurrentEntry()
         entry.sels = entry.sels.filter(sel => {
             const ok: boolean = isVecInRectArr(mpos, sel.bb)
-            if (ok) { deletedAnything = true }
-            return ! ok
+            if (ok) {
+                deletedAnything = true
+            }
+            return !ok
         })
         if (entry.tempSel) {
             entry.tempSel.bb = entry.tempSel.bb.filter(rect => {
                 const ok: boolean = isVecInRect(mpos, rect)
-                if (ok) { deletedAnything = true }
-                return ! ok
+                if (ok) {
+                    deletedAnything = true
+                }
+                return !ok
             })
         }
-        
-        if (! deletedAnything) {
+
+        if (!deletedAnything) {
             this.selectionCreatorDeconstruct()
         }
         this.save()
@@ -133,7 +133,9 @@ export class SelectionManager {
 
     selectionCreatorDeconstruct() {
         let sel = this.inSelStack.peek()
-        if (! sel) { return }
+        if (!sel) {
+            return
+        }
 
         const entry = this.getCurrentEntry()
         entry.tempSel = ig.copy(sel)
@@ -146,7 +148,9 @@ export class SelectionManager {
     }
 
     selectionCreatorSelect() {
-        if (this.selectStep == -1) { return }
+        if (this.selectStep == -1) {
+            return
+        }
         const pos: EntityPoint = new EntityPoint(0, 0)
         ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
         const mpos: MapPoint = pos.to(MapPoint)
@@ -173,7 +177,9 @@ export class SelectionManager {
             entry.tempSel.bb.push(MapRect.fromTwoPoints(this.tempPos, mpos))
             this.selIndexes.push(undefined)
             this.tempPos = new MapPoint(0, 0)
-        } else { throw new Error() }
+        } else {
+            throw new Error()
+        }
 
         this.selectStep++
     }
@@ -193,7 +199,7 @@ export class SelectionManager {
 
     checkSelForEvents(sel: Selection, vec: MapPoint, i: number) {
         let isIn = isVecInRectArr(vec, sel.bb)
-        
+
         /* trigger walk in and out events only once */
         if (isIn) {
             if (this.selIndexes[i] === undefined) {
@@ -213,7 +219,8 @@ export class SelectionManager {
     drawBox(rect: bareRect, color: string) {
         let pos = { x: 0, y: 0 }
         ig.system.getScreenFromMapPos(pos, rect.x, rect.y)
-        let w = rect.width, h = rect.height
+        let w = rect.width,
+            h = rect.height
         if (blitzkrieg.debug.selectionOutlines) {
             w -= 2
             h -= 2
@@ -228,27 +235,39 @@ export class SelectionManager {
     }
 
     drawSelections() {
-        if (! this.drawBoxes || ! ig.perf.gui) { return }
+        if (!this.drawBoxes || !ig.perf.gui) {
+            return
+        }
 
         const entry = this.getCurrentEntry()
-        if (! entry) { return }
+        if (!entry) {
+            return
+        }
         for (const sel of entry.sels) {
-            this.drawBoxArray(sel.bb.map(rect => Rect.new(MapRect, rect).to(EntityRect)), this.completeColor)
+            this.drawBoxArray(
+                sel.bb.map(rect => Rect.new(MapRect, rect).to(EntityRect)),
+                this.completeColor
+            )
         }
 
         if (entry.tempSel) {
-            this.drawBoxArray(entry.tempSel.bb.map(rect => Rect.new(MapRect, rect).to(EntityRect)), this.tempColor)
+            this.drawBoxArray(
+                entry.tempSel.bb.map(rect => Rect.new(MapRect, rect).to(EntityRect)),
+                this.tempColor
+            )
         }
         if (blitzkrieg.selectionMode == this.name) {
             let pos: EntityPoint = new EntityPoint(0, 0)
             ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
             const mpos: MapPoint = pos.to(MapPoint)
             if (this.selectStep == 0) {
-                Point.floor(mpos); Vec2.maxC(pos, 0, 0)
+                Point.floor(mpos)
+                Vec2.maxC(pos, 0, 0)
                 pos = mpos.to(EntityPoint)
                 this.drawBox({ x: pos.x, y: pos.y, width: tilesize, height: tilesize }, this.tempColor)
             } else if (this.selectStep == 1) {
-                Point.round(mpos); Vec2.maxC(pos, 0, 0)
+                Point.round(mpos)
+                Vec2.maxC(pos, 0, 0)
                 Vec2.sub(mpos, this.tempPos)
                 pos = mpos.to(EntityPoint)
                 this.drawBox({ x: this.tempPos.x * tilesize, y: this.tempPos.y * tilesize, width: pos.x, height: pos.y }, this.tempColor)
@@ -257,7 +276,7 @@ export class SelectionManager {
     }
 
     toggleDrawing() {
-        this.drawBoxes = ! this.drawBoxes
+        this.drawBoxes = !this.drawBoxes
     }
 
     async save() {
@@ -271,7 +290,9 @@ export class SelectionManager {
         }
         for (let i = 0; i < this.jsonFiles.length; i++) {
             const path: string = this.jsonFiles[i]
-            if (path.includes('ccmod')) { continue }
+            if (path.includes('ccmod')) {
+                continue
+            }
             try {
                 let content: string = JSON.stringify(saveObjects[i])
                 if (blitzkrieg.debug.prettifySels) {
@@ -300,7 +321,7 @@ export class SelectionManager {
             if (this.selMap) {
                 this.selMap = { ...this.selMap, ...obj }
             }
-        } catch(error) {
+        } catch (error) {
             /* file doesn't exist */
         }
     }
@@ -314,7 +335,7 @@ export class SelectionManager {
     }
 
     static getSelFromRect(rect: MapRect, mapName: string, z: number) {
-        const sel: Selection = { bb: [ rect ], mapName, sizeRect: rect, data: {} }
+        const sel: Selection = { bb: [rect], mapName, sizeRect: rect, data: {} }
         sel.data = {}
         const epos: EntityPoint = MapPoint.fromVec(rect).to(EntityPoint)
         sel.data.startPos = {
@@ -340,7 +361,7 @@ export class SelectionManager {
                 Vec2.add(nsp, sel.sizeRect.to(EntityRect))
                 Vec2.sub(nsp, sel.data.startPos)
             }
-            
+
             if (sel.data.endPos) {
                 const nsp: EntityPoint = offset.to(EntityPoint)
                 Vec2.add(nsp, sel.sizeRect.to(EntityRect))

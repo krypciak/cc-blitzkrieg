@@ -3,7 +3,9 @@ const path: typeof import('path') = (0, eval)('require("path")')
 
 export class FsUtil {
     static mkdirs(path: string) {
-        if (! fs.existsSync(path)) { fs.mkdirSync(path, { recursive: true }) }
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path, { recursive: true })
+        }
     }
 
     static clearDir(path: string) {
@@ -26,7 +28,7 @@ export class FsUtil {
             FsUtil.mkdirs(path)
         }
     }
-    
+
     static writeFile(path: string, obj: any): Promise<void> {
         return new Promise((resolve, reject) => {
             fs.writeFile(path, typeof obj === 'string' ? obj : JSON.stringify(obj), (err: any) => {
@@ -44,7 +46,9 @@ export class FsUtil {
     }
 
     static async readFileResponse(path: string): Promise<Response> {
-        if (path.startsWith('assets/')) { path = path.substring('assets/'.length) }
+        if (path.startsWith('assets/')) {
+            path = path.substring('assets/'.length)
+        }
         return fetch(path)
     }
     static async readFile(path: string): Promise<string> {
@@ -53,11 +57,11 @@ export class FsUtil {
     static async readFileJson(path: string): Promise<any> {
         return (await this.readFileResponse(path)).json()
     }
-    
+
     static doesFileExist(path: string): boolean {
         return fs.existsSync(path)
     }
-    
+
     static async copyFile(from: string, dest: string): Promise<void> {
         return FsUtil.writeFile(dest, await FsUtil.readFile(from))
     }
@@ -65,7 +69,7 @@ export class FsUtil {
     static listFiles(path: string): string[] {
         return fs.readdirSync(path)
     }
-    
+
     static basename(path1: string): string {
         return path.basename(path1)
     }

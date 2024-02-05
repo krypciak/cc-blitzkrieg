@@ -16,10 +16,10 @@ export enum PuzzleCompletionType {
 }
 
 export interface PuzzleSelectionStep {
-    log: 
-        (([/* frame */ number, /* var path */ string, /* value */ any]) |
-         ([/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string])
-        )[]
+    log: (
+        | [/* frame */ number, /* var path */ string, /* value */ any]
+        | [/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string]
+    )[]
     pos: Vec3 & { level: number }
     shootAngle?: number /* in degrees */
     element: sc.ELEMENT
@@ -47,8 +47,12 @@ export interface PuzzleSelection extends Selection {
     }
 }
 
-function isBounceBlock(e: ig.Entity, type: string): e is ig.ENTITY.BounceBlock { return type == 'BounceBlock' }
-function isBounceSwitch(e: ig.Entity, type: string): e is ig.ENTITY.BounceSwitch { return type == 'BounceSwitch' }
+function isBounceBlock(e: ig.Entity, type: string): e is ig.ENTITY.BounceBlock {
+    return type == 'BounceBlock'
+}
+function isBounceSwitch(e: ig.Entity, type: string): e is ig.ENTITY.BounceSwitch {
+    return type == 'BounceSwitch'
+}
 
 export class PuzzleSelectionManager extends SelectionManager {
     recorder: PuzzleChangeRecorder
@@ -58,9 +62,9 @@ export class PuzzleSelectionManager extends SelectionManager {
     fakeBuffItemId: number = 2137420
     modifiersActive: boolean = false
     fakeBuffActive: boolean = false
-    
+
     constructor() {
-        super('puzzle', '#77000022', '#ff222222', [ blitzkrieg.mod.baseDirectory + 'json/puzzleData.json', ])
+        super('puzzle', '#77000022', '#ff222222', [blitzkrieg.mod.baseDirectory + 'json/puzzleData.json'])
         this.setFileIndex(0)
         this.recorder = new PuzzleChangeRecorder()
 
@@ -76,20 +80,24 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     updatePuzzleSpeed(sel: PuzzleSelection) {
-        const speed: number = (! sel?.data?.puzzleSpeed) ? 1 : sel.data.puzzleSpeed
+        const speed: number = !sel?.data?.puzzleSpeed ? 1 : sel.data.puzzleSpeed
 
         if (this.changeSpeed && sc.options.get('assist-puzzle-speed') != speed) {
-            sc.options.set('assist-puzzle-speed', speed) 
+            sc.options.set('assist-puzzle-speed', speed)
             blitzkrieg.rhudmsg('blitzkrieg', 'Setting puzzle speed to ' + Math.round(speed * 100) + '%', 1)
-            if (speed != 1) { this.createFakeBuff() }
-            if (speed == 1 && ! this.modifiersActive) {
-                this.destroyFakeBuff() 
+            if (speed != 1) {
+                this.createFakeBuff()
+            }
+            if (speed == 1 && !this.modifiersActive) {
+                this.destroyFakeBuff()
             }
         }
     }
 
     createFakeBuff() {
-        if (this.fakeBuffActive) { return }
+        if (this.fakeBuffActive) {
+            return
+        }
 
         this.fakeBuffActive = true
         /* add a buff that only shows when the modifiers are active */
@@ -99,7 +107,9 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     destroyFakeBuff() {
-        if (! this.fakeBuffActive) { return }
+        if (!this.fakeBuffActive) {
+            return
+        }
         this.fakeBuffActive = false
         for (let buff of sc.model.player.params.buffs as sc.ItemBuff[]) {
             if (buff.itemID == this.fakeBuffItemId) {
@@ -109,12 +119,14 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     setSpeed(val: number) {
-        if (isNaN(val)) { return }
+        if (isNaN(val)) {
+            return
+        }
         const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
         sel.data.puzzleSpeed = val
         this.updatePuzzleSpeed(sel)
     }
-    
+
     async walkInEvent(sel: PuzzleSelection) {
         this.updatePuzzleSpeed(sel as PuzzleSelection)
 
@@ -151,8 +163,19 @@ export class PuzzleSelectionManager extends SelectionManager {
         const scale: readonly string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] as const
 
         const data: Partial<PuzzleSelection['data']> = {
-            type: PuzzleRoomType[await blitzkrieg.syncDialog('select puzzle \\c[3]type\\c[0]', Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleRoomType],
-            completionType: PuzzleCompletionType[await Util.syncDialog('select puzzle \\c[3]completion type\\c[0]', Object.keys(PuzzleCompletionType).filter(k => isNaN(k as unknown as number))) as keyof typeof PuzzleCompletionType],
+            type: PuzzleRoomType[
+                (await blitzkrieg.syncDialog(
+                    'select puzzle \\c[3]type\\c[0]',
+                    Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))
+                )) as keyof typeof PuzzleRoomType
+            ],
+            completionType:
+                PuzzleCompletionType[
+                    (await Util.syncDialog(
+                        'select puzzle \\c[3]completion type\\c[0]',
+                        Object.keys(PuzzleCompletionType).filter(k => isNaN(k as unknown as number))
+                    )) as keyof typeof PuzzleCompletionType
+                ],
             difficulty: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale)),
             timeLength: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
             chapter: sc.model.player.chapter,
@@ -174,7 +197,9 @@ export class PuzzleSelectionManager extends SelectionManager {
 
     solve() {
         const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
-        if (! sel) { return }
+        if (!sel) {
+            return
+        }
         let yell: boolean = true
 
         if (sel.data.endPos) {
@@ -185,7 +210,7 @@ export class PuzzleSelectionManager extends SelectionManager {
             }
         }
 
-        if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
+        if (!sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             if (yell) {
                 blitzkrieg.rhudmsg('blitzkrieg', 'No puzzle solution recorded!', 5)
             }
@@ -195,7 +220,9 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     solveSel(sel: PuzzleSelection, delay: number = 0) {
-        if (delay != 0) { throw new Error('not implemented') }
+        if (delay != 0) {
+            throw new Error('not implemented')
+        }
         for (const log of sel.data.recordLog!.steps.map(s => s.log)) {
             for (let i = 0; i < log.length; i++) {
                 const action = log[i]
@@ -204,7 +231,7 @@ export class PuzzleSelectionManager extends SelectionManager {
                     const splittedPath = action[1].substring(1).split('.')
                     let value = ig.vars.storage
                     for (let i = 0; i < splittedPath.length - 1; i++) {
-                        if (! value.hasOwnProperty(splittedPath[i])) {
+                        if (!value.hasOwnProperty(splittedPath[i])) {
                             value[splittedPath[i]] = {}
                         }
                         value = value[splittedPath[i]]
@@ -221,9 +248,13 @@ export class PuzzleSelectionManager extends SelectionManager {
                             e.effects.spawnOnTarget('bounceHit', e)
                             e.setCurrentAnim('on')
                         }
-                        if (act == 'resolve') { e.onGroupResolve(true) }
+                        if (act == 'resolve') {
+                            e.onGroupResolve(true)
+                        }
                     } else if (isBounceSwitch(e, type)) {
-                        if (act == 'resolve') { e.onGroupResolve() }
+                        if (act == 'resolve') {
+                            e.onGroupResolve()
+                        }
                     }
                 }
             }
@@ -262,7 +293,7 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     static getPuzzleSolveCondition(sel: PuzzleSelection): [string, any] | undefined {
-        if (! sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
+        if (!sel.data.recordLog || sel.data.recordLog.steps.length == 0) {
             throw new Error('no puzzle solution recorded')
         }
 
@@ -271,12 +302,16 @@ export class PuzzleSelectionManager extends SelectionManager {
             const log = steps[h].log
             for (let i = log.length - 1; i >= 0; i--) {
                 let action = log[i]
-                if (action.length !== 3) { continue }
+                if (action.length !== 3) {
+                    continue
+                }
                 // let frame = action[0]
                 let path = action[1]
                 // let value = action[2]
                 // console.log(path, value)
-                if (path.startsWith('.maps') || path.startsWith('.plot.line')) { continue }
+                if (path.startsWith('.maps') || path.startsWith('.plot.line')) {
+                    continue
+                }
                 return [path, action[2]]
             }
         }
