@@ -1,240 +1,242 @@
 {
-    "rhombus-dng/room-1-5": {
+    "cargo-ship/room1": {
         "sels": [
             {
-                "bb": [{ "x": 29, "y": 7, "width": 13, "height": 16 }],
-                "mapName": "rhombus-dng/room-1-5",
+                "bb": [
+                    { "x": 0, "y": 2, "width": 23, "height": 17 },
+                    { "x": 13, "y": 19, "width": 10, "height": 7 }
+                ],
+                "mapName": "cargo-ship/room1",
                 "data": {
-                    "type": 1,
-                    "completionType": 0,
+                    "type": 0,
+                    "completionType": 1,
                     "difficulty": 1,
                     "timeLength": 1,
-                    "chapter": 1,
-                    "plotLine": 900,
+                    "chapter": 0,
+                    "plotLine": 11,
                     "elements": [true, true, true, true],
-                    "startPos": { "x": 631.44, "y": 232, "z": 0, "level": 0 },
-                    "endPos": { "x": 479.2, "y": 232, "z": 0, "level": 0 },
+                    "startPos": { "x": 108.92, "y": 288.11, "z": 0, "level": 0 },
+                    "endPos": { "x": 277, "y": 403.94, "z": 0, "level": 0 },
+                    "initialMapState": {
+                        "door2": 0,
+                        "doorCnt": 0,
+                        "wall1": 0,
+                        "door1": 0,
+                        "door3": 0,
+                        "door4": 0,
+                        "wall2": 0,
+                        "crossedeyes-tpr-entered_backDoor-cargoShip/teleporter-door1": true,
+                        "hint1": true,
+                        "hint3": true
+                    },
                     "recordLog": {
                         "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 591.36, "y": 232, "z": 0, "level": 0 }, "shootAngle": 88.77559343887758, "endFrame": 174 },
+                            { "log": [], "element": 0, "pos": { "x": 181.26, "y": 273.15, "z": 0, "level": 0 }, "shootAngle": 302.4461600351725, "endFrame": 0 },
                             {
                                 "log": [
-                                    [178, { "x": 596, "y": 308 }, "BounceBlock", "on"],
-                                    [184, { "x": 500, "y": 308 }, "BounceBlock", "on"],
-                                    [195, { "x": 500, "y": 148 }, "BounceBlock", "on"],
-                                    [197, { "x": 548, "y": 148 }, "BounceBlock", "on"],
-                                    [202, ".map.bounceSolved1", true],
-                                    [202, { "x": 596, "y": 308 }, "BounceBlock", "resolve"],
-                                    [202, { "x": 548, "y": 148 }, "BounceBlock", "resolve"],
-                                    [202, { "x": 500, "y": 148 }, "BounceBlock", "resolve"],
-                                    [202, { "x": 500, "y": 308 }, "BounceBlock", "resolve"],
-                                    [202, { "x": 548, "y": 228 }, "BounceSwitch", "resolve"],
-                                    [203, ".map._entity24_triggered", true],
-                                    [234, ".map.wallDown", true]
+                                    [173, ".map.wall1", true],
+                                    [577, ".map.wall1Removed", true],
+                                    [3111, ".map.hint2", true]
                                 ]
                             }
                         ]
                     }
                 },
-                "sizeRect": { "x": 29, "y": 7, "width": 42, "height": 23 }
+                "sizeRect": { "x": 0, "y": 2, "width": 23, "height": 26 }
             },
             {
-                "bb": [{ "x": 2, "y": 1, "width": 25, "height": 24 }],
-                "mapName": "rhombus-dng/room-1-5",
+                "bb": [{ "x": 13, "y": 27, "width": 11, "height": 10 }],
+                "mapName": "cargo-ship/room1",
                 "data": {
-                    "type": 0,
-                    "completionType": 0,
-                    "difficulty": 1,
-                    "timeLength": 1,
-                    "chapter": 4,
-                    "plotLine": 6170,
-                    "elements": [true, true, false, false],
-                    "startPos": { "x": 384.93, "y": 241.53, "z": 0, "level": 0 },
-                    "endPos": { "x": 325.91, "y": 241.53, "z": 0, "level": 0 },
                     "recordLog": {
                         "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 334.34, "y": 235.6, "z": 0, "level": 0 }, "shootAngle": 223.24890142116774, "endFrame": 0 },
+                            { "log": [], "element": 0, "pos": { "x": 281.27, "y": 472, "z": 0, "level": 0 }, "shootAngle": 93.85206780730522, "endFrame": 0 },
                             {
                                 "log": [
-                                    [90, { "x": 292, "y": 180 }, "BounceBlock", "on"],
-                                    [242, { "x": 244, "y": 260 }, "BounceBlock", "on"],
-                                    [395, { "x": 196, "y": 180 }, "BounceBlock", "on"],
-                                    [528, ".map.bounceSolved2", true],
-                                    [528, { "x": 244, "y": 260 }, "BounceBlock", "resolve"],
-                                    [528, { "x": 196, "y": 180 }, "BounceBlock", "resolve"],
-                                    [528, { "x": 292, "y": 180 }, "BounceBlock", "resolve"],
-                                    [528, { "x": 140, "y": 228 }, "BounceSwitch", "resolve"],
-                                    [534, ".map._entity27_triggered", true],
-                                    [1451, ".map.platformUp", true]
+                                    [125, ".map.wall2", true],
+                                    [632, ".map.wall2Removed", true]
                                 ],
                                 "element": 0,
-                                "pos": { "x": 245.12, "y": 140.4, "z": 32, "level": 1 },
-                                "shootAngle": 0.7837537789384896,
-                                "endFrame": 14776
+                                "pos": { "x": 285.71, "y": 521.08, "z": 0, "level": 0 },
+                                "shootAngle": 43.710669610725745,
+                                "endFrame": 1897
                             },
                             {
+                                "log": [[1967, ".map._entity71_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 298.41, "y": 540.62, "z": 0, "level": 0 },
+                                "shootAngle": 41.41346340855108,
+                                "endFrame": 2363
+                            },
+                            {
+                                "log": [[2411, ".map._entity79_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 312.13, "y": 551.23, "z": 0, "level": 0 },
+                                "shootAngle": 32.633219834629756,
+                                "endFrame": 2759
+                            },
+                            {
+                                "log": [[2821, ".map._entity80_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 323.27, "y": 558.63, "z": 0, "level": 0 },
+                                "shootAngle": 4.412647279048883,
+                                "endFrame": 3259
+                            },
+                            { "log": [[3294, ".map._entity72_destroyed", true]] }
+                        ]
+                    },
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 11,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 277.04, "y": 472, "z": 0, "level": 0 },
+                    "endPos": { "x": 367.34, "y": 548.04, "z": 0, "level": 0 },
+                    "initialMapState": {
+                        "door2": 0,
+                        "doorCnt": 0,
+                        "wall1": true,
+                        "door1": 0,
+                        "door3": 0,
+                        "door4": 0,
+                        "wall2": true,
+                        "crossedeyes-tpr-entered_backDoor-cargoShip/teleporter-door1": true,
+                        "hint1": true,
+                        "wall1Removed": true,
+                        "hint2": true,
+                        "wall2Removed": true,
+                        "_entity79_destroyed": true,
+                        "_entity71_destroyed": true,
+                        "_entity72_destroyed": true,
+                        "_entity80_destroyed": true,
+                        "hint4": true
+                    }
+                },
+                "sizeRect": { "x": 13, "y": 27, "width": 24, "height": 37 }
+            },
+            {
+                "bb": [{ "x": 21, "y": 2, "width": 26, "height": 36 }],
+                "mapName": "cargo-ship/room1",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 2,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": 13,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 356.16, "y": 564.46, "z": 0, "level": 0 },
+                    "endPos": { "x": 661.92, "y": 548.51, "z": 0, "level": 0 },
+                    "initialMapState": {
+                        "door2": 0,
+                        "doorCnt": 0,
+                        "wall1": true,
+                        "door1": 0,
+                        "door3": 0,
+                        "door4": 0,
+                        "wall2": true,
+                        "crossedeyes-tpr-entered_backDoor-cargoShip/teleporter-door1": true,
+                        "hint1": true,
+                        "wall1Removed": true,
+                        "hint2": true,
+                        "wall2Removed": true,
+                        "_entity79_destroyed": true,
+                        "_entity71_destroyed": true,
+                        "_entity72_destroyed": true,
+                        "_entity80_destroyed": true,
+                        "hint4": true,
+                        "_entity43_destroyed": true,
+                        "_entity42_destroyed": true,
+                        "hint5": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 394.59, "y": 458.94, "z": 0, "level": 0 }, "shootAngle": 275.9929486435241, "endFrame": 0 },
+                            {
+                                "log": [[243, ".map._entity42_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 394.59, "y": 458.94, "z": 0, "level": 0 },
+                                "shootAngle": 267.86493343421296,
+                                "endFrame": 653
+                            },
+                            { "log": [], "element": 0, "pos": { "x": 394.59, "y": 458.94, "z": 0, "level": 0 }, "shootAngle": 264.0985943077598, "endFrame": 882 },
+                            {
                                 "log": [
-                                    [14938, { "x": 340, "y": 132 }, "BounceBlock", "on"],
-                                    [15341, { "x": 340, "y": 324 }, "BounceBlock", "on"],
-                                    [15758, { "x": 148, "y": 324 }, "BounceBlock", "on"],
-                                    [16143, ".map.bounceSolved3", true],
-                                    [16143, { "x": 340, "y": 132 }, "BounceBlock", "resolve"],
-                                    [16143, { "x": 340, "y": 324 }, "BounceBlock", "resolve"],
-                                    [16143, { "x": 148, "y": 324 }, "BounceBlock", "resolve"],
-                                    [16143, { "x": 148, "y": 132 }, "BounceSwitch", "resolve"],
-                                    [16148, ".map._entity28_triggered", true],
-                                    [17176, ".map.doorOpen", true]
+                                    [945, ".map._entity43_destroyed", true],
+                                    [1466, ".tmp.shreddersStart", true],
+                                    [1800, ".map.hint5", true],
+                                    [1807, ".plot.line", 13]
+                                ],
+                                "element": 0,
+                                "pos": { "x": 369.95, "y": 290.86, "z": 0, "level": 0 },
+                                "shootAngle": 285.72953986737616,
+                                "endFrame": 3238
+                            },
+                            { "log": [[3683, ".map.door1", true]], "element": 0, "pos": { "x": 499.48, "y": 320.33, "z": 0, "level": 0 }, "shootAngle": 293.67152316712003, "endFrame": 4447 },
+                            {
+                                "log": [[4642, ".map._entity22_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 500.1, "y": 318.55, "z": 0, "level": 0 },
+                                "shootAngle": 333.05983348896643,
+                                "endFrame": 5086
+                            },
+                            {
+                                "log": [[5302, ".map._entity25_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 500.1, "y": 318.55, "z": 0, "level": 0 },
+                                "shootAngle": 338.8108685689427,
+                                "endFrame": 5927
+                            },
+                            {
+                                "log": [[6025, ".map._entity26_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 604.47, "y": 269.7, "z": 32, "level": 1 },
+                                "shootAngle": 241.82904485621762,
+                                "endFrame": 8137
+                            },
+                            { "log": [[8332, ".map.door2", true]], "element": 0, "pos": { "x": 604.47, "y": 269.7, "z": 32, "level": 1 }, "shootAngle": 125.06539587802757, "endFrame": 9124 },
+                            { "log": [[9471, ".map.door3", true]], "element": 0, "pos": { "x": 599.5, "y": 475.23, "z": 0, "level": 0 }, "shootAngle": 272.4780488047325, "endFrame": 11792 },
+                            {
+                                "log": [
+                                    [11806, ".map.door4", true],
+                                    [12210, ".map.doorOpen", true],
+                                    [12210, ".plot.line", 14]
                                 ]
                             }
                         ]
                     }
                 },
-                "sizeRect": { "x": 2, "y": 1, "width": 27, "height": 25 }
+                "sizeRect": { "x": 21, "y": 2, "width": 47, "height": 38 }
             }
         ]
     },
-    "arid-dng/second/f4/center": {
+    "crossedeyes/test": {
         "sels": [
             {
-                "bb": [{ "x": 0, "y": 0, "width": 80, "height": 79 }],
-                "mapName": "arid-dng/second/f4/center",
+                "bb": [{ "x": 12, "y": 11, "width": 13, "height": 12 }],
+                "mapName": "crossedeyes/test",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 0,
                     "difficulty": 1,
                     "timeLength": 1,
-                    "chapter": 9,
-                    "plotLine": 30100,
+                    "chapter": 0,
+                    "plotLine": -1,
                     "elements": [true, true, true, true],
-                    "startPos": { "x": 629.51, "y": 144, "z": 0, "level": 1 },
-                    "endPos": { "x": 152.65, "y": 455.35, "z": 0, "level": 1 },
-                    "puzzleSpeed": 0.5,
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "element": 2, "pos": { "x": 411, "y": 768, "z": 0, "level": 1 }, "shootAngle": 270.2255648424825, "endFrame": 0 },
-                            { "log": [[598, { "x": 404, "y": 1028 }, "BounceBlock", "on"]], "split": true, "element": 2, "pos": { "x": 512, "y": 768, "z": 0, "level": 1 }, "endFrame": 2519 },
-                            { "log": [], "element": 2, "pos": { "x": 635, "y": 766, "z": 0, "level": 1 }, "shootAngle": 267.5180823366114, "endFrame": 4371 },
-                            {
-                                "log": [
-                                    [4969, { "x": 628, "y": 484 }, "BounceBlock", "on"],
-                                    [5827, { "x": 724, "y": 484 }, "BounceBlock", "on"]
-                                ],
-                                "split": true,
-                                "element": 2,
-                                "pos": { "x": 761, "y": 763, "z": 0, "level": 1 },
-                                "endFrame": 6855
-                            },
-                            { "log": [], "element": 2, "pos": { "x": 681, "y": 662, "z": 0, "level": 1 }, "shootAngle": 203.82739585125998, "endFrame": 8130 },
-                            { "log": [], "split": true, "element": 2, "pos": { "x": 578, "y": 656, "z": 0, "level": 1 }, "shootAngle": 118.45048220487854, "endFrame": 11997 },
-                            { "log": [] }
-                        ]
-                    }
+                    "startPos": { "x": 371.14, "y": 283.36, "z": 0, "level": 2 },
+                    "endPos": { "x": 216.96, "y": 283.36, "z": 0, "level": 2 },
+                    "initialMapState": {}
                 },
-                "sizeRect": { "x": 0, "y": 0, "width": 80, "height": 79 }
-            }
-        ]
-    },
-    "heat-dng/f4/room-01": {
-        "sels": [
-            {
-                "bb": [{ "x": 11, "y": 2, "width": 64, "height": 34 }],
-                "mapName": "heat-dng/f4/room-01",
-                "data": {
-                    "type": 0,
-                    "completionType": 0,
-                    "difficulty": 1,
-                    "timeLength": 1,
-                    "chapter": 4,
-                    "plotLine": 6150,
-                    "elements": [true, true, false, false],
-                    "startPos": { "x": 207.48, "y": 339.44, "z": 0, "level": 1 },
-                    "endPos": { "x": 689.47, "y": 162.06, "z": 0, "level": 1 },
-                    "puzzleSpeed": 0.5,
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "element": 2, "pos": { "x": 692.84, "y": 390.16, "z": 0, "level": 1 }, "shootAngle": 270.71174147954423, "endFrame": 0 },
-                            { "log": [], "element": 2, "pos": { "x": 625.18, "y": 390.16, "z": 0, "level": 1 }, "shootAngle": 270.3324850578608, "endFrame": 574 },
-                            { "log": [], "element": 2, "pos": { "x": 624.91, "y": 390.16, "z": 0, "level": 1 }, "shootAngle": 270.3324850578608, "endFrame": 1894 },
-                            {
-                                "log": [
-                                    [1929, { "x": 516, "y": 292 }, "BounceBlock", "on"],
-                                    [2457, { "x": 516, "y": 228 }, "BounceBlock", "on"],
-                                    [2586, ".tmp.steam1", true]
-                                ],
-                                "element": 2,
-                                "pos": { "x": 509.87, "y": 362.57, "z": 0, "level": 1 },
-                                "shootAngle": 180.56174903884138,
-                                "endFrame": 4038
-                            },
-                            {
-                                "log": [
-                                    [4493, ".map.coldOn", true],
-                                    [4913, { "x": 292, "y": 228 }, "BounceBlock", "on"],
-                                    [6588, ".tmp.steam1", false],
-                                    [7019, { "x": 292, "y": 436 }, "BounceBlock", "on"]
-                                ],
-                                "element": 1,
-                                "pos": { "x": 509.87, "y": 362.57, "z": 0, "level": 1 },
-                                "shootAngle": 179.6225457590474,
-                                "endFrame": 7111
-                            },
-                            {
-                                "log": [
-                                    [7132, ".map.coldOn", false],
-                                    [7571, ".map.heatOn", true]
-                                ],
-                                "element": 1,
-                                "pos": { "x": 509.87, "y": 362.57, "z": 0, "level": 1 },
-                                "shootAngle": 85.5884818477719,
-                                "endFrame": 8610
-                            },
-                            { "log": [], "element": 1, "pos": { "x": 509.87, "y": 362.57, "z": 0, "level": 1 }, "shootAngle": 53.79236606748373, "endFrame": 8867 },
-                            { "log": [], "element": 1, "pos": { "x": 509.87, "y": 362.57, "z": 0, "level": 1 }, "shootAngle": 42.845984051112964, "endFrame": 9148 },
-                            { "log": [], "element": 2, "pos": { "x": 778.21, "y": 356.64, "z": 0, "level": 1 }, "shootAngle": 42.175455388557225, "endFrame": 11796 },
-                            { "log": [], "element": 2, "pos": { "x": 778.21, "y": 356.64, "z": 0, "level": 1 }, "shootAngle": 266.8017516186595, "endFrame": 12452 },
-                            { "log": [], "element": 2, "pos": { "x": 778.21, "y": 356.64, "z": 0, "level": 1 }, "shootAngle": 266.8017516186595, "endFrame": 13366 },
-                            {
-                                "log": [
-                                    [13863, { "x": 868, "y": 372 }, "BounceBlock", "on"],
-                                    [14433, ".tmp.steam2", true],
-                                    [15374, { "x": 1092, "y": 372 }, "BounceBlock", "on"],
-                                    [15430, { "x": 1092, "y": 436 }, "BounceBlock", "on"],
-                                    [15593, { "x": 948, "y": 436 }, "BounceBlock", "on"],
-                                    [15809, { "x": 948, "y": 228 }, "BounceBlock", "on"],
-                                    [15970, { "x": 1092, "y": 228 }, "BounceBlock", "on"],
-                                    [16024, { "x": 1092, "y": 292 }, "BounceBlock", "on"],
-                                    [16274, { "x": 868, "y": 292 }, "BounceBlock", "on"],
-                                    [16330, { "x": 868, "y": 228 }, "BounceBlock", "on"],
-                                    [16511, ".map.doneFINALLY", true],
-                                    [16511, { "x": 868, "y": 372 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 948, "y": 436 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 1092, "y": 372 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 1092, "y": 292 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 948, "y": 228 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 1092, "y": 228 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 868, "y": 292 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 868, "y": 228 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 516, "y": 292 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 1092, "y": 436 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 292, "y": 436 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 516, "y": 228 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 292, "y": 228 }, "BounceBlock", "resolve"],
-                                    [16511, { "x": 692, "y": 232 }, "BounceSwitch", "resolve"],
-                                    [16511, ".map._entity170_triggered", true],
-                                    [17437, ".map.doorOpen", true]
-                                ]
-                            }
-                        ]
-                    }
-                },
-                "sizeRect": { "x": 11, "y": 2, "width": 75, "height": 36 }
+                "sizeRect": { "x": 12, "y": 11, "width": 25, "height": 23 }
             }
         ]
     },
     "cargo-ship/teleporter": {
         "sels": [
             {
-                "bb": [{ "x": 9, "y": 10, "width": 27, "height": 21 }],
+                "bb": [],
                 "mapName": "cargo-ship/teleporter",
                 "data": {
                     "type": 2,
@@ -243,132 +245,265 @@
                     "timeLength": 1,
                     "chapter": 0,
                     "plotLine": 1,
-                    "elements": [true, true, true, true],
+                    "elements": [false, false, false, false],
                     "startPos": { "x": 344, "y": 328, "z": 0, "level": 0 },
                     "endPos": { "x": 344, "y": 328, "z": 0, "level": 0 },
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 274.42815067296056, "endFrame": 0 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 180.04411212471837, "endFrame": 1307 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 96.57471721816881, "endFrame": 2619 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 2.240803034105568, "endFrame": 3842 },
-                            {
-                                "log": [
-                                    [9306, ".map.hitCounter", 0],
-                                    [9306, ".plot.line", 2]
-                                ],
-                                "split": true,
-                                "element": 0,
-                                "pos": { "x": 344, "y": 328, "z": 0, "level": 0 },
-                                "shootAngle": 333.9411708866161,
-                                "endFrame": 13558
-                            },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 293.4342207258808, "endFrame": 15039 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 270.2252995328406, "endFrame": 16116 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 242.73263595463868, "endFrame": 17603 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 205.26835913007355, "endFrame": 18596 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 156.5224153445505, "endFrame": 20931 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 115.2621577314037, "endFrame": 22182 },
-                            { "log": [], "split": true, "element": 0, "pos": { "x": 344, "y": 328, "z": 0, "level": 0 }, "shootAngle": 62.243999747207965, "endFrame": 23592 },
-                            {
-                                "log": [
-                                    [29336, ".map.blockerOn", true],
-                                    [30286, ".map.hitCounter", 0],
-                                    [30286, ".plot.line", 3]
-                                ],
-                                "split": true,
-                                "element": 0,
-                                "pos": { "x": 344, "y": 328, "z": 0, "level": 0 },
-                                "shootAngle": 357.97144559889017,
-                                "endFrame": 32725
-                            },
-                            {
-                                "log": [
-                                    [36547, ".map.blockerOn", false],
-                                    [40765, ".playerVar.staticFloat", false],
-                                    [45149, ".map.doorOpen", true],
-                                    [45149, ".plot.line", 5]
-                                ]
-                            }
-                        ]
-                    }
+                    "initialMapState": { "hitCounter": 1 }
                 },
-                "sizeRect": { "x": 9, "y": 10, "width": 36, "height": 31 }
+                "sizeRect": { "x": 12, "y": 11, "width": 33, "height": 30 }
             }
         ]
     },
-    "cargo-ship/room1": {
+    "cargo-ship/room1-5": {
         "sels": [
             {
-                "bb": [{ "x": 0, "y": 2, "width": 23, "height": 18 }],
-                "mapName": "cargo-ship/room1",
-                "data": {
-                    "type": 0,
-                    "completionType": 0,
-                    "difficulty": 1,
-                    "timeLength": 1,
-                    "chapter": 0,
-                    "plotLine": 11,
-                    "elements": [true, true, true, true],
-                    "startPos": { "x": 128.61, "y": 319.27, "z": 0, "level": 0 },
-                    "endPos": { "x": 315.49, "y": 354.83, "z": 32, "level": 1 },
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 234.85, "y": 270.24, "z": 0, "level": 0 }, "shootAngle": 269.3215818455161, "endFrame": 0 },
-                            {
-                                "log": [
-                                    [145, ".map.wall1", true],
-                                    [549, ".map.wall1Removed", true]
-                                ]
-                            }
-                        ]
-                    }
-                },
-                "sizeRect": { "x": 0, "y": 2, "width": 23, "height": 20 }
-            },
-            {
-                "bb": [{ "x": 13, "y": 27, "width": 16, "height": 10 }],
-                "mapName": "cargo-ship/room1",
+                "bb": [{ "x": 0, "y": 12, "width": 12, "height": 9 }],
+                "mapName": "cargo-ship/room1-5",
                 "data": {
                     "type": 0,
                     "completionType": 1,
                     "difficulty": 1,
                     "timeLength": 1,
                     "chapter": 0,
-                    "plotLine": 12,
-                    "elements": [true, true, true, true],
-                    "startPos": { "x": 282.38, "y": 452.74, "z": 0, "level": 0 },
-                    "endPos": { "x": 389.45, "y": 459.71, "z": 0, "level": 0 },
+                    "plotLine": 20,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 66.81, "y": 315.54, "z": 0, "level": 0 },
+                    "endPos": { "x": 60.56, "y": 215.05, "z": 0, "level": 0 },
+                    "initialMapState": { "wall3": 0, "wall1": 0, "wall2": 0, "crossedeyes-tpr-entered_startDoor-cargoShip/room1-end": true, "hint1": true, "hint1Done": true },
                     "recordLog": {
                         "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 276.97, "y": 472, "z": 0, "level": 0 }, "shootAngle": 89.26283048763509, "endFrame": 0 },
+                            { "log": [], "element": 0, "pos": { "x": 60.56, "y": 291.42, "z": 0, "level": 0 }, "shootAngle": 19.176974838753665, "endFrame": 0 },
+                            { "log": [], "element": 0, "pos": { "x": 60.56, "y": 291.42, "z": 0, "level": 0 }, "shootAngle": 15.851448282771798, "endFrame": 889 },
+                            { "log": [], "element": 0, "pos": { "x": 60.56, "y": 291.42, "z": 0, "level": 0 }, "shootAngle": 15.85144746263802, "endFrame": 1139 },
+                            { "log": [], "element": 0, "pos": { "x": 60.56, "y": 291.42, "z": 0, "level": 0 }, "shootAngle": 14.998646158414715, "endFrame": 1563 },
+                            { "log": [], "element": 0, "pos": { "x": 60.56, "y": 291.42, "z": 0, "level": 0 }, "shootAngle": 14.975076541829651, "endFrame": 1848 },
+                            { "log": [[1952, ".map.wall1", true]] }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 12, "width": 12, "height": 21 }
+            },
+            {
+                "bb": [
+                    { "x": 12, "y": 1, "width": 26, "height": 38 },
+                    { "x": 8, "y": 21, "width": 4, "height": 18 }
+                ],
+                "mapName": "cargo-ship/room1-5",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 2,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": 21,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 280, "y": 135.92, "z": 0, "level": 0 },
+                    "endPos": { "x": 501.56, "y": 546.51, "z": 0, "level": 0 },
+                    "initialMapState": {
+                        "wall3": 0,
+                        "wall1": true,
+                        "wall2": 0,
+                        "crossedeyes-tpr-entered_startDoor-cargoShip/room1-end": true,
+                        "hint1": true,
+                        "hint1Done": true,
+                        "hint2": true,
+                        "hint2Done": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 281.03, "y": 145, "z": 0, "level": 0 }, "shootAngle": 355.0100348025423, "endFrame": 0 },
+                            { "log": [[229, ".map._entity5_destroyed", true]], "element": 0, "pos": { "x": 331.92, "y": 144, "z": 0, "level": 0 }, "shootAngle": 51.856802129906896, "endFrame": 709 },
+                            {
+                                "log": [[903, ".map._entity11_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 377.25, "y": 225.39, "z": 0, "level": 0 },
+                                "shootAngle": 92.55830115057557,
+                                "endFrame": 1897
+                            },
+                            {
+                                "log": [[2105, ".map._entity17_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 383.73, "y": 235.85, "z": 0, "level": 0 },
+                                "shootAngle": 18.620005068600733,
+                                "endFrame": 2411
+                            },
                             {
                                 "log": [
-                                    [125, ".map.wall2", true],
-                                    [515, ".map.wall2Removed", true]
+                                    [2661, ".map._entity18_destroyed", true],
+                                    [3030, ".map._entity19_destroyed", true]
                                 ],
                                 "element": 0,
-                                "pos": { "x": 307.91, "y": 548.18, "z": 0, "level": 0 },
-                                "shootAngle": 2.138621223295104,
-                                "endFrame": 1932
+                                "pos": { "x": 383.73, "y": 235.85, "z": 0, "level": 0 },
+                                "shootAngle": 73.98388348910294,
+                                "endFrame": 3592
                             },
-                            {
-                                "log": [[1946, ".map._entity71_destroyed", true]],
-                                "element": 0,
-                                "pos": { "x": 326.96, "y": 552, "z": 0, "level": 0 },
-                                "shootAngle": 13.821280393319057,
-                                "endFrame": 2752
-                            },
+                            { "log": [[3724, ".map.wall2", true]], "element": 0, "pos": { "x": 301.81, "y": 379.61, "z": 0, "level": 0 }, "shootAngle": 268.52212375378076, "endFrame": 6657 },
                             {
                                 "log": [
-                                    [2779, ".map._entity72_destroyed", true],
-                                    [3266, ".map.hint4", true]
+                                    [7518, ".map.wall3", true],
+                                    [8144, ".map.wall3Down", true],
+                                    [8825, ".plot.line", 22]
                                 ]
                             }
                         ]
                     }
                 },
-                "sizeRect": { "x": 13, "y": 27, "width": 29, "height": 37 }
+                "sizeRect": { "x": 8, "y": 1, "width": 38, "height": 39 }
+            }
+        ]
+    },
+    "cargo-ship/room5": { "sels": [] },
+    "cargo-ship/ground": {
+        "sels": [
+            {
+                "bb": [{ "x": 1, "y": 4, "width": 31, "height": 26 }],
+                "mapName": "cargo-ship/ground",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 2,
+                    "timeLength": 3,
+                    "chapter": 0,
+                    "plotLine": 170,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 327.77, "y": 465.7, "z": 48, "level": 1 },
+                    "endPos": { "x": 102, "y": 204, "z": 52, "level": 1 },
+                    "initialMapState": { "crossedeyes-tpr-entered_the_actual_door-cargoShip/ship-deck": true, "destroyBoxes": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 155.84, "y": 383.13, "z": 48, "level": 1 }, "shootAngle": 234.87755093910434, "endFrame": 0 },
+                            {
+                                "log": [
+                                    [70, ".map._entity65_destroyed", true],
+                                    [77, ".map.boxesCommented", true]
+                                ],
+                                "element": 0,
+                                "pos": { "x": 155.84, "y": 383.13, "z": 48, "level": 1 },
+                                "shootAngle": 233.62444395988754,
+                                "endFrame": 980
+                            },
+                            {
+                                "log": [[1175, ".map._entity63_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 155.84, "y": 383.13, "z": 48, "level": 1 },
+                                "shootAngle": 230.5477362221367,
+                                "endFrame": 1327
+                            },
+                            {
+                                "log": [[1536, ".map._entity66_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 155.84, "y": 383.13, "z": 48, "level": 1 },
+                                "shootAngle": 276.0379324230523,
+                                "endFrame": 2120
+                            },
+                            {
+                                "log": [[2356, ".map._entity60_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 155.84, "y": 383.13, "z": 48, "level": 1 },
+                                "shootAngle": 278.34140327013563,
+                                "endFrame": 2502
+                            },
+                            {
+                                "log": [
+                                    [2842, ".map._entity61_destroyed", true],
+                                    [3023, ".map._entity62_destroyed", true]
+                                ],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 110.11660071936802,
+                                "endFrame": 6407
+                            },
+                            {
+                                "log": [[6463, ".map._entity77_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 121.80549955934941,
+                                "endFrame": 6928
+                            },
+                            {
+                                "log": [[6991, ".map._entity76_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 62.82678571493102,
+                                "endFrame": 7505
+                            },
+                            {
+                                "log": [[7574, ".map._entity79_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 294.4431169680521,
+                                "endFrame": 8964
+                            },
+                            {
+                                "log": [[9332, ".map._entity67_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 334.7252673336021,
+                                "endFrame": 10993
+                            },
+                            {
+                                "log": [[11361, ".map._entity83_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 421.21, "z": 80, "level": 2 },
+                                "shootAngle": 326.10664648407055,
+                                "endFrame": 11771
+                            },
+                            {
+                                "log": [[12300, ".map._entity82_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 226.05, "y": 402.78, "z": 80, "level": 2 },
+                                "shootAngle": 14.97592724650167,
+                                "endFrame": 13981
+                            },
+                            {
+                                "log": [[14301, ".map._entity70_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 199.41, "y": 402.78, "z": 80, "level": 2 },
+                                "shootAngle": 285.74901615412534,
+                                "endFrame": 15989
+                            },
+                            { "log": [], "element": 0, "pos": { "x": 199.41, "y": 402.78, "z": 80, "level": 2 }, "shootAngle": 284.4339702421947, "endFrame": 16830 },
+                            { "log": [], "element": 0, "pos": { "x": 199.41, "y": 402.78, "z": 80, "level": 2 }, "shootAngle": 281.72311604470264, "endFrame": 17581 },
+                            {
+                                "log": [[17720, ".map._entity69_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 384, "y": 208, "z": 80, "level": 2 },
+                                "shootAngle": 349.57984317523375,
+                                "endFrame": 20047
+                            },
+                            {
+                                "log": [[20242, ".map._entity81_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 384, "y": 208, "z": 80, "level": 2 },
+                                "shootAngle": 273.53592273617886,
+                                "endFrame": 20575
+                            },
+                            {
+                                "log": [[20770, ".map._entity80_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 384, "y": 208, "z": 80, "level": 2 },
+                                "shootAngle": 190.9793621729968,
+                                "endFrame": 21097
+                            },
+                            {
+                                "log": [[21194, ".map._entity75_destroyed", true]],
+                                "element": 0,
+                                "pos": { "x": 384, "y": 208, "z": 80, "level": 2 },
+                                "shootAngle": 194.07713401357265,
+                                "endFrame": 21944
+                            },
+                            { "log": [], "element": 0, "pos": { "x": 384, "y": 208, "z": 80, "level": 2 }, "shootAngle": 193.7894430340024, "endFrame": 22507 },
+                            {
+                                "log": [
+                                    [22639, ".map._entity74_destroyed", true],
+                                    [22646, ".map.destroyBoxes", false],
+                                    [27010, ".plot.line", 171]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 1, "y": 4, "width": 32, "height": 30 }
             }
         ]
     }
