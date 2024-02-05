@@ -74,6 +74,28 @@ function addVimBindings() {
     }
 }
 
+function addWidgets() {
+    if (sc.QuickRingMenuWidgets) {
+        /* optional dependency https://github.com/krypciak/cc-diorbital-menu */
+        sc.QuickRingMenuWidgets.addWidget({
+            name: 'cc-blitzkrieg_puzzleSkip',
+            title: 'Skip puzzle',
+            description: "Skip the puzzle you're standing in right now.",
+            pressEvent: () => {
+                if (blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle') {
+                    ;(blitzkrieg.currSel as PuzzleSelectionManager).solve()
+                }
+            },
+            image: () => ({
+                gfx: new ig.Image('media/gui/menu.png'),
+                srcPos: { x: 624, y: 0 },
+                pos: { x: 8, y: 6 },
+                size: { x: 16, y: 16 },
+            }),
+        })
+    }
+}
+
 const kb: KeyBinder = new KeyBinder()
 function bindKeys() {
     kb.addKey(
@@ -203,6 +225,7 @@ export default class Blitzkrieg {
 
     async prestart() {
         addVimBindings()
+        addWidgets()
         puzzleAssistSpeedInitPrestart()
         this.rhudmsg = TextNotification.rhudmsg
         this.mapUtil = new BlitzkriegMapUtil()
@@ -213,6 +236,7 @@ export default class Blitzkrieg {
             battle: new SelectionManager('battle', '#00770044', '#22ff2244', [blitzkrieg.mod.baseDirectory + 'json/battleData.json']),
         }
         this.currSel = this.sels.puzzle
+        this.currSel.loadAll()
         this.registerSels()
         setupTabs()
         MenuOptions.initPrestart()
