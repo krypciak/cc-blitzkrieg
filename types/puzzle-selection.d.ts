@@ -41,6 +41,7 @@ export interface PuzzleSelection extends Selection {
         recordLog?: {
             steps: PuzzleSelectionStep[];
         };
+        initialMapState: Record<string, string | number | boolean>;
     };
 }
 export declare class PuzzleSelectionManager extends SelectionManager {

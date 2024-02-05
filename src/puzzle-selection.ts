@@ -44,13 +44,14 @@ export interface PuzzleSelection extends Selection {
         recordLog?: {
             steps: PuzzleSelectionStep[]
         }
+        initialMapState: Record<string, string | number | boolean>
     }
 }
 
-function isBounceBlock(e: ig.Entity, type: string): e is ig.ENTITY.BounceBlock {
+function isBounceBlock(_e: ig.Entity, type: string): _e is ig.ENTITY.BounceBlock {
     return type == 'BounceBlock'
 }
-function isBounceSwitch(e: ig.Entity, type: string): e is ig.ENTITY.BounceSwitch {
+function isBounceSwitch(_e: ig.Entity, type: string): _e is ig.ENTITY.BounceSwitch {
     return type == 'BounceSwitch'
 }
 
@@ -180,18 +181,22 @@ export class PuzzleSelectionManager extends SelectionManager {
             timeLength: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
             chapter: sc.model.player.chapter,
             plotLine: ig.vars.storage.plot ? ig.vars.storage.plot.line : -1,
-            elements: [
-                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
-                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
-                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
-                sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
-            ],
+            elements: sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_CHANGE)
+                ? [
+                      sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_HEAT),
+                      sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_COLD),
+                      sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_SHOCK),
+                      sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_WAVE),
+                  ]
+                : [false, false, false, false],
         }
 
         blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 1)
         data.startPos = await Util.waitForPositionKey()
         blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
         data.endPos = await Util.waitForPositionKey()
+
+        data.initialMapState = { ...ig.vars.storage.map }
         sel.data = { ...sel.data, ...data }
     }
 
