@@ -129,6 +129,7 @@ export class PuzzleSelectionManager extends SelectionManager {
     }
 
     async walkInEvent(sel: PuzzleSelection) {
+        super.walkInEvent(sel)
         this.updatePuzzleSpeed(sel as PuzzleSelection)
 
         if (this.changeModifiers) {
@@ -144,7 +145,8 @@ export class PuzzleSelectionManager extends SelectionManager {
         }
     }
 
-    async walkOutEvent() {
+    async walkOutEvent(sel: PuzzleSelection) {
+        super.walkOutEvent(sel)
         this.updatePuzzleSpeed(this.inSelStack.peek() as PuzzleSelection)
 
         if (this.changeModifiers) {

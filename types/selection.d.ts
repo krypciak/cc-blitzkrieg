@@ -36,10 +36,12 @@ export declare class SelectionManager {
     tempPos: MapPoint;
     selIndexes: (number | undefined)[];
     recorder?: IChangeRecorder;
+    walkInListeners: ((selection: Selection) => void)[];
+    walkOutListeners: ((selection: Selection) => void)[];
     constructor(name: string, completeColor: string, tempColor: string, jsonFiles: string[]);
     newSelEvent(_: Selection): Promise<void>;
-    walkInEvent(_: Selection): Promise<void>;
-    walkOutEvent(_: Selection): Promise<void>;
+    walkInEvent(selection: Selection): Promise<void>;
+    walkOutEvent(selection: Selection): Promise<void>;
     onNewMapEntryEvent(): Promise<void>;
     setFileIndex(index: number): void;
     setMapEntry(map: string, entry: SelectionMapEntry): void;

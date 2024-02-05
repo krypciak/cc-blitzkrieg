@@ -41,6 +41,9 @@ export class SelectionManager {
     selIndexes: (number | undefined)[] = []
     recorder?: IChangeRecorder
 
+    walkInListeners: ((selection: Selection) => void)[] = []
+    walkOutListeners: ((selection: Selection) => void)[] = []
+
     constructor(
         public name: string,
         public completeColor: string,
@@ -49,8 +52,12 @@ export class SelectionManager {
     ) {}
 
     async newSelEvent(_: Selection): Promise<void> {}
-    async walkInEvent(_: Selection): Promise<void> {}
-    async walkOutEvent(_: Selection): Promise<void> {}
+    async walkInEvent(selection: Selection): Promise<void> {
+        this.walkInListeners.forEach(f => f(selection))
+    }
+    async walkOutEvent(selection: Selection): Promise<void> {
+        this.walkOutListeners.forEach(f => f(selection))
+    }
     async onNewMapEntryEvent(): Promise<void> {
         for (const sel of this.inSelStack.array) {
             this.walkOutEvent(sel)

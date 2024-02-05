@@ -58,7 +58,7 @@ export declare class PuzzleSelectionManager extends SelectionManager {
     destroyFakeBuff(): void;
     setSpeed(val: number): void;
     walkInEvent(sel: PuzzleSelection): Promise<void>;
-    walkOutEvent(): Promise<void>;
+    walkOutEvent(sel: PuzzleSelection): Promise<void>;
     newSelEvent(sel: Selection): Promise<void>;
     finalizeSel(sel1: Selection): Promise<void>;
     solve(): void;
