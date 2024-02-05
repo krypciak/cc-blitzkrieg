@@ -19,6 +19,7 @@
         "ja_JP": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
         "ko_KR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools"
     },
+    "homepage": "https://github.com/krypciak/cc-blitzkrieg",
     "icons": {
         "24": "icon/icon.png"
     },
