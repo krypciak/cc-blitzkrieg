@@ -1,31 +1,17 @@
 {
     "id": "cc-blitzkrieg",
     "version": "0.4.7",
-    "title": {
-        "en_US": "Blitzkrieg",
-        "de_DE": "Blitzkrieg",
-        "fr_FR": "Blitzkrieg",
-        "zh_CN": "Blitzkrieg",
-        "zh_TW": "Blitzkrieg",
-        "ja_JP": "Blitzkrieg",
-        "ko_KR": "Blitzkrieg"
-    },
-    "description": {
-        "en_US": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "de_DE": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "fr_FR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "zh_CN": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "zh_TW": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "ja_JP": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
-        "ko_KR": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools"
-    },
-    "homepage": "https://github.com/krypciak/cc-blitzkrieg",
+    "title": "Blitzkrieg (WIP)",
+    "description": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
+    "repository": "https://github.com/krypciak/cc-blitzkrieg",
+    "tags": ["library", "puzzle"],
+    "authors": "krypek",
     "icons": {
         "24": "icon/icon.png"
     },
-    "plugin": "plugin.js",
     "dependencies": {
-        "input-api": ">=1.0.0",
+        "input-api": ">=1.0.2",
         "crosscode": ">=1.4.0"
-    }
+    },
+    "plugin": "plugin.js"
 }
