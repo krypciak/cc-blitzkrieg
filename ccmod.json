@@ -4,7 +4,7 @@
     "title": "Blitzkrieg (WIP)",
     "description": "Puzzle solving, incresed puzzle difficuly, puzzle and boss collection tools",
     "repository": "https://github.com/krypciak/cc-blitzkrieg",
-    "tags": ["library", "puzzle", "widget"],
+    "tags": ["puzzle", "widget", "library"],
     "authors": "krypek",
     "icons": {
         "24": "icon/icon.png"
