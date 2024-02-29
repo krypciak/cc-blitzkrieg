@@ -3,6 +3,7 @@ import { SelectionManager, SelectionMapEntry } from './selection';
 import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './puzzle-selection';
 import { BlitzkriegMapUtil } from './map-sel-copy';
 import { FsUtil } from './fsutil';
+import 'nax-ccuilib/src/headers/nax/quick-menu-public-api';
 declare global {
     const blitzkrieg: Blitzkrieg;
     interface Window {

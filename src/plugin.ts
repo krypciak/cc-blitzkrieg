@@ -11,6 +11,8 @@ import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
 import { MenuOptions } from './options'
 import { Util } from './util'
 
+import 'nax-ccuilib/src/headers/nax/quick-menu-public-api.d.ts'
+
 import * as prettier from 'prettier/standalone'
 import prettierPluginBabel from 'prettier/plugins/babel'
 import prettierPluginEstree from 'prettier/plugins/estree'
@@ -75,9 +77,9 @@ function addVimBindings() {
 }
 
 function addWidgets() {
-    if (sc.QuickRingMenuWidgets) {
+    if (nax.ccuilib.QuickRingMenuWidgets) {
         /* optional dependency https://github.com/krypciak/cc-diorbital-menu */
-        sc.QuickRingMenuWidgets.addWidget({
+        nax.ccuilib.QuickRingMenuWidgets.addWidget({
             name: 'cc-blitzkrieg_puzzleSkip',
             title: 'Skip puzzle',
             description: "Skip the puzzle you're standing in right now.",
