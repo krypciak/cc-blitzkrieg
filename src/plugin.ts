@@ -77,7 +77,7 @@ function addVimBindings() {
 }
 
 function addWidgets() {
-    if (nax.ccuilib.QuickRingMenuWidgets) {
+    if (window.nax?.ccuilib?.QuickRingMenuWidgets) {
         /* optional dependency https://github.com/krypciak/cc-diorbital-menu */
         nax.ccuilib.QuickRingMenuWidgets.addWidget({
             name: 'cc-blitzkrieg_puzzleSkip',
