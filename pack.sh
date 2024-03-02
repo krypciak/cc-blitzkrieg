@@ -4,4 +4,14 @@ NAME="${BASE_NAME}-$(jq '.version' ccmod.json | sed 's/^"//;s/"$//').ccmod"
 rm -rf "$BASE_NAME"*
 npm install
 npm run build
-zip -r "$NAME" ./ -x "*.ccmod" "*.zip" "node_modules/*" ".git*" "*.ts" "README.md" "tsconfig.json" "pack.sh" "package-lock.json"
+mkdir -p pack
+cp -r assets icon json LICENSE plugin.js ./pack
+cd ./pack
+for file in $(find . -iname '*.json'); do
+    jq '.' ../$file -c > $file
+done
+cp ../ccmod.json .
+rm -rf icon/icon240.png icon/icon.kra icon/icon.png~
+zip -r "../$NAME" .
+cd ..
+rm -rf pack
