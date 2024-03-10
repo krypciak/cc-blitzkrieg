@@ -30,8 +30,8 @@ epic crosscode mod
 ```bash
 git clone https://github.com/krypciak/cc-blitzkrieg
 cd cc-blitzkrieg
-npm install
-npm run start
+pnpm install
+pnpm run start
 # this should return no errors (hopefully)
 npx tsc
 ```
