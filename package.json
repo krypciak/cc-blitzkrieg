@@ -13,10 +13,12 @@
     "license": "GPLv3",
     "homepage": "https://github.com/krypciak/cc-blitzkrieg",
     "devDependencies": {
+        "@types/adm-zip": "^0.5.5",
         "@types/jquery": "^3.5.29",
         "@types/node": "^11.6.0",
         "@typescript-eslint/eslint-plugin": "^6.20.0",
         "@typescript-eslint/parser": "^6.20.0",
+        "adm-zip": "^0.5.12",
         "cc-map-util": "github:krypciak/cc-map-util",
         "cc-vim": "github:krypciak/cc-vim",
         "esbuild": "^0.20.0",

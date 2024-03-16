@@ -295,21 +295,26 @@ export class SelectionManager {
             const selE: SelectionMapEntry = this.selMap[mapName]
             saveObjects[selE.fileIndex][mapName] = selE
         }
-        for (let i = 0; i < this.jsonFiles.length; i++) {
-            const path: string = this.jsonFiles[i]
-            if (path.includes('ccmod')) {
-                continue
-            }
-            try {
-                let content: string = JSON.stringify(saveObjects[i])
-                if (blitzkrieg.debug.prettifySels) {
-                    content = await blitzkrieg.prettifyJson(content)
-                }
-                FsUtil.writeFileSync(path, content)
-            } catch (err) {
-                console.log(err)
-            }
-        }
+
+        await Promise.all(
+            this.jsonFiles
+                .filter(path => !path.includes('ccmod'))
+                .map(
+                    async (path, i) =>
+                        new Promise<void>(async resolve => {
+                            try {
+                                let content: string = JSON.stringify(saveObjects[i])
+                                if (blitzkrieg.debug.prettifySels) {
+                                    content = await blitzkrieg.prettifyJson(content)
+                                }
+                                await FsUtil.writeFile(path, content)
+                            } catch (err) {
+                                console.log(err)
+                            }
+                            resolve()
+                        })
+                )
+        )
     }
 
     async load(index: number) {

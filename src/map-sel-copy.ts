@@ -44,7 +44,7 @@ export class BlitzkriegMapUtil {
         const newName = (newMap.name = 'blitzkrieg/newmap')
         console.log(newMap)
         const mapString: string = await blitzkrieg.prettifyJson(JSON.stringify(newMap), 300)
-        FsUtil.writeFileSync(`${blitzkrieg.dir}/assets/data/maps/${newName}.json`, mapString)
+        return FsUtil.writeFile(`${blitzkrieg.dir}/assets/data/maps/${newName}.json`, mapString)
     }
 
     getMapStringByPath(path: string): Promise<string> {
