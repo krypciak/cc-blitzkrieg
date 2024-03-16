@@ -42,19 +42,23 @@ export class FsUtil {
         return fs.promises.writeFile(path, typeof obj === 'string' ? obj : JSON.stringify(obj))
     }
 
-    static async readFileResponse(path: string): Promise<Response> {
+    static async readFileExternal(path: string): Promise<string> {
+        return (await fs.promises.readFile(path)).toString()
+    }
+
+    static async readFileInternalResponse(path: string): Promise<Response> {
         if (path.startsWith('assets/')) {
             path = path.substring('assets/'.length)
         }
         return fetch(path)
     }
 
-    static async readFile(path: string): Promise<string> {
-        return (await this.readFileResponse(path)).text()
+    static async readFileInternal(path: string): Promise<string> {
+        return (await this.readFileInternalResponse(path)).text()
     }
 
     static async readFileJson(path: string): Promise<any> {
-        return (await this.readFileResponse(path)).json()
+        return (await this.readFileInternalResponse(path)).json()
     }
 
     static async doesFileExist(path: string): Promise<boolean> {
@@ -66,8 +70,8 @@ export class FsUtil {
         })
     }
 
-    static async copyFile(from: string, dest: string): Promise<void> {
-        return FsUtil.writeFile(dest, await FsUtil.readFile(from))
+    static async copyFileInternal(from: string, dest: string): Promise<void> {
+        return FsUtil.writeFile(dest, await FsUtil.readFileInternal(from))
     }
 
     static async blobToArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
