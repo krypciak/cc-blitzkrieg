@@ -6,7 +6,7 @@ import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './
 import { InputKey, KeyBinder } from './keybinder'
 import { BlitzkriegMapUtil } from './map-sel-copy'
 import { FsUtil } from './fsutil'
-
+import { BattleSelectionManager } from './battle-selection'
 import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
 import { MenuOptions } from './options'
 import { Util } from './util'
@@ -16,7 +16,9 @@ import 'nax-ccuilib/src/headers/nax/quick-menu-public-api.d.ts'
 import * as prettier from 'prettier/standalone'
 import prettierPluginBabel from 'prettier/plugins/babel'
 import prettierPluginEstree from 'prettier/plugins/estree'
-import { BattleSelectionManager } from './battle-selection'
+import { PluginClass } from 'ultimate-crosscode-typedefs/modloader/mod'
+
+const crypto: typeof import('crypto') = (0, eval)('require("crypto")')
 
 declare global {
     const blitzkrieg: Blitzkrieg
@@ -36,10 +38,14 @@ function addVimBindings() {
             blitzkrieg.debug.selectionOutlines = !blitzkrieg.debug.selectionOutlines
         })
 
-        const isInPuzzleSel = (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel.name == 'puzzle'
-        vim.addAlias('blitzkrieg', 'puzzle-solve', '', isInPuzzleSel, () => {
-            blitzkrieg.sels.puzzle.solve()
-        })
+        const isInPuzzleSel = (ingame: boolean) => ingame && blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel instanceof PuzzleSelectionManager
+        vim.addAlias(
+            'blitzkrieg',
+            'solve',
+            '',
+            ingame => ingame && blitzkrieg.solve(true),
+            () => blitzkrieg.solve()
+        )
         vim.addAlias(
             'blitzkrieg',
             'puzzle-set-speed',
@@ -57,7 +63,7 @@ function addVimBindings() {
             '',
             (ingame: boolean) => ingame && !!blitzkrieg.currSel.recorder && blitzkrieg.currSel.inSelStack.length() > 0,
             () => {
-                blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel.inSelStack.peek())
+                blitzkrieg.currSel.recorder?.startRecording(blitzkrieg.currSel.inSelStack.peek() as any)
             }
         )
         vim.addAlias(
@@ -71,7 +77,25 @@ function addVimBindings() {
             [{ type: 'boolean', description: 'Leave empty to save data' }]
         )
 
-        // vim.addAlias('blitzkrieg', 'toogle-selection-mode', '', 'ingame', () => { blitzkrieg.selectionDialog() })
+        vim.addAlias(
+            'blitzkrieg',
+            'toogle-selection-mode',
+            '',
+            'ingame',
+            (mode?: string) => {
+                if (!mode) return
+                blitzkrieg.currSel = blitzkrieg.sels[mode as keyof typeof blitzkrieg.sels]
+            },
+            [
+                {
+                    type: 'string',
+                    description: 'type',
+                    possibleArguments() {
+                        return Object.keys(blitzkrieg.sels).map(name => ({ value: name, keys: [name], display: [name] }))
+                    },
+                },
+            ]
+        )
     }
 }
 
@@ -82,11 +106,7 @@ function addWidgets() {
             name: 'cc-blitzkrieg_puzzleSkip',
             title: 'Skip puzzle',
             description: "Skip the puzzle you're standing in right now.",
-            pressEvent: () => {
-                if (blitzkrieg.currSel.inSelStack.length() > 0 && blitzkrieg.currSel instanceof PuzzleSelectionManager) {
-                    blitzkrieg.currSel.solve()
-                }
-            },
+            pressEvent: () => blitzkrieg.solve(),
             image: () => ({
                 gfx: new ig.Image('media/gui/menu.png'),
                 srcPos: { x: 624, y: 0 },
@@ -171,23 +191,19 @@ interface BlitzkreigDebug {
     prettifySels: boolean
 }
 
-export default class Blitzkrieg {
+export default class Blitzkrieg implements PluginClass {
     dir: string
     mod: Mod1
-    rhudmsg!: (title: string, message: string, timeout: number) => void
-    syncDialog!: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>
-    currSel!: (typeof this.sels)[keyof typeof this.sels]
     sels!: {
         puzzle: PuzzleSelectionManager
         battle: BattleSelectionManager
     }
-    mapUtil!: BlitzkriegMapUtil
+    currSel!: (typeof this.sels)[keyof typeof this.sels]
 
     debug: BlitzkreigDebug = {
         selectionOutlines: false,
         prettifySels: true,
     }
-    selectionMode: string = 'puzzle'
 
     constructor(mod: Mod1) {
         this.dir = mod.baseDirectory
@@ -197,7 +213,7 @@ export default class Blitzkrieg {
         this.mod.isCCModPacked = mod.baseDirectory.endsWith('.ccmod/')
     }
 
-    registerSels() {
+    private registerSels() {
         ig.ENTITY.Player.inject({
             update(...args) {
                 MenuOptions.blitzkriegEnabled && Object.values(blitzkrieg.sels).forEach(m => m.checkForEvents(ig.game.playerEntity.coll.pos))
@@ -226,7 +242,7 @@ export default class Blitzkrieg {
         puzzleAssistSpeedInitPrestart()
         this.rhudmsg = TextNotification.rhudmsg
         this.mapUtil = new BlitzkriegMapUtil()
-        this.syncDialog = Util.syncDialog
+        this.dialogPromise = Util.syncDialog
 
         ig.Game.inject({
             update() {
@@ -234,6 +250,13 @@ export default class Blitzkrieg {
                 if (!this.paused && !ig.loading && !sc.model.isTitle()) {
                     ig.game.now += ig.system.tick * 1000
                 }
+            },
+        })
+
+        ig.Entity.inject({
+            init(x, y, z, settings) {
+                this.parent(x, y, z, settings)
+                this.uuid = crypto.createHash('sha256').update(`${settings.name}-${x},${y}`).digest('hex')
             },
         })
 
@@ -278,12 +301,26 @@ export default class Blitzkrieg {
         })
     }
 
-    /* global classes */
+    /* exported stuff */
+    public solve(pretend: boolean = false): boolean {
+        if (blitzkrieg.sels.puzzle.inSelStack.length() > 0) {
+            !pretend && blitzkrieg.sels.puzzle.solve()
+            return true
+        } else if (blitzkrieg.sels.battle.inSelStack.length() > 0) {
+            !pretend && blitzkrieg.sels.battle.solve()
+            return true
+        }
+        return false
+    }
+
+    rhudmsg!: (title: string, message: string, timeout: number) => void
+    dialogPromise!: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>
+    mapUtil!: BlitzkriegMapUtil
+
     FsUtil = FsUtil
     SelectionManager = SelectionManager
     SelectionMapEntry = SelectionMapEntry
     PuzzleSelectionManager = PuzzleSelectionManager
     PuzzleCompletionType = PuzzleCompletionType
     PuzzleRoomType = PuzzleRoomType
-    /* global classes end */
 }

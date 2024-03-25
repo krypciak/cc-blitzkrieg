@@ -1,6 +1,6 @@
 import { Selection, SelectionManager } from './selection'
 import { Util } from './util'
-import { PuzzleChangeRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder'
+import { PuzzleChangeRecorder as PuzzleRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder'
 import { assertBool } from 'cc-map-util/src/util'
 
 export enum PuzzleRoomType {
@@ -56,7 +56,7 @@ function isBounceSwitch(_e: ig.Entity, type: string): _e is ig.ENTITY.BounceSwit
 }
 
 export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
-    recorder: PuzzleChangeRecorder
+    recorder: PuzzleRecorder
     incStep: number = 0.05
     changeModifiers: boolean = true
     changeSpeed: boolean = true
@@ -65,8 +65,8 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
     fakeBuffActive: boolean = false
 
     constructor() {
-        super('puzzle', '#77000022', '#ff222222', [blitzkrieg.mod.baseDirectory + 'json/puzzleData.json'])
-        this.recorder = new PuzzleChangeRecorder(this)
+        super(0, '#77000022', '#ff222222', [blitzkrieg.mod.baseDirectory + 'json/puzzleData.json'])
+        this.recorder = new PuzzleRecorder(this)
 
         ig.Game.inject({
             spawnEntity(entity, x, y, z, settings, showAppearEffects) {
@@ -166,7 +166,7 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
 
         const data: Partial<PuzzleSelection['data']> = {
             type: PuzzleRoomType[
-                (await blitzkrieg.syncDialog(
+                (await blitzkrieg.dialogPromise(
                     'select puzzle \\c[3]type\\c[0]',
                     Object.keys(PuzzleRoomType).filter(k => isNaN(k as unknown as number))
                 )) as keyof typeof PuzzleRoomType
@@ -178,8 +178,8 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
                         Object.keys(PuzzleCompletionType).filter(k => isNaN(k as unknown as number))
                     )) as keyof typeof PuzzleCompletionType
                 ],
-            difficulty: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]difficulty\\c[0]', scale)),
-            timeLength: parseInt(await blitzkrieg.syncDialog('Select puzzle \\c[3]length\\c[0]', scale)),
+            difficulty: parseInt(await blitzkrieg.dialogPromise('Select puzzle \\c[3]difficulty\\c[0]', scale)),
+            timeLength: parseInt(await blitzkrieg.dialogPromise('Select puzzle \\c[3]length\\c[0]', scale)),
             chapter: sc.model.player.chapter,
             plotLine: ig.vars.storage.plot ? ig.vars.storage.plot.line : -1,
             elements: sc.model.player.getCore(sc.PLAYER_CORE.ELEMENT_CHANGE)

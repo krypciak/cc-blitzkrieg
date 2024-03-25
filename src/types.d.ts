@@ -33,6 +33,7 @@ declare global {
         }
 
         interface Entity {
+            uuid: string
             oldPos?: Vec2 /* set by cc-map-util */
         }
 

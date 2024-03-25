@@ -4,20 +4,9 @@ import { PuzzleSelection, PuzzleSelectionManager, PuzzleSelectionStep } from './
 
 export type RecordedPuzzleElementsEntities = 'BounceBlock' | 'BounceSwitch'
 
-type PuzzleChangeRecorderData = { steps: Partial<PuzzleSelectionStep>[] }
+type PuzzleRecorderData = { steps: Partial<PuzzleSelectionStep>[] }
 
-export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, PuzzleSelectionManager, PuzzleChangeRecorderData> {
-    //get loopIndex(): number {
-    //    return 0
-    //    // const now = ig.game.now
-    //    // if (!this.startTime) {
-    //    //     this.startTime = now
-    //    // }
-    //    // const diff = now - this.startTime
-    //    // const res = Math.round(diff * sc.options.get('assist-puzzle-speed'))
-    //    // return res
-    //}
-
+export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, PuzzleSelectionManager, PuzzleRecorderData> {
     private currentStepIndex: number = -1
 
     constructor(selM: PuzzleSelectionManager) {
@@ -74,7 +63,7 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
         this.currentStep().log!.push([this.getCurrentTime(), pos, type, action])
     }
 
-    protected getEmptyRecord(): PuzzleChangeRecorderData {
+    protected getEmptyRecord(): PuzzleRecorderData {
         return {
             steps: [],
         }

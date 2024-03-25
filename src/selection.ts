@@ -32,13 +32,10 @@ export class SelectionMapEntry<SEL extends Selection> {
 }
 
 export class SelectionManager<SEL extends Selection> {
-    private static fileIndexHighest = 0
-
     selMap: Record<string, SelectionMapEntry<SEL>> = {}
     inSelStack: Stack<SEL> = new Stack()
     drawBoxes: boolean = defaultDrawBoxes
     selectStep: number = -1
-    fileIndex!: number
     tempPos!: MapPoint
     selIndexes: (number | undefined)[] = []
     recorder?: IChangeRecorder
@@ -47,13 +44,11 @@ export class SelectionManager<SEL extends Selection> {
     walkOutListeners: ((selection: SEL) => void)[] = []
 
     constructor(
-        public name: string,
+        public fileIndex: number,
         public completeColor: string,
         public tempColor: string,
         public jsonFiles: string[]
-    ) {
-        this.fileIndex = SelectionManager.fileIndexHighest++
-    }
+    ) { }
 
     async newSelEvent(_: SEL): Promise<void> {}
     async walkInEvent(selection: SEL): Promise<void> {
@@ -270,7 +265,7 @@ export class SelectionManager<SEL extends Selection> {
                 this.tempColor
             )
         }
-        if (blitzkrieg.selectionMode == this.name) {
+        if (blitzkrieg.currSel === (this as any)) {
             let pos: EntityPoint = new EntityPoint(0, 0)
             ig.system.getMapFromScreenPos(pos, sc.control.getMouseX(), sc.control.getMouseY())
             const mpos: MapPoint = pos.to(MapPoint)
