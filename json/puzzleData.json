@@ -506,5 +506,46 @@
                 "sizeRect": { "x": 1, "y": 4, "width": 32, "height": 30 }
             }
         ]
+    },
+    "rhombus-dng/room-1-5": {
+        "sels": [
+            {
+                "bb": [{ "x": 29, "y": 6, "width": 13, "height": 17 }],
+                "mapName": "rhombus-dng/room-1-5",
+                "data": {
+                    "type": 1,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 634.36, "y": 231.07, "z": 0, "level": 0 },
+                    "endPos": { "x": 470.03, "y": 237.31, "z": 0, "level": 0 },
+                    "initialMapState": { "bounceSolved1": false, "bounceSolved2": false, "bounceSolved3": false },
+                    "recordLog": {
+                        "steps": [
+                            {
+                                "log": [
+                                    [1654, { "x": 596, "y": 308, "z": 0 }, "BounceBlock", "on"],
+                                    [1883, { "x": 500, "y": 308, "z": 0 }, "BounceBlock", "on"],
+                                    [2224, { "x": 500, "y": 148, "z": 0 }, "BounceBlock", "on"],
+                                    [2321, { "x": 548, "y": 148, "z": 0 }, "BounceBlock", "on"],
+                                    [2460, ".map.bounceSolved1", true],
+                                    [2460, { "x": 596, "y": 308, "z": 0 }, "BounceBlock", "resolve"],
+                                    [2460, { "x": 548, "y": 148, "z": 0 }, "BounceBlock", "resolve"],
+                                    [2460, { "x": 500, "y": 148, "z": 0 }, "BounceBlock", "resolve"],
+                                    [2460, { "x": 500, "y": 308, "z": 0 }, "BounceBlock", "resolve"],
+                                    [2460, { "x": 548, "y": 228, "z": 0 }, "BounceSwitch", "resolve"],
+                                    [2460, ".map._entity24_triggered", true],
+                                    [3391, ".map.wallDown", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 29, "y": 6, "width": 42, "height": 23 }
+            }
+        ]
     }
 }

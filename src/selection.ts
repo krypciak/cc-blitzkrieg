@@ -19,11 +19,11 @@ export interface Selection {
     }
 }
 
-export class SelectionMapEntry {
+export class SelectionMapEntry<SEL extends Selection> {
     constructor(
-        public sels: Selection[],
+        public sels: SEL[],
         public fileIndex: number,
-        public tempSel?: Omit<Selection, 'sizeRect'>
+        public tempSel?: Omit<SEL, 'sizeRect'>
     ) {}
 
     toJSON(): object {
@@ -31,9 +31,11 @@ export class SelectionMapEntry {
     }
 }
 
-export class SelectionManager {
-    selMap: Record<string, SelectionMapEntry> = {}
-    inSelStack: Stack<Selection> = new Stack()
+export class SelectionManager<SEL extends Selection> {
+    private static fileIndexHighest = 0
+
+    selMap: Record<string, SelectionMapEntry<SEL>> = {}
+    inSelStack: Stack<SEL> = new Stack()
     drawBoxes: boolean = defaultDrawBoxes
     selectStep: number = -1
     fileIndex!: number
@@ -41,21 +43,23 @@ export class SelectionManager {
     selIndexes: (number | undefined)[] = []
     recorder?: IChangeRecorder
 
-    walkInListeners: ((selection: Selection) => void)[] = []
-    walkOutListeners: ((selection: Selection) => void)[] = []
+    walkInListeners: ((selection: SEL) => void)[] = []
+    walkOutListeners: ((selection: SEL) => void)[] = []
 
     constructor(
         public name: string,
         public completeColor: string,
         public tempColor: string,
         public jsonFiles: string[]
-    ) {}
+    ) {
+        this.fileIndex = SelectionManager.fileIndexHighest++
+    }
 
-    async newSelEvent(_: Selection): Promise<void> {}
-    async walkInEvent(selection: Selection): Promise<void> {
+    async newSelEvent(_: SEL): Promise<void> {}
+    async walkInEvent(selection: SEL): Promise<void> {
         this.walkInListeners.forEach(f => f(selection))
     }
-    async walkOutEvent(selection: Selection): Promise<void> {
+    async walkOutEvent(selection: SEL): Promise<void> {
         this.walkOutListeners.forEach(f => f(selection))
     }
     async onNewMapEntryEvent(): Promise<void> {
@@ -69,12 +73,11 @@ export class SelectionManager {
     setFileIndex(index: number) {
         this.fileIndex = index
     }
-
-    setMapEntry(map: string, entry: SelectionMapEntry) {
+    setMapEntry(map: string, entry: SelectionMapEntry<SEL>) {
         this.selMap[map.replace(/\./g, '/')] = entry
     }
 
-    getCurrentEntry(): SelectionMapEntry {
+    getCurrentEntry(): SelectionMapEntry<SEL> {
         return this.selMap[ig.game.mapName?.replace(/\./g, '/')]
     }
 
@@ -91,7 +94,7 @@ export class SelectionManager {
         }
         if (entry.tempSel && entry.tempSel.bb.length > 0) {
             const obj = reduceRectArr(entry.tempSel.bb)
-            const newSel: Selection = entry.tempSel as Selection
+            const newSel: SEL = entry.tempSel as SEL
             newSel.bb = obj.rects
             newSel.sizeRect = obj.rectSize
             await this.newSelEvent(newSel)
@@ -101,7 +104,11 @@ export class SelectionManager {
             entry.tempSel = undefined
             this.save()
         }
-        entry.tempSel = { bb: [], mapName: ig.game.mapName.replace(/\./g, '/'), data: {} }
+        ;(entry.tempSel as any) = {
+            bb: [],
+            mapName: ig.game.mapName.replace(/\./g, '/'),
+            data: {},
+        }
         if (setStep) {
             this.selectStep = 0
         }
@@ -199,12 +206,12 @@ export class SelectionManager {
                 this.checkSelForEvents(entry.sels[i], mpos, i)
             }
             if (entry.tempSel) {
-                this.checkSelForEvents(entry.tempSel as Selection, mpos, entry.sels.length)
+                this.checkSelForEvents(entry.tempSel as SEL, mpos, entry.sels.length)
             }
         }
     }
 
-    checkSelForEvents(sel: Selection, vec: MapPoint, i: number) {
+    checkSelForEvents(sel: SEL, vec: MapPoint, i: number) {
         let isIn = isVecInRectArr(vec, sel.bb)
 
         /* trigger walk in and out events only once */
@@ -287,12 +294,12 @@ export class SelectionManager {
     }
 
     async save() {
-        const saveObjects: Record<string, SelectionMapEntry>[] = []
+        const saveObjects: Record<string, SelectionMapEntry<SEL>>[] = []
         for (let i = 0; i < this.jsonFiles.length; i++) {
             saveObjects.push({})
         }
         for (const mapName in this.selMap) {
-            const selE: SelectionMapEntry = this.selMap[mapName]
+            const selE: SelectionMapEntry<SEL> = this.selMap[mapName]
             saveObjects[selE.fileIndex][mapName] = selE
         }
 
@@ -320,9 +327,9 @@ export class SelectionManager {
     async load(index: number) {
         try {
             let path: string = this.jsonFiles[index]
-            const obj: Record<string, SelectionMapEntry> = await FsUtil.readFileJson(path)
+            const obj: Record<string, SelectionMapEntry<SEL>> = await FsUtil.readFileJson(path)
             for (const mapName in obj) {
-                const entry: SelectionMapEntry = obj[mapName]
+                const entry: SelectionMapEntry<SEL> = obj[mapName]
                 entry.sels = entry.sels.map(s => {
                     s.sizeRect = Rect.new(MapRect, s.sizeRect)
                     s.bb = s.bb.map(r => Rect.new(MapRect, r))

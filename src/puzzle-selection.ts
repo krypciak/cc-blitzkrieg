@@ -55,7 +55,7 @@ function isBounceSwitch(_e: ig.Entity, type: string): _e is ig.ENTITY.BounceSwit
     return type == 'BounceSwitch'
 }
 
-export class PuzzleSelectionManager extends SelectionManager {
+export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
     recorder: PuzzleChangeRecorder
     incStep: number = 0.05
     changeModifiers: boolean = true
@@ -66,8 +66,7 @@ export class PuzzleSelectionManager extends SelectionManager {
 
     constructor() {
         super('puzzle', '#77000022', '#ff222222', [blitzkrieg.mod.baseDirectory + 'json/puzzleData.json'])
-        this.setFileIndex(0)
-        this.recorder = new PuzzleChangeRecorder()
+        this.recorder = new PuzzleChangeRecorder(this)
 
         ig.Game.inject({
             spawnEntity(entity, x, y, z, settings, showAppearEffects) {
