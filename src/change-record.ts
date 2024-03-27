@@ -7,24 +7,25 @@ export interface IChangeRecorder {
     recording: boolean
 }
 
-export abstract class ChangeRecorder<S extends Selection, M extends SelectionManager<S>, T> implements IChangeRecorder {
+export abstract class ChangeRecorder<SEL extends Selection, SELM extends SelectionManager<SEL>, T> implements IChangeRecorder {
     recording: boolean = false
     currentRecord!: T
-    startingSel!: S
+    startingSel!: SEL
     startTick!: number
 
     getCurrentTime(): number {
-        return ig.game.now - this.startTick
+        if (this.startTick == -1) this.startTick = ig.game.now
+        return Math.round(ig.game.now - this.startTick)
     }
 
     constructor(
-        public selM: M,
+        public selM: SELM,
         public ignoreSet: Set<string>
     ) {
         const self = this
         ig.Vars.inject({
             set(path: string, value) {
-                if (self.recording && !self.ignoreSet.has(path)) {
+                if (path !== undefined && path !== null && self.recording && !self.ignoreSet.has(path)) {
                     const prev = ig.vars.get(path)
                     let changed: boolean = false
                     if (typeof value === 'object') {
@@ -45,11 +46,11 @@ export abstract class ChangeRecorder<S extends Selection, M extends SelectionMan
 
     protected abstract pushVariableChange(frame: number, path: string, value: unknown): void
 
-    startRecording(startingSel: S) {
+    startRecording(startingSel: SEL) {
         assert(startingSel)
         this.startingSel = startingSel
         this.currentRecord = this.getEmptyRecord()
-        this.startTick = ig.game.now
+        this.startTick = -1
         this.recording = true
         blitzkrieg.rhudmsg('blitzkrieg', 'Started recording for game state changes', 2)
     }

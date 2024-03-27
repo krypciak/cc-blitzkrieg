@@ -13,7 +13,7 @@ export interface Selection {
     mapName: string
     sizeRect: MapRect
     data: {
-        recordLog?: any
+        recordLog?: unknown
         endPos?: Vec3 & { level: number }
         startPos?: Vec3 & { level: number }
     }

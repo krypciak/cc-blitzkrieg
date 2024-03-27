@@ -1,0 +1,178 @@
+{
+    "crossedeyes/test": {
+        "sels": [
+            {
+                "bb": [{ "x": 27, "y": 12, "width": 13, "height": 9 }],
+                "mapName": "crossedeyes/test",
+                "data": {
+                    "recordLog": {
+                        "log": [
+                            [0, ".tmp.s1", true],
+                            [7, ".tmp._entity74_triggered", true],
+                            [7, ".tmp._entity93_triggered", true],
+                            [7, ".map.chest_73", 0],
+                            [7, ".map.chest_74", 0],
+                            [7, ".map.chest_77", 0],
+                            [7, ".map.chest_78", 0],
+                            [7, ".map.chest_79", 0],
+                            [7, ".map.chest_80", 0],
+                            [7, ".map.chest_81", 0],
+                            [7, ".map.chest_82", 0],
+                            [3294, ".tmp.cage", true],
+                            [3885, ".tmp.pvp_null_defeated", true],
+                            [4774, ".tmp.cage", false],
+                            [5087, "death", "bb0d1acc135e4f6a94e507801b0cf93d155ada44a9a4fa0f83956a15767a0a66"],
+                            [5650, ".tmp.cage", true],
+                            [6108, "death", "b8b4a6141b61a8529c9ad6a3d28084df3e3549cf22fae115a78faf5b90bf4fd4"],
+                            [6657, ".tmp.cage", false]
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 27, "y": 12, "width": 40, "height": 21 }
+            }
+        ]
+    },
+    "arid-dng/second/f0/center": {
+        "sels": [
+            {
+                "bb": [{ "x": 0, "y": 1, "width": 46, "height": 38 }],
+                "mapName": "arid-dng/second/f0/center",
+                "data": {
+                    "recordLog": {
+                        "log": [
+                            [0, ".tmp.battleStart", true],
+                            [7, ".map._entity19_triggered", true],
+                            [7, ".tmp.barrier", true],
+                            [2658, "spawn", "a4eff64e9b1eea754ea48971371350d5fc013557f9ee430de313003b8f8bf061"],
+                            [2764, "spawn", "88ba9fd494ea94f8ec520e21dd3b557299aeb835e564ff805e8d102c5ce345e8"],
+                            [2820, "spawn", "8e3ff62461d39fda65fe9b5d3b407cdcec26acf2ee6cef76aea48ffd27ae0fa2"],
+                            [2876, "spawn", "688c458d99c9ab3eb0fa73e3ee1554bcb8b3154d3d0b1b2aafc6b779c9e1d94c"],
+                            [12141, ".tmp.pvp_null_defeated", true],
+                            [13196, "death", "88ba9fd494ea94f8ec520e21dd3b557299aeb835e564ff805e8d102c5ce345e8"],
+                            [14159, ".map.counter", 9],
+                            [22909, "death", "688c458d99c9ab3eb0fa73e3ee1554bcb8b3154d3d0b1b2aafc6b779c9e1d94c"],
+                            [23834, ".map.counter", 8],
+                            [26719, "death", "8e3ff62461d39fda65fe9b5d3b407cdcec26acf2ee6cef76aea48ffd27ae0fa2"],
+                            [27491, ".map.counter", 7],
+                            [30029, "death", "a4eff64e9b1eea754ea48971371350d5fc013557f9ee430de313003b8f8bf061"],
+                            [30509, ".map.counter", 6],
+                            [30509, ".map._entity36_triggered", true],
+                            [30898, "spawn", "d115d33dced90fda798e077327a20d5ca8d2327471eaa575eb8f9ba3b9a0c3d9"],
+                            [30898, "spawn", "97ac66573487941466b80a16ac966a87ebd0fde445693588ee391a2813da39cf"],
+                            [30898, "spawn", "6bc5847bb10f4870b720e0dff51fc7924599573b584552426f1b9f98409bffd0"],
+                            [30898, "spawn", "269f0d438d67e75704dd92cdc9055c1d7884e0e880712e7aefd598e24ddeac3c"],
+                            [30898, "spawn", "1d5143ad97f273adf5dc43b7a434c7142b8eb9e2e61cb82fbcd7666bffe365cd"],
+                            [30898, "spawn", "46185ab5ca8d575f4b473fadb17ba268f88a7b8a726575200ced92726f581481"],
+                            [36152, "death", "97ac66573487941466b80a16ac966a87ebd0fde445693588ee391a2813da39cf"],
+                            [37136, "death", "d115d33dced90fda798e077327a20d5ca8d2327471eaa575eb8f9ba3b9a0c3d9"],
+                            [37171, ".map.counter", 5],
+                            [37653, ".map.counter", 4],
+                            [41374, "death", "269f0d438d67e75704dd92cdc9055c1d7884e0e880712e7aefd598e24ddeac3c"],
+                            [42635, ".map.counter", 3],
+                            [43393, "spawn", "a2df66c632e4955949ba0bee23f0e280960a041fc9aecb1d6468322562ba61f7"],
+                            [43393, "spawn", "a2df66c632e4955949ba0bee23f0e280960a041fc9aecb1d6468322562ba61f7"],
+                            [45630, "death", "6bc5847bb10f4870b720e0dff51fc7924599573b584552426f1b9f98409bffd0"],
+                            [47016, ".map.counter", 2],
+                            [47278, "death", "1d5143ad97f273adf5dc43b7a434c7142b8eb9e2e61cb82fbcd7666bffe365cd"],
+                            [48078, ".map.counter", 1],
+                            [49223, ".map.preDone", true],
+                            [49223, ".map._entity37_triggered", true],
+                            [49723, "death", "46185ab5ca8d575f4b473fadb17ba268f88a7b8a726575200ced92726f581481"],
+                            [49744, "death", "a2df66c632e4955949ba0bee23f0e280960a041fc9aecb1d6468322562ba61f7"],
+                            [49744, "death", "a2df66c632e4955949ba0bee23f0e280960a041fc9aecb1d6468322562ba61f7"],
+                            [50209, ".map.counter", 0],
+                            [50209, ".map.postDone", true],
+                            [50779, ".tmp.designer", true],
+                            [53623, ".tmp.designer", false],
+                            [54399, ".map.elevator", true],
+                            [55455, ".map.elevatorSign", true],
+                            [55623, ".g.last-dng.floor0", true],
+                            [55791, ".g.last-dng.floor1", true],
+                            [55959, ".tmp.barrier", false],
+                            [56177, ".tmp._levelUpFinished", false],
+                            [56423, ".tmp._levelUpFinished", true]
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 1, "width": 46, "height": 39 }
+            }
+        ]
+    },
+    "arid-dng/second/elevator-up": {
+        "sels": [
+            {
+                "bb": [{ "x": 9, "y": 7, "width": 41, "height": 27 }],
+                "mapName": "arid-dng/second/elevator-up",
+                "data": {
+                    "recordLog": {
+                        "log": [
+                            [1063, "death", "f967786bba19869ffcac90f241e954423af8195301d1c3dfe1b0ff87b88b0701"],
+                            [2356, "death", "ada0274d128c1bc4e788693ee8e595bd5fdfe5f1f9cceb16f8d6c42f87f93750"],
+                            [4551, "spawn", "3d5b58b2f9320b8627a21cae07166291db5082687a7db541aa13f974a8b254ec"],
+                            [5086, "death", "fcd3c9c1722a1d59857b1396b68e528a6451b02efc8c783b3f68035220c80492"],
+                            [6810, "death", "3d5b58b2f9320b8627a21cae07166291db5082687a7db541aa13f974a8b254ec"],
+                            [9686, "spawn", "dd9865306b354d38cc4e3d8f5d2acec19dccd229904a8682de8cb79853e88dc9"],
+                            [13220, "death", "dd9865306b354d38cc4e3d8f5d2acec19dccd229904a8682de8cb79853e88dc9"],
+                            [14172, "spawn", "363517af6b017d94c9f4d15559354b0cfa46365e683e3a635b80f9e3664940b1"],
+                            [17036, "death", "363517af6b017d94c9f4d15559354b0cfa46365e683e3a635b80f9e3664940b1"],
+                            [17168, "spawn", "b893a3f604a677c05abe2215391c0019a3020048354e4de36544331aa6586cbb"],
+                            [20991, "death", "b893a3f604a677c05abe2215391c0019a3020048354e4de36544331aa6586cbb"],
+                            [23889, "spawn", "d8794dbe19702a7956cf9fed1d3e11236851af41bc038f1558f841a5df9c9e8b"],
+                            [23986, "spawn", "a8755827a95096c3bb7f546fab445e265f8074794619f0b7639f47f0b49c003f"],
+                            [24084, "spawn", "e4faa72665f61278b9f7503e38445581cf04d32a66910b7fd0a3b431547fa16e"],
+                            [25918, "death", "d8794dbe19702a7956cf9fed1d3e11236851af41bc038f1558f841a5df9c9e8b"],
+                            [26939, "death", "e4faa72665f61278b9f7503e38445581cf04d32a66910b7fd0a3b431547fa16e"],
+                            [28413, "spawn", "3d5b58b2f9320b8627a21cae07166291db5082687a7db541aa13f974a8b254ec"],
+                            [28503, "death", "a8755827a95096c3bb7f546fab445e265f8074794619f0b7639f47f0b49c003f"],
+                            [30205, "death", "3d5b58b2f9320b8627a21cae07166291db5082687a7db541aa13f974a8b254ec"],
+                            [31407, "spawn", "f6d3414ec1d0b6ad556a0ea5713fcd0f7982f435963facc9331ed9a0a35294b4"],
+                            [34854, "death", "f6d3414ec1d0b6ad556a0ea5713fcd0f7982f435963facc9331ed9a0a35294b4"],
+                            [37856, "spawn", "ed9790581e5c4ff6c025bdc13dff12c1d4aa59064f9b47f0182f2c91e9bf079c"],
+                            [42445, "death", "ed9790581e5c4ff6c025bdc13dff12c1d4aa59064f9b47f0182f2c91e9bf079c"],
+                            [44349, "spawn", "ce3e4ade7749667786faac16b25ec818589488be85b711e22b59714b656e254f"],
+                            [48081, "death", "ce3e4ade7749667786faac16b25ec818589488be85b711e22b59714b656e254f"],
+                            [50346, "spawn", "86e8af7c03198192db65164e925556dd9cd9d940d58ac1565717260a2aec5365"],
+                            [53056, "death", "86e8af7c03198192db65164e925556dd9cd9d940d58ac1565717260a2aec5365"]
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 9, "y": 7, "width": 50, "height": 34 }
+            }
+        ]
+    },
+    "shock-dng/f2/room3to5": {
+        "sels": [
+            {
+                "bb": [{ "x": 1, "y": 4, "width": 121, "height": 29 }],
+                "mapName": "shock-dng/f2/room3to5",
+                "data": {
+                    "recordLog": {
+                        "log": [
+                            [19129, "death", "ec31b64a57e884b97d2afa3fe60fb47b3fbe1b8c636c5183fcc175cc60033e5a"],
+                            [21563, "death", "e01511404043d2d7cb7f312b1f843bc5e7cb8f755799c7bb3829203d2b5575ea"],
+                            [24482, "death", "88bc8fcd9dec421255fd3edd88682f0d086ed1a823ec22ff2d5e65e9ff82ecc1"],
+                            [26650, "death", "d59ce2cfd60ffa2cd0a20c0aecb56cadd6807a604bcb5675029a9e8c1303cd0b"],
+                            [34340, "death", "b8c2b88aca63a7d8edc028f628821ad9bc093fb2940302a7efefea977b6acca0"],
+                            [37369, "death", "c7139943cfbbc1b87cbfaa230aac610d2a9d31cf26b7ace57cec31fb5545b9ff"],
+                            [51598, "spawn", "ddcd74dd5d91f26a81e94174c6c1dd4b9172a1f54df9f4335c1a545b4b21d66a"],
+                            [52084, "death", "70e8a18443cc3f16a28fffb2d6086b93eb873051fd4bbc21c6588ced43fab255"],
+                            [58702, "death", "6d1cb907cdb4a4cc7cfce17726b5736342f021b1b77146ba1517b06ce18f2f00"],
+                            [74073, "death", "ddcd74dd5d91f26a81e94174c6c1dd4b9172a1f54df9f4335c1a545b4b21d66a"],
+                            [77432, "death", "c96d19b5e81577a550a52331f45f85ade2fe19875494561247a6fce8c9ebc608"],
+                            [83862, "death", "42228f57a5205695986d94461ce3e2bff4027bfcd5dc6c284664628785d81f02"],
+                            [97689, "death", "43ea6f3c404a8c9d86870e115638188477ac4d45cdae8bef5452a35b037bdf05"],
+                            [99990, "death", "b18fe55c8efdeb4efc2be7a80e68da00f19f163dfd32a3e6f936f1170a1ebaab"],
+                            [105897, "death", "d66cded9632c6a2e7a16abec65d3ea4c9288c1fd4de49da8a6652556b592b031"],
+                            [108550, "spawn", "c72c0c672071f563cd51a52a544f8a61ef5330295d4114da9622955ec524895c"],
+                            [108550, "spawn", "2269a9cf120f03a0cec4801a57d864fa6a3131de95e50687a2b9ec23c689d447"],
+                            [121907, "death", "c72c0c672071f563cd51a52a544f8a61ef5330295d4114da9622955ec524895c"],
+                            [144242, "death", "2269a9cf120f03a0cec4801a57d864fa6a3131de95e50687a2b9ec23c689d447"]
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 1, "y": 4, "width": 122, "height": 33 }
+            }
+        ]
+    },
+    "arid-dng/second/f99/boss-1": { "sels": [] }
+}

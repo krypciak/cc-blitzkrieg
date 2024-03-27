@@ -48,7 +48,7 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
     }
 
     getCurrentTime(): number {
-        return Math.round((ig.game.now - this.startTick) * sc.options.get('assist-puzzle-speed'))
+        return super.getCurrentTime() * sc.options.get('assist-puzzle-speed')
     }
 
     private currentStep() {

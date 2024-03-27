@@ -264,8 +264,8 @@ export default class Blitzkrieg implements PluginClass {
             puzzle: new PuzzleSelectionManager(),
             battle: new BattleSelectionManager(),
         }
+        Object.values(this.sels).map(sm => sm.loadAll())
         this.currSel = this.sels.puzzle
-        this.currSel.loadAll()
         this.registerSels()
         setupTabs()
         MenuOptions.initPrestart()

@@ -28,7 +28,7 @@ devDependencies:
     version: github.com/krypciak/cc-map-util/256929a9a8b77021a953c92d048832ee789839f5
   cc-vim:
     specifier: github:krypciak/cc-vim
-    version: github.com/krypciak/cc-vim/50ff12de740b415192dc394673dd218365420d62
+    version: github.com/krypciak/cc-vim/e671c2fdfcf231609cdc77ed02d4ce4f70e56a70
   esbuild:
     specifier: ^0.20.0
     version: 0.20.1
@@ -43,7 +43,7 @@ devDependencies:
     version: 5.4.2
   ultimate-crosscode-typedefs:
     specifier: github:krypciak/ultimate-crosscode-typedefs
-    version: github.com/krypciak/ultimate-crosscode-typedefs/c79f4e5372469f5f3e45ab195a6b4156b6172b5d
+    version: github.com/krypciak/ultimate-crosscode-typedefs/8b98dbfe7cccca6d1d0dc003413033b42e225f89
 
 packages:
 
@@ -1267,14 +1267,14 @@ packages:
     version: 1.0.0
     dev: true
 
-  github.com/krypciak/cc-vim/50ff12de740b415192dc394673dd218365420d62:
-    resolution: {tarball: https://codeload.github.com/krypciak/cc-vim/tar.gz/50ff12de740b415192dc394673dd218365420d62}
+  github.com/krypciak/cc-vim/e671c2fdfcf231609cdc77ed02d4ce4f70e56a70:
+    resolution: {tarball: https://codeload.github.com/krypciak/cc-vim/tar.gz/e671c2fdfcf231609cdc77ed02d4ce4f70e56a70}
     name: cc-vim
-    version: 1.5.9
+    version: 1.6.0
     dev: true
 
-  github.com/krypciak/ultimate-crosscode-typedefs/c79f4e5372469f5f3e45ab195a6b4156b6172b5d:
-    resolution: {tarball: https://codeload.github.com/krypciak/ultimate-crosscode-typedefs/tar.gz/c79f4e5372469f5f3e45ab195a6b4156b6172b5d}
+  github.com/krypciak/ultimate-crosscode-typedefs/8b98dbfe7cccca6d1d0dc003413033b42e225f89:
+    resolution: {tarball: https://codeload.github.com/krypciak/ultimate-crosscode-typedefs/tar.gz/8b98dbfe7cccca6d1d0dc003413033b42e225f89}
     name: ultimate-crosscode-typedefs
     version: 0.0.1
     engines: {node: '>=10.0.0'}

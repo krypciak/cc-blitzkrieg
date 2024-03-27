@@ -122,14 +122,14 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
         if (isNaN(val)) {
             return
         }
-        const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
+        const sel: PuzzleSelection = this.inSelStack.peek()
         sel.data.puzzleSpeed = val
         this.updatePuzzleSpeed(sel)
     }
 
     async walkInEvent(sel: PuzzleSelection) {
         super.walkInEvent(sel)
-        this.updatePuzzleSpeed(sel as PuzzleSelection)
+        this.updatePuzzleSpeed(sel)
 
         if (this.changeModifiers) {
             ig.game.playerEntity.params.modifiers.AIMING_MOVEMENT = 0.5
@@ -146,7 +146,7 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
 
     async walkOutEvent(sel: PuzzleSelection) {
         super.walkOutEvent(sel)
-        this.updatePuzzleSpeed(this.inSelStack.peek() as PuzzleSelection)
+        this.updatePuzzleSpeed(this.inSelStack.peek())
 
         if (this.changeModifiers) {
             this.modifiersActive = false
@@ -157,11 +157,10 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
     }
 
     async newSelEvent(sel: Selection) {
-        await this.finalizeSel(sel as PuzzleSelection)
+        await this.finalizeSel(sel)
     }
 
-    async finalizeSel(sel1: Selection) {
-        const sel = sel1 as PuzzleSelection
+    async finalizeSel(sel: Selection) {
         const scale: readonly string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] as const
 
         const data: Partial<PuzzleSelection['data']> = {
@@ -202,7 +201,7 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
     }
 
     solve() {
-        const sel: PuzzleSelection = this.inSelStack.peek() as PuzzleSelection
+        const sel: PuzzleSelection = this.inSelStack.peek()
         if (!sel) {
             return
         }
@@ -233,20 +232,11 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
             for (let i = 0; i < log.length; i++) {
                 const action = log[i]
                 if (action.length == 3) {
-                    assertBool(action[1].startsWith('.'))
-                    const splittedPath = action[1].substring(1).split('.')
-                    let value = ig.vars.storage
-                    for (let i = 0; i < splittedPath.length - 1; i++) {
-                        if (!value.hasOwnProperty(splittedPath[i])) {
-                            value[splittedPath[i]] = {}
-                        }
-                        value = value[splittedPath[i]]
-                    }
-                    value[splittedPath[splittedPath.length - 1]] = action[2]
+                    const [_, path, value] = action
+                    assertBool(path.startsWith('.'))
+                    ig.vars.set(path.substring(1), value)
                 } else {
-                    const type = action[2]
-                    const pos: Vec2 = action[1]
-                    const act: string = action[3]
+                    const [_, pos, type, act] = action
                     const e: ig.Entity = PuzzleSelectionManager.getEntityByPos(pos)
                     if (isBounceBlock(e, type)) {
                         if (act == 'on') {
@@ -254,37 +244,13 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
                             e.effects.spawnOnTarget('bounceHit', e)
                             e.setCurrentAnim('on')
                         }
-                        if (act == 'resolve') {
-                            e.onGroupResolve(true)
-                        }
+                        if (act == 'resolve') e.onGroupResolve(true)
                     } else if (isBounceSwitch(e, type)) {
-                        if (act == 'resolve') {
-                            e.onGroupResolve()
-                        }
+                        if (act == 'resolve') e.onGroupResolve()
                     }
                 }
             }
-            // let solveArrayIndex = 0
-            // const intervalID = setInterval(async () => {
-            //     const action = log[solveArrayIndex]
-            //     if (action.length !== 3) { return }
-            //     const splittedPath = action[1].split('.')
-            //     let value = ig.vars.storage
-            //     for (let i = 0; i < splittedPath.length - 1; i++) {
-            //         value = value[splittedPath[i]]
-            //     }
-
-            //     value[splittedPath[splittedPath.length - 1]] = action[2]
-
-            //     ig.game.varsChangedDeferred()
-
-            //     solveArrayIndex++
-            //     if (solveArrayIndex == log.length) {
-            //         clearInterval(intervalID)
-            //     }
-            // }, 1000 / delay)
         }
-        ig.game.varsChangedDeferred()
         blitzkrieg.rhudmsg('blitzkrieg', 'Solved puzzle', 2)
     }
 
