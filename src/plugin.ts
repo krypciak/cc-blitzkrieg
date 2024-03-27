@@ -306,9 +306,6 @@ export default class Blitzkrieg implements PluginClass {
         if (blitzkrieg.sels.puzzle.inSelStack.length() > 0) {
             !pretend && blitzkrieg.sels.puzzle.solve()
             return true
-        } else if (blitzkrieg.sels.battle.inSelStack.length() > 0) {
-            !pretend && blitzkrieg.sels.battle.solve()
-            return true
         }
         return false
     }
