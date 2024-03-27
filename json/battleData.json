@@ -1,12 +1,2 @@
 {
-    "crossedeyes/test": {
-        "sels": [
-            {
-                "bb": [{ "x": 75, "y": 10, "width": 13, "height": 13 }],
-                "mapName": "crossedeyes/test",
-                "data": { "type": null, "difficulty": 1, "timeLength": 1, "chapter": 0, "plotLine": -1, "elements": [true, true, true, true], "startPos": { "x": 1216, "y": 269, "z": 1, "level": 2 } },
-                "sizeRect": { "x": 75, "y": 10, "width": 88, "height": 23 }
-            }
-        ]
-    }
 }

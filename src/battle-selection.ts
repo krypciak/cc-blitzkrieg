@@ -3,7 +3,7 @@ import { Util } from './util'
 
 export interface BattleSelection extends Selection {
     data: {
-        endPos: undefined
+        endPos: Vec3 & { level: number }
         startPos: Vec3 & { level: number }
         type: BATTLE_TYPE
         difficulty: number
@@ -51,6 +51,8 @@ export class BattleSelectionManager extends SelectionManager<BattleSelection> {
 
         blitzkrieg.rhudmsg('blitzkrieg', 'Starting position', 1)
         data.startPos = await Util.waitForPositionKey()
+        blitzkrieg.rhudmsg('blitzkrieg', 'Ending position', 1)
+        data.endPos = await Util.waitForPositionKey()
 
         sel.data = { ...sel.data, ...data }
     }
