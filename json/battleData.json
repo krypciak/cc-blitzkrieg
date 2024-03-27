@@ -1,2 +1,217 @@
 {
+    "cargo-ship/room4": {
+        "sels": [
+            {
+                "bb": [],
+                "mapName": "cargo-ship/room4",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": 51,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 136.16, "y": 339.43, "z": 0, "level": 0 },
+                    "endPos": { "x": 180.37, "y": 186.99, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 7, "y": 5, "width": 34, "height": 37 }
+            },
+            {
+                "bb": [{ "x": 9, "y": 5, "width": 25, "height": 32 }],
+                "mapName": "cargo-ship/room4",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": 51,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 151.53, "y": 335.47, "z": 0, "level": 0 },
+                    "endPos": { "x": 512, "y": 335.47, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 9, "y": 5, "width": 34, "height": 37 }
+            }
+        ]
+    },
+    "hideout/path-1": {
+        "sels": [
+            {
+                "bb": [{ "x": 1, "y": 0, "width": 37, "height": 26 }],
+                "mapName": "hideout/path-1",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 353.79, "y": 431.02, "z": 32, "level": 1 },
+                    "endPos": { "x": 585.25, "y": 247.54, "z": 32, "level": 1 }
+                },
+                "sizeRect": { "x": 1, "y": 0, "width": 38, "height": 26 }
+            }
+        ]
+    },
+    "hideout/path-2": {
+        "sels": [
+            {
+                "bb": [{ "x": 36, "y": 11, "width": 34, "height": 36 }],
+                "mapName": "hideout/path-2",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 576.69, "y": 481.1, "z": 0, "level": 1 },
+                    "endPos": { "x": 811.28, "y": 259.17, "z": 0, "level": 1 }
+                },
+                "sizeRect": { "x": 36, "y": 11, "width": 70, "height": 47 }
+            }
+        ]
+    },
+    "cargo-ship/room2": {
+        "sels": [
+            {
+                "bb": [
+                    { "x": 0, "y": 4, "width": 19, "height": 25 },
+                    { "x": 0, "y": 29, "width": 7, "height": 3 }
+                ],
+                "mapName": "cargo-ship/room2",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 30,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 60.76, "y": 501.31, "z": 0, "level": 0 },
+                    "endPos": { "x": 229.93, "y": 423.76, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 0, "y": 4, "width": 19, "height": 32 }
+            },
+            {
+                "bb": [
+                    { "x": 21, "y": 28, "width": 6, "height": 9 },
+                    { "x": 9, "y": 29, "width": 12, "height": 8 }
+                ],
+                "mapName": "cargo-ship/room2",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 31,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 210.73, "y": 469.89, "z": 0, "level": 0 },
+                    "endPos": { "x": 407.94, "y": 527.32, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 9, "y": 28, "width": 27, "height": 37 }
+            },
+            {
+                "bb": [
+                    { "x": 21, "y": 4, "width": 26, "height": 24 },
+                    { "x": 27, "y": 28, "width": 20, "height": 10 }
+                ],
+                "mapName": "cargo-ship/room2",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": 32,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 439.8, "y": 515, "z": 0, "level": 0 },
+                    "endPos": { "x": 666.88, "y": 544, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 21, "y": 4, "width": 47, "height": 38 }
+            }
+        ]
+    },
+    "cargo-ship/room5": {
+        "sels": [
+            {
+                "bb": [{ "x": 9, "y": 10, "width": 8, "height": 11 }],
+                "mapName": "cargo-ship/room5",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 62,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 188, "y": 181, "z": 1, "level": 0 },
+                    "endPos": { "x": 256.44, "y": 303, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 9, "y": 10, "width": 17, "height": 21 }
+            },
+            {
+                "bb": [{ "x": 15, "y": 4, "width": 10, "height": 13 }],
+                "mapName": "cargo-ship/room5",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 64,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 300, "y": 271.84, "z": 0, "level": 0 },
+                    "endPos": { "x": 381.28, "y": 155, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 15, "y": 4, "width": 25, "height": 17 }
+            },
+            {
+                "bb": [{ "x": 31, "y": 4, "width": 17, "height": 19 }],
+                "mapName": "cargo-ship/room5",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 66,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 499.06, "y": 225.34, "z": 0, "level": 0 },
+                    "endPos": { "x": 742.04, "y": 306, "z": 0, "level": 0 }
+                },
+                "sizeRect": { "x": 31, "y": 4, "width": 48, "height": 23 }
+            }
+        ]
+    },
+    "cargo-ship/ship": {
+        "sels": [
+            {
+                "bb": [{ "x": 121, "y": 28, "width": 18, "height": 15 }],
+                "mapName": "cargo-ship/ship",
+                "data": {
+                    "type": null,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": 300,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 1949.08, "y": 1017, "z": 448, "level": 4 },
+                    "endPos": { "x": 1948.29, "y": 1017, "z": 448, "level": 4 }
+                },
+                "sizeRect": { "x": 121, "y": 28, "width": 139, "height": 43 }
+            }
+        ]
+    },
+    "cargo-ship/boss": {
+        "sels": [
+            {
+                "bb": [{ "x": 12, "y": 24, "width": 38, "height": 25 }],
+                "mapName": "cargo-ship/boss",
+                "data": {
+                    "type": null,
+                    "difficulty": 2,
+                    "timeLength": 3,
+                    "chapter": 0,
+                    "plotLine": 600,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 607.6, "y": 1204.73, "z": 448, "level": 1 },
+                    "endPos": { "x": 607.6, "y": 832, "z": 448, "level": 1 }
+                },
+                "sizeRect": { "x": 12, "y": 24, "width": 50, "height": 49 }
+            }
+        ]
+    }
 }
