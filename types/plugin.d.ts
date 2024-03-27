@@ -3,7 +3,9 @@ import { SelectionManager, SelectionMapEntry } from './selection';
 import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './puzzle-selection';
 import { BlitzkriegMapUtil } from './map-sel-copy';
 import { FsUtil } from './fsutil';
+import { BattleSelectionManager } from './battle-selection';
 import 'nax-ccuilib/src/headers/nax/quick-menu-public-api.d.ts';
+import { PluginClass } from 'ultimate-crosscode-typedefs/modloader/mod';
 declare global {
     const blitzkrieg: Blitzkrieg;
     interface Window {
@@ -14,24 +16,24 @@ interface BlitzkreigDebug {
     selectionOutlines: boolean;
     prettifySels: boolean;
 }
-export default class Blitzkrieg {
+export default class Blitzkrieg implements PluginClass {
     dir: string;
     mod: Mod1;
-    rhudmsg: (title: string, message: string, timeout: number) => void;
-    syncDialog: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>;
-    currSel: SelectionManager;
     sels: {
         puzzle: PuzzleSelectionManager;
-        battle: SelectionManager;
+        battle: BattleSelectionManager;
     };
-    mapUtil: BlitzkriegMapUtil;
+    currSel: (typeof this.sels)[keyof typeof this.sels];
     debug: BlitzkreigDebug;
-    selectionMode: string;
     constructor(mod: Mod1);
-    registerSels(): void;
+    private registerSels;
     prestart(): Promise<void>;
     poststart(): Promise<void>;
     prettifyJson(json: string, printWidth?: number, tabWidth?: number): Promise<string>;
+    solve(pretend?: boolean): boolean;
+    rhudmsg: (title: string, message: string, timeout: number) => void;
+    dialogPromise: <T extends readonly any[]>(text: string, buttons: T) => Promise<T[number]>;
+    mapUtil: BlitzkriegMapUtil;
     FsUtil: typeof FsUtil;
     SelectionManager: typeof SelectionManager;
     SelectionMapEntry: typeof SelectionMapEntry;

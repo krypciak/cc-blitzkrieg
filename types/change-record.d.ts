@@ -1,23 +1,21 @@
 import { Selection, SelectionManager } from './selection';
 export interface IChangeRecorder {
-    startRecording(selM: SelectionManager, startingSel: Selection): void;
+    startRecording(startingSel: Selection): void;
     stopRecording(purge?: boolean): void;
-    initPrestart(): void;
-    initPoststart(): void;
     recording: boolean;
 }
-export declare class ChangeRecorder implements IChangeRecorder {
-    tps: number;
+export declare abstract class ChangeRecorder<SEL extends Selection, SELM extends SelectionManager<SEL>, T> implements IChangeRecorder {
+    selM: SELM;
+    ignoreSet: Set<string>;
     recording: boolean;
-    currentRecord: {
-        log: [/* frame */ number, /* var path */ string, /* value */ any][];
-    };
-    loopIndex: number;
-    selM: SelectionManager;
-    startingSel: Selection;
-    constructor(tps: number);
-    initPoststart(): void;
-    initPrestart(): void;
-    startRecording(selM: SelectionManager, startingSel: Selection): void;
+    currentRecord: T;
+    startingSel: SEL;
+    startTick: number;
+    getCurrentTime(): number;
+    constructor(selM: SELM, ignoreSet: Set<string>);
+    protected abstract getEmptyRecord(): T;
+    protected abstract pushVariableChange(frame: number, path: string, value: unknown): void;
+    startRecording(startingSel: SEL): void;
     stopRecording(purge?: boolean): void;
+    protected abstract handleStopRecordingData(): void;
 }

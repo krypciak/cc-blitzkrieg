@@ -1,5 +1,5 @@
 import { Selection, SelectionManager } from './selection';
-import { PuzzleChangeRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder';
+import { PuzzleChangeRecorder as PuzzleRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder';
 export declare enum PuzzleRoomType {
     WholeRoom = 0,
     AddWalls = 1,
@@ -44,8 +44,8 @@ export interface PuzzleSelection extends Selection {
         initialMapState: Record<string, string | number | boolean>;
     };
 }
-export declare class PuzzleSelectionManager extends SelectionManager {
-    recorder: PuzzleChangeRecorder;
+export declare class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
+    recorder: PuzzleRecorder;
     incStep: number;
     changeModifiers: boolean;
     changeSpeed: boolean;
@@ -60,7 +60,7 @@ export declare class PuzzleSelectionManager extends SelectionManager {
     walkInEvent(sel: PuzzleSelection): Promise<void>;
     walkOutEvent(sel: PuzzleSelection): Promise<void>;
     newSelEvent(sel: Selection): Promise<void>;
-    finalizeSel(sel1: Selection): Promise<void>;
+    finalizeSel(sel: Selection): Promise<void>;
     solve(): void;
     solveSel(sel: PuzzleSelection, delay?: number): void;
     static getEntityByPos(pos: Vec2): ig.Entity;

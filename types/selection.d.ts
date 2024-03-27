@@ -7,7 +7,7 @@ export interface Selection {
     mapName: string;
     sizeRect: MapRect;
     data: {
-        recordLog?: any;
+        recordLog?: unknown;
         endPos?: Vec3 & {
             level: number;
         };
@@ -16,42 +16,41 @@ export interface Selection {
         };
     };
 }
-export declare class SelectionMapEntry {
-    sels: Selection[];
+export declare class SelectionMapEntry<SEL extends Selection> {
+    sels: SEL[];
     fileIndex: number;
-    tempSel?: Omit<Selection, "sizeRect"> | undefined;
-    constructor(sels: Selection[], fileIndex: number, tempSel?: Omit<Selection, "sizeRect"> | undefined);
+    tempSel?: Omit<SEL, "sizeRect"> | undefined;
+    constructor(sels: SEL[], fileIndex: number, tempSel?: Omit<SEL, "sizeRect"> | undefined);
     toJSON(): object;
 }
-export declare class SelectionManager {
-    name: string;
+export declare class SelectionManager<SEL extends Selection> {
+    fileIndex: number;
     completeColor: string;
     tempColor: string;
     jsonFiles: string[];
-    selMap: Record<string, SelectionMapEntry>;
-    inSelStack: Stack<Selection>;
+    selMap: Record<string, SelectionMapEntry<SEL>>;
+    inSelStack: Stack<SEL>;
     drawBoxes: boolean;
     selectStep: number;
-    fileIndex: number;
     tempPos: MapPoint;
     selIndexes: (number | undefined)[];
     recorder?: IChangeRecorder;
-    walkInListeners: ((selection: Selection) => void)[];
-    walkOutListeners: ((selection: Selection) => void)[];
-    constructor(name: string, completeColor: string, tempColor: string, jsonFiles: string[]);
-    newSelEvent(_: Selection): Promise<void>;
-    walkInEvent(selection: Selection): Promise<void>;
-    walkOutEvent(selection: Selection): Promise<void>;
+    walkInListeners: ((selection: SEL) => void)[];
+    walkOutListeners: ((selection: SEL) => void)[];
+    constructor(fileIndex: number, completeColor: string, tempColor: string, jsonFiles: string[]);
+    newSelEvent(_: SEL): Promise<void>;
+    walkInEvent(selection: SEL): Promise<void>;
+    walkOutEvent(selection: SEL): Promise<void>;
     onNewMapEntryEvent(): Promise<void>;
     setFileIndex(index: number): void;
-    setMapEntry(map: string, entry: SelectionMapEntry): void;
-    getCurrentEntry(): SelectionMapEntry;
+    setMapEntry(map: string, entry: SelectionMapEntry<SEL>): void;
+    getCurrentEntry(): SelectionMapEntry<SEL>;
     selectionCreatorBegin(): Promise<void>;
     selectionCreatorDelete(): void;
     selectionCreatorDeconstruct(): void;
     selectionCreatorSelect(): void;
     checkForEvents(pos: Vec2): void;
-    checkSelForEvents(sel: Selection, vec: MapPoint, i: number): void;
+    checkSelForEvents(sel: SEL, vec: MapPoint, i: number): void;
     drawBox(rect: bareRect, color: string): void;
     drawBoxArray(rects: bareRect[], color: string): void;
     drawSelections(): void;

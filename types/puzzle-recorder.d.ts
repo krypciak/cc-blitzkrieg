@@ -1,25 +1,19 @@
-import { IChangeRecorder } from './change-record';
+import { ChangeRecorder } from './change-record';
 import { PuzzleSelection, PuzzleSelectionManager, PuzzleSelectionStep } from './puzzle-selection';
 export type RecordedPuzzleElementsEntities = 'BounceBlock' | 'BounceSwitch';
-export declare class PuzzleChangeRecorder implements IChangeRecorder {
-    recording: boolean;
-    currentRecord: {
-        steps: Partial<PuzzleSelectionStep>[];
-    };
-    startTime: number;
-    get loopIndex(): number;
-    selM: PuzzleSelectionManager;
-    startingSel: PuzzleSelection;
-    recordIgnoreSet: Set<string>;
-    constructor();
-    currentStepIndex: number;
-    currentStep(): Partial<PuzzleSelectionStep>;
-    pushLog(path: string, value: any): void;
-    pushLog(action: string, pos: Vec2, type: RecordedPuzzleElementsEntities): void;
-    initPrestart(): void;
-    initPoststart(): void;
+type PuzzleRecorderData = {
+    steps: Partial<PuzzleSelectionStep>[];
+};
+export declare class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, PuzzleSelectionManager, PuzzleRecorderData> {
+    private currentStepIndex;
+    constructor(selM: PuzzleSelectionManager);
+    getCurrentTime(): number;
+    private currentStep;
+    protected pushVariableChange(frame: number, path: string, value: unknown): void;
+    private pushAction;
+    protected getEmptyRecord(): PuzzleRecorderData;
     split(): void;
     private nextStep;
-    startRecording(selM: PuzzleSelectionManager, startingSel: PuzzleSelection): void;
-    stopRecording(purge?: boolean): void;
+    protected handleStopRecordingData(): void;
 }
+export {};
