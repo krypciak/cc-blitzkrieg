@@ -570,6 +570,419 @@
                     }
                 },
                 "sizeRect": { "x": 29, "y": 6, "width": 42, "height": 23 }
+            },
+            {
+                "bb": [{ "x": 0, "y": 1, "width": 26, "height": 24 }],
+                "mapName": "rhombus-dng/room-1-5",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 2,
+                    "timeLength": 2,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 386.12, "y": 233.65, "z": 0, "level": 0 },
+                    "endPos": { "x": 66.76, "y": 233.65, "z": 0, "level": 0 },
+                    "initialMapState": {
+                        "bounceSolved1": true,
+                        "bounceSolved2": false,
+                        "bounceSolved3": false,
+                        "crossedeyes-tpr-entered_start-rhombusDng/room-1-exit": true,
+                        "_entity24_triggered": true,
+                        "wallDown": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 335.56, "y": 240.92, "z": 0, "level": 0 }, "shootAngle": 224.18045687886718, "endFrame": 0 },
+                            {
+                                "log": [
+                                    [104, { "x": 292, "y": 180, "z": 0 }, "BounceBlock", "on"],
+                                    [257, { "x": 244, "y": 260, "z": 0 }, "BounceBlock", "on"],
+                                    [410, { "x": 196, "y": 180, "z": 0 }, "BounceBlock", "on"],
+                                    [535, ".map.bounceSolved2", true],
+                                    [535, { "x": 244, "y": 260, "z": 0 }, "BounceBlock", "resolve"],
+                                    [535, { "x": 196, "y": 180, "z": 0 }, "BounceBlock", "resolve"],
+                                    [535, { "x": 292, "y": 180, "z": 0 }, "BounceBlock", "resolve"],
+                                    [535, { "x": 140, "y": 228, "z": 0 }, "BounceSwitch", "resolve"],
+                                    [535, ".map._entity27_triggered", true],
+                                    [1341, ".map.platformUp", true]
+                                ],
+                                "element": 0,
+                                "pos": { "x": 254.78, "y": 145.4, "z": 32, "level": 1 },
+                                "shootAngle": 359.5744293484424,
+                                "endFrame": 4065
+                            },
+                            {
+                                "log": [
+                                    [4218, { "x": 340, "y": 132, "z": 32 }, "BounceBlock", "on"],
+                                    [4607, { "x": 340, "y": 324, "z": 32 }, "BounceBlock", "on"],
+                                    [5038, { "x": 148, "y": 324, "z": 32 }, "BounceBlock", "on"],
+                                    [5420, ".map.bounceSolved3", true],
+                                    [5420, { "x": 340, "y": 132, "z": 32 }, "BounceBlock", "resolve"],
+                                    [5420, { "x": 340, "y": 324, "z": 32 }, "BounceBlock", "resolve"],
+                                    [5420, { "x": 148, "y": 324, "z": 32 }, "BounceBlock", "resolve"],
+                                    [5420, { "x": 148, "y": 132, "z": 32 }, "BounceSwitch", "resolve"],
+                                    [5420, ".map._entity28_triggered", true],
+                                    [6352, ".map.doorOpen", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 1, "width": 26, "height": 25 }
+            }
+        ]
+    },
+    "rhombus-dng/room-1": {
+        "sels": [
+            {
+                "bb": [{ "x": 43, "y": 9, "width": 15, "height": 15 }],
+                "mapName": "rhombus-dng/room-1",
+                "data": {
+                    "type": 1,
+                    "completionType": 1,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 854.21, "y": 361.33, "z": 0, "level": 0 },
+                    "endPos": { "x": 697.61, "y": 224.2, "z": 32, "level": 1 },
+                    "initialMapState": { "toggleOn": 0, "crossedeyes-tpr-entered_start-rhombusDng/entrance-exit": true, "sergeyAway": true, "_entity14_triggered": true },
+                    "recordLog": { "steps": [{ "log": [[0, ".map.toggleOn", true]] }] }
+                },
+                "sizeRect": { "x": 43, "y": 9, "width": 58, "height": 24 }
+            },
+            {
+                "bb": [{ "x": 0, "y": 0, "width": 43, "height": 31 }],
+                "mapName": "rhombus-dng/room-1",
+                "data": {
+                    "type": 0,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 663.48, "y": 372.52, "z": 32, "level": 1 },
+                    "endPos": { "x": 62.07, "y": 289.63, "z": 0, "level": 0 },
+                    "initialMapState": { "toggleOn": true, "crossedeyes-tpr-entered_start-rhombusDng/entrance-exit": true, "sergeyAway": true, "_entity14_triggered": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [[0, ".map.toggleOn", false]], "element": 0, "pos": { "x": 439.07, "y": 390.79, "z": 32, "level": 1 }, "shootAngle": 327.2927733561685, "endFrame": 1932 },
+                            { "log": [[2237, ".map.toggleOn", true]], "element": 0, "pos": { "x": 414.55, "y": 174.36, "z": 32, "level": 1 }, "shootAngle": 29.77366498057836, "endFrame": 4322 },
+                            { "log": [[4655, ".map.toggleOn", false]] }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 0, "width": 43, "height": 31 }
+            }
+        ]
+    },
+    "rhombus-dng/room-1-6": { "sels": [] },
+    "rhombus-dng/room-3-1-pre": {
+        "sels": [
+            {
+                "bb": [{ "x": 22, "y": 2, "width": 29, "height": 26 }],
+                "mapName": "rhombus-dng/room-3-1-pre",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 2,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 714.41, "y": 392.07, "z": 0, "level": 1 },
+                    "endPos": { "x": 345.34, "y": 348.98, "z": 0, "level": 1 },
+                    "initialMapState": { "toggleSwitch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-2-door-north1": true },
+                    "recordLog": {
+                        "steps": [{ "log": [], "element": 0, "pos": { "x": 456.7, "y": 319.8, "z": 0, "level": 1 }, "shootAngle": 270, "endFrame": 0 }, { "log": [[332, ".map.toggleSwitch", true]] }]
+                    }
+                },
+                "sizeRect": { "x": 22, "y": 2, "width": 51, "height": 28 }
+            },
+            {
+                "bb": [{ "x": 2, "y": 0, "width": 20, "height": 30 }],
+                "mapName": "rhombus-dng/room-3-1-pre",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 2,
+                    "timeLength": 2,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 333.51, "y": 348.97, "z": 0, "level": 1 },
+                    "endPos": { "x": 181.89, "y": 142.96, "z": 32, "level": 2 },
+                    "initialMapState": { "toggleSwitch": true, "crossedeyes-tpr-entered_start-rhombusDng/room-2-door-north1": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 148.78, "y": 217, "z": 0, "level": 1 }, "shootAngle": 87.96920669364056, "endFrame": 0 },
+                            { "log": [[519, ".map.toggleSwitch", false]] }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 2, "y": 0, "width": 22, "height": 30 }
+            }
+        ]
+    },
+    "rhombus-dng/room-3-1": {
+        "sels": [
+            {
+                "bb": [{ "x": 0, "y": 0, "width": 55, "height": 38 }],
+                "mapName": "rhombus-dng/room-3-1",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 3,
+                    "timeLength": 3,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 152.5, "y": 482.07, "z": 0, "level": 1 },
+                    "endPos": { "x": 728.37, "y": 462.69, "z": 0, "level": 1 },
+                    "initialMapState": { "toggleSwitch": true, "crossedeyes-tpr-entered_start-rhombusDng/room-3-1Pre-end": true, "_entity76_triggered": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 123.87, "y": 182, "z": 0, "level": 1 }, "shootAngle": 24.483743799125932, "endFrame": 0 },
+                            { "log": [[371, ".map.toggleSwitch", false]], "element": 0, "pos": { "x": 338.43, "y": 182, "z": 0, "level": 1 }, "shootAngle": 92.89318663988632, "endFrame": 4693 },
+                            { "log": [[4824, ".map.toggleSwitch", true]], "element": 0, "pos": { "x": 583.73, "y": 266.49, "z": 0, "level": 1 }, "shootAngle": 177.36709896840762, "endFrame": 14267 },
+                            { "log": [[14660, ".map.toggleSwitch", false]] }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 0, "width": 55, "height": 38 }
+            }
+        ]
+    },
+    "rhombus-dng/room-2": {
+        "sels": [
+            {
+                "bb": [{ "x": 19, "y": 5, "width": 28, "height": 8 }],
+                "mapName": "rhombus-dng/room-2",
+                "data": {
+                    "type": 2,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 694.26, "y": 132.02, "z": 32, "level": 1 },
+                    "endPos": { "x": 648, "y": 152, "z": 32, "level": 1 },
+                    "initialMapState": {
+                        "switch1": 0,
+                        "switch2": 0,
+                        "crossedeyes-tpr-entered_door-east1-rhombusDng/room-1-6-end": true,
+                        "fight": true,
+                        "fight-spawn": false,
+                        "fight-start": true,
+                        "fight-end-pre": true,
+                        "fight-end": true,
+                        "doors": true,
+                        "doors2": true,
+                        "crossedeyes-tpr-entered_door-north1-rhombusDng/room-3-1Pre-start": true,
+                        "crossedeyes-tpr-entered_door-north2-rhombusDng/room-3-1Post-end": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 648, "y": 152, "z": 32, "level": 1 }, "shootAngle": 179.95363464885452, "endFrame": 0 },
+                            { "log": [[571, ".map.switch1", true]], "element": 0, "pos": { "x": 648, "y": 152, "z": 32, "level": 1 }, "shootAngle": 162.49075159432107, "endFrame": 1655 },
+                            {
+                                "log": [
+                                    [2420, ".map.steps1", true],
+                                    [5078, ".tmp.focusSwitch1", false]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 19, "y": 5, "width": 47, "height": 13 }
+            },
+            {
+                "bb": [{ "x": 19, "y": 20, "width": 28, "height": 7 }],
+                "mapName": "rhombus-dng/room-2",
+                "data": {
+                    "type": 2,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 692.23, "y": 435.01, "z": 32, "level": 1 },
+                    "endPos": { "x": 648, "y": 415.7, "z": 32, "level": 1 },
+                    "initialMapState": {
+                        "switch1": true,
+                        "switch2": 0,
+                        "crossedeyes-tpr-entered_door-east1-rhombusDng/room-1-6-end": true,
+                        "fight": true,
+                        "fight-spawn": false,
+                        "fight-start": true,
+                        "fight-end-pre": true,
+                        "fight-end": true,
+                        "doors": true,
+                        "doors2": true,
+                        "crossedeyes-tpr-entered_door-north1-rhombusDng/room-3-1Pre-start": true,
+                        "crossedeyes-tpr-entered_door-north2-rhombusDng/room-3-1Post-end": true,
+                        "steps1": true,
+                        "crossedeyes-tpr-entered_door-south1-rhombusDng/room-3-2Pre-start": true,
+                        "crossedeyes-tpr-entered_door-south2-rhombusDng/room-3-2Post-end": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 648, "y": 415.7, "z": 32, "level": 1 }, "shootAngle": 180.3955390161446, "endFrame": 0 },
+                            {
+                                "log": [
+                                    [577, ".map.switch2", true],
+                                    [2418, ".map.steps2", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 19, "y": 20, "width": 47, "height": 27 }
+            }
+        ]
+    },
+    "rhombus-dng/room-3-2-pre": {
+        "sels": [
+            {
+                "bb": [{ "x": 0, "y": 1, "width": 35, "height": 39 }],
+                "mapName": "rhombus-dng/room-3-2-pre",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 307.79, "y": 156.87, "z": 0, "level": 0 },
+                    "endPos": { "x": 104, "y": 529.29, "z": 32, "level": 1 },
+                    "initialMapState": { "toggleSwitch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-2-door-south1": true, "crossedeyes-tpr-entered_end-rhombusDng/room-3-2-start": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 257.73, "y": 196.16, "z": 0, "level": 0 }, "shootAngle": 358.6029696824582, "endFrame": 0 },
+                            { "log": [[76, ".map.toggleSwitch", true]], "element": 0, "pos": { "x": 210.52, "y": 304.72, "z": 0, "level": 0 }, "shootAngle": 267.6609706830936, "endFrame": 2370 },
+                            { "log": [[2703, ".map.toggleSwitch", false]], "element": 0, "pos": { "x": 320, "y": 337, "z": 0, "level": 0 }, "shootAngle": 359.2156708216319, "endFrame": 4621 },
+                            { "log": [[5191, ".map.toggleSwitch", true]] }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 0, "y": 1, "width": 35, "height": 40 }
+            }
+        ]
+    },
+    "rhombus-dng/room-3-2": {
+        "sels": [
+            {
+                "bb": [{ "x": 0, "y": 5, "width": 59, "height": 25 }],
+                "mapName": "rhombus-dng/room-3-2",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 3,
+                    "timeLength": 2,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 98.26, "y": 241.35, "z": 32, "level": 1 },
+                    "endPos": { "x": 847.19, "y": 236.98, "z": 32, "level": 1 },
+                    "initialMapState": { "switch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-3-2Pre-end": true, "_entity116_triggered": true }
+                },
+                "sizeRect": { "x": 0, "y": 5, "width": 59, "height": 30 }
+            }
+        ]
+    },
+    "rhombus-dng/room-6": {
+        "sels": [
+            {
+                "bb": [{ "x": 38, "y": 8, "width": 17, "height": 10 }],
+                "mapName": "rhombus-dng/room-6",
+                "data": {
+                    "type": 1,
+                    "completionType": 0,
+                    "difficulty": 1,
+                    "timeLength": 1,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 851.4, "y": 224.03, "z": 0, "level": 1 },
+                    "endPos": { "x": 720.5, "y": 282.54, "z": 0, "level": 1 },
+                    "initialMapState": { "bounceSwitch1": false, "bounceSwitch2": false, "switchToggle": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-5Newer-end": true },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 751.8, "y": 150.88, "z": 0, "level": 1 }, "shootAngle": 3.935561797815467, "endFrame": 0 },
+                            {
+                                "log": [
+                                    [118, { "x": 820, "y": 148, "z": 0 }, "BounceBlock", "on"],
+                                    [674, { "x": 628, "y": 212, "z": 0 }, "BounceBlock", "on"],
+                                    [799, { "x": 628, "y": 148, "z": 0 }, "BounceBlock", "on"],
+                                    [1133, ".map.bounceSwitch1", true],
+                                    [1133, { "x": 820, "y": 148, "z": 0 }, "BounceBlock", "resolve"],
+                                    [1133, { "x": 628, "y": 148, "z": 0 }, "BounceBlock", "resolve"],
+                                    [1133, { "x": 628, "y": 212, "z": 0 }, "BounceBlock", "resolve"],
+                                    [1133, { "x": 692, "y": 248, "z": 0 }, "BounceSwitch", "resolve"],
+                                    [1133, ".map._entity19_triggered", true],
+                                    [2036, ".map.wall1", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 38, "y": 8, "width": 55, "height": 18 }
+            },
+            {
+                "bb": [{ "x": 2, "y": 20, "width": 58, "height": 25 }],
+                "mapName": "rhombus-dng/room-6",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 3,
+                    "timeLength": 3,
+                    "chapter": 1,
+                    "plotLine": 900,
+                    "elements": [false, false, false, false],
+                    "startPos": { "x": 726.53, "y": 347.83, "z": 0, "level": 1 },
+                    "endPos": { "x": 317.14, "y": 446.39, "z": 0, "level": 1 },
+                    "initialMapState": {
+                        "bounceSwitch1": true,
+                        "bounceSwitch2": false,
+                        "switchToggle": 0,
+                        "crossedeyes-tpr-entered_start-rhombusDng/room-5Newer-end": true,
+                        "_entity19_triggered": true,
+                        "wall1": true
+                    },
+                    "recordLog": {
+                        "steps": [
+                            { "log": [], "element": 0, "pos": { "x": 723, "y": 444.45, "z": 0, "level": 1 }, "shootAngle": 86.41586497218032, "endFrame": 0 },
+                            { "log": [[243, ".map.switchToggle", true]], "element": 0, "pos": { "x": 723, "y": 444.45, "z": 0, "level": 1 }, "shootAngle": 88.42143018789938, "endFrame": 1598 },
+                            { "log": [[1842, ".map.switchToggle", false]], "element": 0, "pos": { "x": 723, "y": 444.45, "z": 0, "level": 1 }, "shootAngle": 179.9999999999991, "endFrame": 4024 },
+                            {
+                                "log": [
+                                    [4197, { "x": 612, "y": 436, "z": 0 }, "BounceBlock", "on"],
+                                    [4496, { "x": 660, "y": 516, "z": 0 }, "BounceBlock", "on"],
+                                    [4781, { "x": 660, "y": 660, "z": 0 }, "BounceBlock", "on"],
+                                    [5066, { "x": 788, "y": 660, "z": 0 }, "BounceBlock", "on"],
+                                    [5351, { "x": 788, "y": 516, "z": 0 }, "BounceBlock", "on"],
+                                    [5615, ".map.bounceSwitch2", true],
+                                    [5615, { "x": 788, "y": 516, "z": 0 }, "BounceBlock", "resolve"],
+                                    [5615, { "x": 660, "y": 660, "z": 0 }, "BounceBlock", "resolve"],
+                                    [5615, { "x": 788, "y": 660, "z": 0 }, "BounceBlock", "resolve"],
+                                    [5615, { "x": 612, "y": 436, "z": 0 }, "BounceBlock", "resolve"],
+                                    [5615, { "x": 660, "y": 516, "z": 0 }, "BounceBlock", "resolve"],
+                                    [5615, { "x": 836, "y": 440, "z": 0 }, "BounceSwitch", "resolve"],
+                                    [5615, ".map._entity23_triggered", true],
+                                    [6560, ".map.bigPlatform", true]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "sizeRect": { "x": 2, "y": 20, "width": 60, "height": 45 }
             }
         ]
     }
