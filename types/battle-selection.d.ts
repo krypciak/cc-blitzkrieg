@@ -1,7 +1,9 @@
 import { Selection, SelectionManager } from './selection';
 export interface BattleSelection extends Selection {
     data: {
-        endPos: undefined;
+        endPos: Vec3 & {
+            level: number;
+        };
         startPos: Vec3 & {
             level: number;
         };

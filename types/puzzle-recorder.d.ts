@@ -12,6 +12,7 @@ export declare class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection
     protected pushVariableChange(frame: number, path: string, value: unknown): void;
     private pushAction;
     protected getEmptyRecord(): PuzzleRecorderData;
+    startRecording(startingSel: PuzzleSelection): void;
     split(): void;
     private nextStep;
     protected handleStopRecordingData(): void;

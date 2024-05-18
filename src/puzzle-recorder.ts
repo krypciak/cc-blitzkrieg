@@ -69,6 +69,12 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
         }
     }
 
+    startRecording(startingSel: PuzzleSelection): void {
+        super.startRecording(startingSel)
+        this.currentStepIndex = -1
+        this.nextStep()
+    }
+
     split() {
         const step = this.currentStep()
         if (step.split) {
