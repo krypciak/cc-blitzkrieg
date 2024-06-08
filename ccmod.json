@@ -11,7 +11,8 @@
     },
     "dependencies": {
         "input-api": ">=1.0.2",
-        "crosscode": ">=1.4.0"
+        "crosscode": ">=1.4.0",
+        "ccmodmanager": ">=0.9.12"
     },
     "plugin": "plugin.js"
 }

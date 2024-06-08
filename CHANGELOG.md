@@ -3,6 +3,11 @@
 # Change Log
 
 ## [Unreleased]
+
+### Changed
+
+- Moved all options to the CCModManager
+
 ## [0.5.6] 2024-05-18
 ## [0.5.5] 2024-03-27
 ## [0.5.4] 2024-03-16

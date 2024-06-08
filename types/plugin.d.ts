@@ -4,7 +4,6 @@ import { PuzzleCompletionType, PuzzleRoomType, PuzzleSelectionManager } from './
 import { BlitzkriegMapUtil } from './map-sel-copy';
 import { FsUtil } from './fsutil';
 import { BattleSelectionManager } from './battle-selection';
-import 'nax-ccuilib/src/headers/nax/quick-menu-public-api.d.ts';
 import { PluginClass } from 'ultimate-crosscode-typedefs/modloader/mod';
 declare global {
     const blitzkrieg: Blitzkrieg;

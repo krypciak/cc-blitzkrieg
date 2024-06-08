@@ -1,4 +1,4 @@
-import { MenuOptions } from './options'
+import { Opts } from './options'
 
 function adjustPuzzleAssistSlider() {
     const from: number = 0.1
@@ -37,9 +37,8 @@ export function puzzleAssistSpeedInitPrestart() {
 
     ig.ENTITY.Compressor?.inject({
         createCompressorBall() {
-            if (!MenuOptions.puzzleElementAdjustEnabled) {
+            if (!Opts.enforcePuzzleSpeed) 
                 return this.parent()
-            }
             const pos: Vec2 = this.getCenter()
             if (this.currentElement == sc.ELEMENT.SHOCK)
                 this.compressorBall = ig.game.spawnEntity(sc.CompressedShockEntity, pos.x, pos.y, this.coll.pos.z + 12, {
@@ -58,7 +57,7 @@ export function puzzleAssistSpeedInitPrestart() {
         ballHit(e: ig.Entity, ...rest: unknown[]): boolean {
             const pos: Vec2 = rest[0] as Vec2
             if (
-                MenuOptions.puzzleElementAdjustEnabled &&
+                Opts.enforcePuzzleSpeed &&
                 isBall(e) &&
                 !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
                 pos &&

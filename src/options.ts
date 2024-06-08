@@ -1,66 +1,90 @@
-export const categoryName = 'blitzkrieg'
-declare global {
-    namespace sc {
-        enum OPTION_CATEGORY {
-            'blitzkrieg',
-        }
-    }
-}
+import type { Options } from 'ccmodmanager/types/mod-options'
+import { PuzzleSelectionManager } from './puzzle-selection'
 
-const headerGeneral: string = 'blitzkrieg-general'
-const descriptionId = 'blitzkrieg-description'
-const enableId = 'blitzkrieg-enable'
-const puzzleElementsAdjustId = 'blitzkrieg-puzzleelementsadjust'
+export let Opts: ReturnType<typeof sc.modMenu.registerAndGetModOptions<ReturnType<typeof registerOpts>>>
 
-export class MenuOptions {
-    static get blitzkriegEnabled(): boolean {
-        return sc.options?.get(enableId) as boolean
-    }
-    static set blitzkriegEnabled(value: boolean) {
-        sc.options?.set(enableId, value)
-    }
+export function registerOpts() {
+    const opts = {
+        general: {
+            settings: {
+                title: 'General',
+                tabIcon: 'general',
+            },
+            headers: {
+                general: {
+                    enable: {
+                        type: 'CHECKBOX',
+                        init: true,
+                        name: 'Enable the mod',
+                        description: 'Enables/Disables the entire functionality of the mod',
+                    },
+                    enforcePuzzleSpeed: {
+                        type: 'CHECKBOX',
+                        init: true,
+                        name: 'Enforce puzzle speed',
+                        description: 'Applies the puzzle speed for unimplemented puzzle elements e.g. shock/wave balls',
+                    },
+                },
+                controls: {
+                    selbNewEntry: {
+                        type: 'CONTROLS',
+                        init: { key1: ig.KEY.P },
 
-    static get puzzleElementAdjustEnabled(): boolean {
-        return (sc.options?.get(puzzleElementsAdjustId) as boolean) && MenuOptions.blitzkriegEnabled
-    }
-    static set puzzleElementAdjustEnabled(value: boolean) {
-        sc.options?.set(puzzleElementsAdjustId, value)
-    }
+                        pressEvent() {
+                            Opts.enable && blitzkrieg.currSel.selectionCreatorBegin()
+                        },
 
-    static initPrestart() {
-        sc.OPTIONS_DEFINITION[descriptionId] = {
-            type: 'INFO',
-            data: `options.${descriptionId}.description`,
-            cat: sc.OPTION_CATEGORY[categoryName],
-        }
+                        name: 'Create a new selection entry',
+                        description: 'duno',
+                    },
+                    selbSelect: {
+                        type: 'CONTROLS',
+                        init: { key1: ig.KEY.BRACKET_OPEN },
 
-        sc.OPTIONS_DEFINITION[enableId] = {
-            type: 'CHECKBOX',
-            init: true,
-            cat: sc.OPTION_CATEGORY[categoryName],
-            header: headerGeneral,
-            hasDivider: true,
-        }
-        sc.OPTIONS_DEFINITION[puzzleElementsAdjustId] = {
-            type: 'CHECKBOX',
-            init: true,
-            cat: sc.OPTION_CATEGORY[categoryName],
-            header: headerGeneral,
-        }
-    }
+                        pressEvent() {
+                            Opts.enable && blitzkrieg.currSel.selectionCreatorSelect()
+                        },
 
-    static initPoststart() {
-        ig.lang.labels.sc.gui.options.headers[headerGeneral] = 'general'
-        ig.lang.labels.sc.gui.options[descriptionId] = {
-            description: '\\c[3]https://github.com/krypciak/cc-blitzkrieg\\c[0]',
-        }
-        ig.lang.labels.sc.gui.options[enableId] = {
-            name: 'Enable the mod',
-            description: 'Enables/Disables the entire functionality of the mod',
-        }
-        ig.lang.labels.sc.gui.options[puzzleElementsAdjustId] = {
-            name: 'Enforce puzzle speed',
-            description: 'Applies the puzzle speed for unimplemented puzzle elements e.g. shock/wave balls',
-        }
-    }
+                        name: 'Create a new selection in steps',
+                        description: 'duno',
+                    },
+                    selbDestroy: {
+                        type: 'CONTROLS',
+                        init: { key1: ig.KEY.BRACKET_CLOSE },
+
+                        pressEvent() {
+                            Opts.enable && blitzkrieg.currSel.selectionCreatorDelete()
+                        },
+
+                        name: 'Delete/Decunstruct a selection',
+                        description: 'duno',
+                    },
+                    recorderSplit: {
+                        type: 'CONTROLS',
+                        init: { key1: ig.KEY.O },
+
+                        pressEvent() {
+                            Opts.enable &&
+                                blitzkrieg.currSel.recorder?.recording &&
+                                blitzkrieg.currSel instanceof PuzzleSelectionManager &&
+                                blitzkrieg.currSel.recorder.split()
+                        },
+
+                        name: 'Split puzzle recording',
+                        description: 'duno',
+                    },
+                },
+            },
+        },
+    } as const satisfies Options
+
+    Opts = sc.modMenu.registerAndGetModOptions(
+        {
+            modId: 'cc-blitzkrieg',
+            title: 'Blitzkrieg',
+            // helpMenu: Lang.help.options,
+        },
+        opts
+    )
+    return opts
 }
