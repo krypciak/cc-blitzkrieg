@@ -1,7 +1,7 @@
 import type { Options } from 'ccmodmanager/types/mod-options'
 import { PuzzleSelectionManager } from './puzzle-selection'
 
-export let Opts: ReturnType<typeof sc.modMenu.registerAndGetModOptions<ReturnType<typeof registerOpts>>>
+export let Opts: ReturnType<typeof modmanager.registerAndGetModOptions<ReturnType<typeof registerOpts>>>
 
 export function registerOpts() {
     const opts = {
@@ -78,7 +78,7 @@ export function registerOpts() {
         },
     } as const satisfies Options
 
-    Opts = sc.modMenu.registerAndGetModOptions(
+    Opts = modmanager.registerAndGetModOptions(
         {
             modId: 'cc-blitzkrieg',
             title: 'Blitzkrieg',
