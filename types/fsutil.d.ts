@@ -12,5 +12,5 @@ export declare class FsUtil {
     static copyFileInternal(from: string, dest: string): Promise<void>;
     static blobToArrayBuffer(blob: Blob): Promise<ArrayBuffer>;
     static downloadFile(url: string, outPath: string): Promise<void>;
-    static unzipFile(path: string, outPath: string): Promise<void>;
+    static unzipArchive(data: ArrayBuffer, targetPath: string): Promise<void[]>;
 }

@@ -1,5 +1,7 @@
 const fs: typeof import('fs') = (0, eval)('require("fs")')
-import AdmZip from 'adm-zip'
+const path: typeof import('path') = (0, eval)('require("path")')
+
+import { loadAsync } from 'jszip'
 
 export class FsUtil {
     static async exists(path: string): Promise<boolean> {
@@ -93,8 +95,25 @@ export class FsUtil {
         return fs.promises.writeFile(outPath, Buffer.from(arrayBuffer))
     }
 
-    static async unzipFile(path: string, outPath: string) {
-        const zip = new AdmZip(path)
-        return zip.extractAllToAsync(outPath, true)
+    static async unzipArchive(data: ArrayBuffer, targetPath: string) {
+        const zip = await loadAsync(data)
+
+        return Promise.all(
+            Object.values(zip.files)
+                .filter(file => !file.dir)
+                .map(async file => {
+                    const data = await file.async('uint8array')
+                    const relative = path.join(targetPath, file.name)
+                    if (relative.startsWith('..' + path.sep)) {
+                        return
+                    }
+
+                    const filepath = relative
+                    try {
+                        await fs.promises.mkdir(path.dirname(filepath), { recursive: true })
+                    } catch {}
+                    return fs.promises.writeFile(filepath, data)
+                })
+        )
     }
 }
