@@ -15,6 +15,7 @@ import prettierPluginBabel from 'prettier/plugins/babel'
 import prettierPluginEstree from 'prettier/plugins/estree'
 import { PluginClass } from 'ultimate-crosscode-typedefs/modloader/mod'
 import { Opts, registerOpts } from './options'
+import { initLibraries } from './library-providers'
 
 const crypto: typeof import('crypto') = (0, eval)('require("crypto")')
 
@@ -142,9 +143,10 @@ export default class Blitzkrieg implements PluginClass {
     constructor(mod: Mod1) {
         this.dir = mod.baseDirectory
         this.mod = mod
-        window.blitzkrieg = this
         this.mod.isCCL3 = mod.findAllAssets ? true : false
         this.mod.isCCModPacked = mod.baseDirectory.endsWith('.ccmod/')
+
+        window.blitzkrieg = this
     }
 
     private registerSels() {
@@ -172,6 +174,7 @@ export default class Blitzkrieg implements PluginClass {
     }
 
     async prestart() {
+        initLibraries()
         registerOpts()
         addVimBindings()
         addWidgets()

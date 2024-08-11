@@ -1,7 +1,7 @@
+import { JSZip } from './library-providers'
+
 const fs: typeof import('fs') = (0, eval)('require("fs")')
 const path: typeof import('path') = (0, eval)('require("path")')
-
-import { loadAsync } from 'jszip'
 
 export class FsUtil {
     static async exists(path: string): Promise<boolean> {
@@ -96,7 +96,7 @@ export class FsUtil {
     }
 
     static async unzipArchive(data: ArrayBuffer, targetPath: string) {
-        const zip = await loadAsync(data)
+        const zip = await JSZip.loadAsync(data)
 
         return Promise.all(
             Object.values(zip.files)
