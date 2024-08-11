@@ -212,52 +212,6 @@
             }
         ]
     },
-    "crossedeyes/test": {
-        "sels": [
-            {
-                "bb": [{ "x": 12, "y": 11, "width": 13, "height": 12 }],
-                "mapName": "crossedeyes/test",
-                "data": {
-                    "type": 2,
-                    "completionType": 0,
-                    "difficulty": 1,
-                    "timeLength": 1,
-                    "chapter": 0,
-                    "plotLine": -1,
-                    "elements": [true, true, true, true],
-                    "startPos": { "x": 371.14, "y": 283.36, "z": 0, "level": 2 },
-                    "endPos": { "x": 216.96, "y": 283.36, "z": 0, "level": 2 },
-                    "initialMapState": {},
-                    "recordLog": {
-                        "steps": [
-                            {
-                                "log": [
-                                    [0, ".tmp.s1", true],
-                                    [7, ".tmp._entity74_triggered", true],
-                                    [7, ".tmp._entity93_triggered", true],
-                                    [7, ".map.chest_73", 0],
-                                    [7, ".map.chest_74", 0],
-                                    [7, ".map.chest_77", 0],
-                                    [7, ".map.chest_78", 0],
-                                    [7, ".map.chest_79", 0],
-                                    [7, ".map.chest_80", 0],
-                                    [7, ".map.chest_81", 0],
-                                    [7, ".map.chest_82", 0]
-                                ],
-                                "element": 0,
-                                "pos": { "x": 244.68, "y": 275.45, "z": 0, "level": 2 },
-                                "shootAngle": 253.0060771985501,
-                                "endFrame": 2001
-                            },
-                            { "log": [], "element": 0, "pos": { "x": 244.68, "y": 275.45, "z": 0, "level": 2 }, "shootAngle": 254.70454858681433, "endFrame": 3154 },
-                            { "log": [[4016, ".tmp.mhs1", true]] }
-                        ]
-                    }
-                },
-                "sizeRect": { "x": 12, "y": 11, "width": 25, "height": 23 }
-            }
-        ]
-    },
     "cargo-ship/teleporter": {
         "sels": [
             {
