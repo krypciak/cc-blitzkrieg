@@ -8,7 +8,7 @@
                 ],
                 "mapName": "cargo-ship/room1",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 1,
                     "difficulty": 1,
                     "timeLength": 1,
@@ -85,7 +85,7 @@
                             { "log": [[3294, ".map._entity72_destroyed", true]] }
                         ]
                     },
-                    "type": 0,
+                    "type": 2,
                     "completionType": 1,
                     "difficulty": 1,
                     "timeLength": 1,
@@ -120,7 +120,7 @@
                 "bb": [{ "x": 21, "y": 2, "width": 26, "height": 36 }],
                 "mapName": "cargo-ship/room1",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 0,
                     "difficulty": 2,
                     "timeLength": 2,
@@ -239,7 +239,7 @@
                 "bb": [{ "x": 0, "y": 12, "width": 12, "height": 9 }],
                 "mapName": "cargo-ship/room1-5",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 1,
                     "difficulty": 1,
                     "timeLength": 1,
@@ -269,7 +269,7 @@
                 ],
                 "mapName": "cargo-ship/room1-5",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 1,
                     "difficulty": 2,
                     "timeLength": 2,
@@ -338,7 +338,7 @@
                 "bb": [{ "x": 1, "y": 4, "width": 31, "height": 26 }],
                 "mapName": "cargo-ship/ground",
                 "data": {
-                    "type": 0,
+                    "type": 2,
                     "completionType": 0,
                     "difficulty": 2,
                     "timeLength": 3,
@@ -613,15 +613,15 @@
                 "mapName": "rhombus-dng/room-1",
                 "data": {
                     "type": 0,
-                    "completionType": 0,
+                    "completionType": 1,
                     "difficulty": 1,
-                    "timeLength": 2,
-                    "chapter": 1,
-                    "plotLine": 900,
-                    "elements": [false, false, false, false],
-                    "startPos": { "x": 663.48, "y": 372.52, "z": 32, "level": 1 },
-                    "endPos": { "x": 62.07, "y": 289.63, "z": 0, "level": 0 },
-                    "initialMapState": { "toggleOn": true, "crossedeyes-tpr-entered_start-rhombusDng/entrance-exit": true, "sergeyAway": true, "_entity14_triggered": true },
+                    "timeLength": 1,
+                    "chapter": 0,
+                    "plotLine": -1,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 671.35, "y": 287.45, "z": 32, "level": 1 },
+                    "endPos": { "x": 48, "y": 278.14, "z": 0, "level": 0 },
+                    "initialMapState": { "toggleOn": 0, "sergeyAway": true, "_entity14_triggered": true },
                     "recordLog": {
                         "steps": [
                             { "log": [[0, ".map.toggleOn", false]], "element": 0, "pos": { "x": 439.07, "y": 390.79, "z": 32, "level": 1 }, "shootAngle": 327.2927733561685, "endFrame": 1932 },
@@ -637,26 +637,6 @@
     "rhombus-dng/room-1-6": { "sels": [] },
     "rhombus-dng/room-3-1-pre": {
         "sels": [
-            {
-                "bb": [{ "x": 22, "y": 2, "width": 29, "height": 26 }],
-                "mapName": "rhombus-dng/room-3-1-pre",
-                "data": {
-                    "type": 0,
-                    "completionType": 1,
-                    "difficulty": 2,
-                    "timeLength": 1,
-                    "chapter": 1,
-                    "plotLine": 900,
-                    "elements": [false, false, false, false],
-                    "startPos": { "x": 714.41, "y": 392.07, "z": 0, "level": 1 },
-                    "endPos": { "x": 345.34, "y": 348.98, "z": 0, "level": 1 },
-                    "initialMapState": { "toggleSwitch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-2-door-north1": true },
-                    "recordLog": {
-                        "steps": [{ "log": [], "element": 0, "pos": { "x": 456.7, "y": 319.8, "z": 0, "level": 1 }, "shootAngle": 270, "endFrame": 0 }, { "log": [[332, ".map.toggleSwitch", true]] }]
-                    }
-                },
-                "sizeRect": { "x": 22, "y": 2, "width": 51, "height": 28 }
-            },
             {
                 "bb": [{ "x": 2, "y": 0, "width": 20, "height": 30 }],
                 "mapName": "rhombus-dng/room-3-1-pre",
@@ -679,35 +659,49 @@
                     }
                 },
                 "sizeRect": { "x": 2, "y": 0, "width": 22, "height": 30 }
+            },
+            {
+                "bb": [{ "x": 22, "y": 0, "width": 29, "height": 26 }],
+                "mapName": "rhombus-dng/room-3-1-pre",
+                "data": {
+                    "type": 0,
+                    "completionType": 1,
+                    "difficulty": 1,
+                    "timeLength": 2,
+                    "chapter": 0,
+                    "plotLine": -1,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 712, "y": 400, "z": 0, "level": 1 },
+                    "endPos": { "x": 355.79, "y": 355.17, "z": 0, "level": 1 },
+                    "initialMapState": { "toggleSwitch": true }
+                },
+                "sizeRect": { "x": 22, "y": 0, "width": 51, "height": 26 }
             }
         ]
     },
     "rhombus-dng/room-3-1": {
         "sels": [
             {
-                "bb": [{ "x": 0, "y": 0, "width": 55, "height": 38 }],
+                "bb": [
+                    { "x": 0, "y": 0, "width": 40, "height": 32 },
+                    { "x": 40, "y": 21, "width": 15, "height": 16 },
+                    { "x": 0, "y": 32, "width": 5, "height": 1 },
+                    { "x": 14, "y": 32, "width": 26, "height": 1 }
+                ],
                 "mapName": "rhombus-dng/room-3-1",
                 "data": {
                     "type": 0,
                     "completionType": 1,
-                    "difficulty": 3,
+                    "difficulty": 2,
                     "timeLength": 3,
-                    "chapter": 1,
-                    "plotLine": 900,
-                    "elements": [false, false, false, false],
-                    "startPos": { "x": 152.5, "y": 482.07, "z": 0, "level": 1 },
-                    "endPos": { "x": 728.37, "y": 462.69, "z": 0, "level": 1 },
-                    "initialMapState": { "toggleSwitch": true, "crossedeyes-tpr-entered_start-rhombusDng/room-3-1Pre-end": true, "_entity76_triggered": true },
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 123.87, "y": 182, "z": 0, "level": 1 }, "shootAngle": 24.483743799125932, "endFrame": 0 },
-                            { "log": [[371, ".map.toggleSwitch", false]], "element": 0, "pos": { "x": 338.43, "y": 182, "z": 0, "level": 1 }, "shootAngle": 92.89318663988632, "endFrame": 4693 },
-                            { "log": [[4824, ".map.toggleSwitch", true]], "element": 0, "pos": { "x": 583.73, "y": 266.49, "z": 0, "level": 1 }, "shootAngle": 177.36709896840762, "endFrame": 14267 },
-                            { "log": [[14660, ".map.toggleSwitch", false]] }
-                        ]
-                    }
+                    "chapter": 0,
+                    "plotLine": -1,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 146.96, "y": 496, "z": 0, "level": 1 },
+                    "endPos": { "x": 730.01, "y": 448, "z": 0, "level": 1 },
+                    "initialMapState": { "toggleSwitch": 0, "_entity76_triggered": true }
                 },
-                "sizeRect": { "x": 0, "y": 0, "width": 55, "height": 38 }
+                "sizeRect": { "x": 0, "y": 0, "width": 55, "height": 37 }
             }
         ]
     },
@@ -804,50 +798,47 @@
     "rhombus-dng/room-3-2-pre": {
         "sels": [
             {
-                "bb": [{ "x": 0, "y": 1, "width": 35, "height": 39 }],
+                "bb": [{ "x": 0, "y": 9, "width": 30, "height": 29 }],
                 "mapName": "rhombus-dng/room-3-2-pre",
                 "data": {
                     "type": 0,
                     "completionType": 1,
-                    "difficulty": 1,
+                    "difficulty": 2,
                     "timeLength": 2,
-                    "chapter": 1,
-                    "plotLine": 900,
-                    "elements": [false, false, false, false],
-                    "startPos": { "x": 307.79, "y": 156.87, "z": 0, "level": 0 },
-                    "endPos": { "x": 104, "y": 529.29, "z": 32, "level": 1 },
-                    "initialMapState": { "toggleSwitch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-2-door-south1": true, "crossedeyes-tpr-entered_end-rhombusDng/room-3-2-start": true },
-                    "recordLog": {
-                        "steps": [
-                            { "log": [], "element": 0, "pos": { "x": 257.73, "y": 196.16, "z": 0, "level": 0 }, "shootAngle": 358.6029696824582, "endFrame": 0 },
-                            { "log": [[76, ".map.toggleSwitch", true]], "element": 0, "pos": { "x": 210.52, "y": 304.72, "z": 0, "level": 0 }, "shootAngle": 267.6609706830936, "endFrame": 2370 },
-                            { "log": [[2703, ".map.toggleSwitch", false]], "element": 0, "pos": { "x": 320, "y": 337, "z": 0, "level": 0 }, "shootAngle": 359.2156708216319, "endFrame": 4621 },
-                            { "log": [[5191, ".map.toggleSwitch", true]] }
-                        ]
-                    }
+                    "chapter": 0,
+                    "plotLine": -1,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 309.19, "y": 159.65, "z": 0, "level": 0 },
+                    "endPos": { "x": 129.58, "y": 544, "z": 32, "level": 1 },
+                    "initialMapState": { "toggleSwitch": true }
                 },
-                "sizeRect": { "x": 0, "y": 1, "width": 35, "height": 40 }
+                "sizeRect": { "x": 0, "y": 9, "width": 30, "height": 38 }
             }
         ]
     },
     "rhombus-dng/room-3-2": {
         "sels": [
             {
-                "bb": [{ "x": 0, "y": 5, "width": 59, "height": 25 }],
+                "bb": [
+                    { "x": 2, "y": 7, "width": 2, "height": 23 },
+                    { "x": 9, "y": 7, "width": 41, "height": 23 },
+                    { "x": 4, "y": 12, "width": 5, "height": 18 },
+                    { "x": 50, "y": 12, "width": 9, "height": 18 }
+                ],
                 "mapName": "rhombus-dng/room-3-2",
                 "data": {
                     "type": 0,
                     "completionType": 1,
-                    "difficulty": 3,
-                    "timeLength": 2,
-                    "chapter": 1,
-                    "plotLine": 900,
-                    "elements": [false, false, false, false],
-                    "startPos": { "x": 98.26, "y": 241.35, "z": 32, "level": 1 },
-                    "endPos": { "x": 847.19, "y": 236.98, "z": 32, "level": 1 },
-                    "initialMapState": { "switch": 0, "crossedeyes-tpr-entered_start-rhombusDng/room-3-2Pre-end": true, "_entity116_triggered": true }
+                    "difficulty": 2,
+                    "timeLength": 3,
+                    "chapter": 0,
+                    "plotLine": -1,
+                    "elements": [true, true, true, true],
+                    "startPos": { "x": 91.93, "y": 234.45, "z": 32, "level": 1 },
+                    "endPos": { "x": 835.59, "y": 228.22, "z": 32, "level": 1 },
+                    "initialMapState": { "switch": 0, "_entity116_triggered": true }
                 },
-                "sizeRect": { "x": 0, "y": 5, "width": 59, "height": 30 }
+                "sizeRect": { "x": 2, "y": 7, "width": 59, "height": 30 }
             }
         ]
     },
