@@ -9,14 +9,14 @@ export class BlitzkriegMapUtil {
         baseMap: sc.MapModel.Map,
         selMap: sc.MapModel.Map,
         sel: Selection,
-        offset: MapPoint,
+        offset: Vec2,
         filters: EntityRecArgs['filters'],
         options: MapCopyOptions
     ): sc.MapModel.Map {
         assert(sel.data?.startPos?.z)
 
         const eargs: EntityRecArgsIn = {
-            offset,
+            offset: MapPoint.fromVec(offset),
             filters,
             selMasterZ: sel.data.startPos.z,
             selSizeRect: MapPoint.fromVec(sel.sizeRect),
