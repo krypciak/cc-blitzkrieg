@@ -48,7 +48,7 @@ export class SelectionManager<SEL extends Selection> {
         public completeColor: string,
         public tempColor: string,
         public jsonFiles: string[]
-    ) { }
+    ) {}
 
     async newSelEvent(_: SEL): Promise<void> {}
     async walkInEvent(selection: SEL): Promise<void> {
@@ -279,7 +279,10 @@ export class SelectionManager<SEL extends Selection> {
                 Vec2.maxC(pos, 0, 0)
                 Vec2.sub(mpos, this.tempPos)
                 pos = mpos.to(EntityPoint)
-                this.drawBox({ x: this.tempPos.x * tilesize, y: this.tempPos.y * tilesize, width: pos.x, height: pos.y }, this.tempColor)
+                this.drawBox(
+                    { x: this.tempPos.x * tilesize, y: this.tempPos.y * tilesize, width: pos.x, height: pos.y },
+                    this.tempColor
+                )
             }
         }
     }
@@ -365,21 +368,17 @@ export class SelectionManager<SEL extends Selection> {
     static setSelPos(sel: Selection, offset: MapPoint) {
         for (let i = 0; i < sel.bb.length; i++) {
             const rect: MapRect = sel.bb[i]
-            sel.bb[i].x = offset.x + sel.sizeRect.x - rect.x
-            sel.bb[i].y = offset.y + sel.sizeRect.y - rect.y
+            sel.bb[i].x = offset.x + rect.x - sel.sizeRect.x
+            sel.bb[i].y = offset.y + rect.y - sel.sizeRect.y
         }
 
+        const offsetE: EntityPoint = offset.to(EntityPoint)
+        const sizeE: EntityRect = sel.sizeRect.to(EntityRect)
         if (sel.data) {
-            if (sel.data.startPos) {
-                const nsp: EntityPoint = offset.to(EntityPoint)
-                Vec2.add(nsp, sel.sizeRect.to(EntityRect))
-                Vec2.sub(nsp, sel.data.startPos)
-            }
-
-            if (sel.data.endPos) {
-                const nsp: EntityPoint = offset.to(EntityPoint)
-                Vec2.add(nsp, sel.sizeRect.to(EntityRect))
-                Vec2.sub(nsp, sel.data.endPos)
+            for (const pos of [sel.data.startPos, sel.data.endPos]) {
+                if (!pos) continue
+                pos.x = offsetE.x + (pos.x - sizeE.x)
+                pos.y = offsetE.y + (pos.y - sizeE.y)
             }
         }
 

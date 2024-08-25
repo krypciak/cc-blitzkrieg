@@ -1,8 +1,10 @@
 import { assert } from 'cc-map-util/src/util'
-import { Selection } from './selection'
+import { Selection, SelectionManager } from './selection'
 import { EntityRecArgs, EntityRecArgsIn, MapCopyOptions, copyMapRectsToMap } from 'cc-map-util/src/map-copy'
 import { FsUtil } from './fsutil'
 import { MapPoint } from 'cc-map-util/src/pos'
+import { PuzzleSelection } from './puzzle-selection'
+import { BattleSelection } from './battle-selection'
 
 export class BlitzkriegMapUtil {
     copySelMapAreaTo(
@@ -11,12 +13,14 @@ export class BlitzkriegMapUtil {
         sel: Selection,
         offset: Vec2,
         filters: EntityRecArgs['filters'],
-        options: MapCopyOptions
+        options: MapCopyOptions,
+        copySels: (PuzzleSelection | BattleSelection)[] = []
     ): sc.MapModel.Map {
         assert(sel.data?.startPos?.z)
 
+        const offsetMap = MapPoint.fromVec(offset)
         const eargs: EntityRecArgsIn = {
-            offset: MapPoint.fromVec(offset),
+            offset: offsetMap,
             filters,
             selMasterZ: sel.data.startPos.z,
             selSizeRect: MapPoint.fromVec(sel.sizeRect),
@@ -30,6 +34,16 @@ export class BlitzkriegMapUtil {
             baseMap.name,
             options
         )
+        for (const sel of copySels) {
+            SelectionManager.setSelPos(sel, offsetMap)
+            const zDiff = sel.data.startPos.z - lvlChangeMap[sel.data.startPos.level + levelOffset]
+
+            for (const poslvl of [sel.data.startPos, sel.data.endPos]) {
+                poslvl.z -= zDiff
+                poslvl.y += zDiff
+                poslvl.level = lvlChangeMap[poslvl.level + levelOffset]
+            }
+        }
         return map
     }
 
@@ -46,7 +60,6 @@ export class BlitzkriegMapUtil {
         const selMap: sc.MapModel.Map = await this.getMapObject(sel.mapName)
         const newMap: sc.MapModel.Map = this.copySelMapAreaTo(baseMap, selMap, sel, new MapPoint(1, 1), [], {
             disableEntities: false,
-            makePuzzlesUnique: false,
         })
         const newName = (newMap.name = 'blitzkrieg/newmap')
         console.log(newMap)
