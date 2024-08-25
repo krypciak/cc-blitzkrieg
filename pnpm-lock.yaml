@@ -26,7 +26,7 @@ importers:
         version: 6.21.0(eslint@8.57.0)(typescript@5.4.5)
       cc-map-util:
         specifier: github:krypciak/cc-map-util
-        version: https://codeload.github.com/krypciak/cc-map-util/tar.gz/d06e1a9219205f2981aa7847314dcf97f71d3e22
+        version: https://codeload.github.com/krypciak/cc-map-util/tar.gz/af8ecbfd2e9df3cd6d1aa8166c46fd8c22b114a4
       cc-vim:
         specifier: github:krypciak/cc-vim
         version: https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6
@@ -366,8 +366,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  cc-map-util@https://codeload.github.com/krypciak/cc-map-util/tar.gz/d06e1a9219205f2981aa7847314dcf97f71d3e22:
-    resolution: {tarball: https://codeload.github.com/krypciak/cc-map-util/tar.gz/d06e1a9219205f2981aa7847314dcf97f71d3e22}
+  cc-map-util@https://codeload.github.com/krypciak/cc-map-util/tar.gz/af8ecbfd2e9df3cd6d1aa8166c46fd8c22b114a4:
+    resolution: {tarball: https://codeload.github.com/krypciak/cc-map-util/tar.gz/af8ecbfd2e9df3cd6d1aa8166c46fd8c22b114a4}
     version: 1.0.0
 
   cc-vim@https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6:
@@ -1065,7 +1065,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  cc-map-util@https://codeload.github.com/krypciak/cc-map-util/tar.gz/d06e1a9219205f2981aa7847314dcf97f71d3e22: {}
+  cc-map-util@https://codeload.github.com/krypciak/cc-map-util/tar.gz/af8ecbfd2e9df3cd6d1aa8166c46fd8c22b114a4: {}
 
   cc-vim@https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6: {}
 

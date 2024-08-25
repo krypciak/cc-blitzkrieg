@@ -22,8 +22,15 @@ export class BlitzkriegMapUtil {
             selSizeRect: MapPoint.fromVec(sel.sizeRect),
             selectAllEventTriggers: true,
         }
-        const newMap: sc.MapModel.Map = copyMapRectsToMap(baseMap, selMap, sel.bb, eargs, baseMap.name, options)
-        return newMap
+        const { map, levelOffset, lvlChangeMap } = copyMapRectsToMap(
+            baseMap,
+            selMap,
+            sel.bb,
+            eargs,
+            baseMap.name,
+            options
+        )
+        return map
     }
 
     async copyCurrentSel() {
