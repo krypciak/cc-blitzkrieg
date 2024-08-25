@@ -56,6 +56,8 @@ export declare class SelectionManager<SEL extends Selection> {
     drawSelections(): void;
     toggleDrawing(): void;
     save(): Promise<void>;
+    private static converRawSelToSel;
+    static copySelection<T extends Selection>(s: T): T;
     load(index: number): Promise<void>;
     loadAll(): Promise<void[]>;
     static getSelFromRect(rect: MapRect, mapName: string, z: number): Selection;
