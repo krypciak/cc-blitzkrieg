@@ -18,20 +18,22 @@ export function registerOpts() {
                         name: 'Enable the mod',
                         description: 'Enables/Disables the entire functionality of the mod',
                     },
-                    enforcePuzzleSpeed: {
+                    devMode: {
                         type: 'CHECKBOX',
-                        init: true,
-                        name: 'Enforce puzzle speed',
-                        description: 'Applies the puzzle speed for unimplemented puzzle elements e.g. shock/wave balls',
+                        init: false,
+                        name: 'Dev mode',
+                        description: 'Probably not for you',
+                        updateMenuOnChange: true,
                     },
                 },
                 controls: {
                     selbNewEntry: {
                         type: 'CONTROLS',
                         init: { key1: ig.KEY.P },
+                        hidden: () => !modmanager.options['cc-blitzkrieg'].devMode,
 
                         pressEvent() {
-                            Opts.enable && blitzkrieg.currSel.selectionCreatorBegin()
+                            Opts.enable && Opts.devMode && blitzkrieg.currSel.selectionCreatorBegin()
                         },
 
                         name: 'Create a new selection entry',
@@ -40,9 +42,10 @@ export function registerOpts() {
                     selbSelect: {
                         type: 'CONTROLS',
                         init: { key1: ig.KEY.BRACKET_OPEN },
+                        hidden: () => !modmanager.options['cc-blitzkrieg'].devMode,
 
                         pressEvent() {
-                            Opts.enable && blitzkrieg.currSel.selectionCreatorSelect()
+                            Opts.enable && Opts.devMode && blitzkrieg.currSel.selectionCreatorSelect()
                         },
 
                         name: 'Create a new selection in steps',
@@ -51,9 +54,10 @@ export function registerOpts() {
                     selbDestroy: {
                         type: 'CONTROLS',
                         init: { key1: ig.KEY.BRACKET_CLOSE },
+                        hidden: () => !modmanager.options['cc-blitzkrieg'].devMode,
 
                         pressEvent() {
-                            Opts.enable && blitzkrieg.currSel.selectionCreatorDelete()
+                            Opts.enable && Opts.devMode && blitzkrieg.currSel.selectionCreatorDelete()
                         },
 
                         name: 'Delete/Decunstruct a selection',
@@ -62,9 +66,11 @@ export function registerOpts() {
                     recorderSplit: {
                         type: 'CONTROLS',
                         init: { key1: ig.KEY.O },
+                        hidden: () => !modmanager.options['cc-blitzkrieg'].devMode,
 
                         pressEvent() {
                             Opts.enable &&
+                                Opts.devMode &&
                                 blitzkrieg.currSel.recorder?.recording &&
                                 blitzkrieg.currSel instanceof PuzzleSelectionManager &&
                                 blitzkrieg.currSel.recorder.split()

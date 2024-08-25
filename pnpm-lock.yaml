@@ -32,7 +32,7 @@ importers:
         version: https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6
       ccmodmanager:
         specifier: github:CCDirectLink/CCModManager
-        version: https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/f2acd78527d0db6d1a83435a003224bf50816514
+        version: https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/d06889a833f2b4e3d9956c936f28357a7bf5ce3d
       esbuild:
         specifier: ^0.20.2
         version: 0.20.2
@@ -374,9 +374,9 @@ packages:
     resolution: {tarball: https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6}
     version: 1.6.2
 
-  ccmodmanager@https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/f2acd78527d0db6d1a83435a003224bf50816514:
-    resolution: {tarball: https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/f2acd78527d0db6d1a83435a003224bf50816514}
-    version: 0.9.15
+  ccmodmanager@https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/d06889a833f2b4e3d9956c936f28357a7bf5ce3d:
+    resolution: {tarball: https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/d06889a833f2b4e3d9956c936f28357a7bf5ce3d}
+    version: 0.9.21
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -1069,7 +1069,7 @@ snapshots:
 
   cc-vim@https://codeload.github.com/krypciak/cc-vim/tar.gz/21e9558681e3d096e84ea6da893f0e4bdf7028f6: {}
 
-  ccmodmanager@https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/f2acd78527d0db6d1a83435a003224bf50816514: {}
+  ccmodmanager@https://codeload.github.com/CCDirectLink/CCModManager/tar.gz/d06889a833f2b4e3d9956c936f28357a7bf5ce3d: {}
 
   chalk@4.1.2:
     dependencies:

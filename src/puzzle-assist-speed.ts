@@ -1,4 +1,3 @@
-import { Opts } from './options'
 
 function adjustPuzzleAssistSlider() {
     const from: number = 0.1
@@ -28,50 +27,46 @@ function adjustPuzzleAssistSlider() {
     }
 }
 
-function isBall(e: ig.Entity): e is ig.ENTITY.Ball {
-    return !!e.isBall
-}
-
 export function puzzleAssistSpeedInitPrestart() {
     adjustPuzzleAssistSlider()
 
-    ig.ENTITY.Compressor?.inject({
-        createCompressorBall() {
-            if (!Opts.enforcePuzzleSpeed) 
-                return this.parent()
-            const pos: Vec2 = this.getCenter()
-            if (this.currentElement == sc.ELEMENT.SHOCK)
-                this.compressorBall = ig.game.spawnEntity(sc.CompressedShockEntity, pos.x, pos.y, this.coll.pos.z + 12, {
-                    speed: this.ballSpeed * sc.options.get('assist-puzzle-speed'),
-                    fastMode: this.fastMode,
-                } as ig.Entity.Settings)
-            else if (this.currentElement == sc.ELEMENT.WAVE)
-                this.compressorBall = ig.game.spawnEntity(sc.CompressedWaveEntity, pos.x, pos.y, this.coll.pos.z + 12, {
-                    speed: this.ballSpeed * sc.options.get('assist-puzzle-speed'),
-                    fastMode: this.fastMode,
-                } as ig.Entity.Settings)
-        },
-    })
-
-    ig.ENTITY.BounceBlock?.inject({
-        ballHit(e: ig.Entity, ...rest: unknown[]): boolean {
-            const pos: Vec2 = rest[0] as Vec2
-            if (
-                Opts.enforcePuzzleSpeed &&
-                isBall(e) &&
-                !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
-                pos &&
-                !Vec2.isZero(pos) &&
-                !this.blockState
-            ) {
-                if (!e._blitzkriegchanged) {
-                    e._blitzkriegchanged = true
-                    if (e.speedFactor == 1) {
-                        e.changeSpeed(e.speedFactor * sc.options.get('assist-puzzle-speed'), true)
-                    }
-                }
-            }
-            return this.parent!(e, ...rest)!
-        },
-    })
+    // ig.ENTITY.Compressor?.inject({
+    //     createCompressorBall() {
+    //         if (!Opts.enforcePuzzleSpeed)
+    //             return this.parent()
+    //         const pos: Vec2 = this.getCenter()
+    //         if (this.currentElement == sc.ELEMENT.SHOCK)
+    //             this.compressorBall = ig.game.spawnEntity(sc.CompressedShockEntity, pos.x, pos.y, this.coll.pos.z + 12, {
+    //                 speed: this.ballSpeed * sc.options.get('assist-puzzle-speed'),
+    //                 fastMode: this.fastMode,
+    //             } as ig.Entity.Settings)
+    //         else if (this.currentElement == sc.ELEMENT.WAVE)
+    //             this.compressorBall = ig.game.spawnEntity(sc.CompressedWaveEntity, pos.x, pos.y, this.coll.pos.z + 12, {
+    //                 speed: this.ballSpeed * sc.options.get('assist-puzzle-speed'),
+    //                 fastMode: this.fastMode,
+    //             } as ig.Entity.Settings)
+    //     },
+    // })
+    //
+    // ig.ENTITY.BounceBlock?.inject({
+    //     ballHit(e: ig.Entity, ...rest: unknown[]): boolean {
+    //         const pos: Vec2 = rest[0] as Vec2
+    //         if (
+    //             Opts.enforcePuzzleSpeed &&
+    //             isBall(e) &&
+    //             !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) &&
+    //             pos &&
+    //             !Vec2.isZero(pos) &&
+    //             !this.blockState
+    //         ) {
+    //             if (!e._blitzkriegchanged) {
+    //                 e._blitzkriegchanged = true
+    //                 if (e.speedFactor == 1) {
+    //                     e.changeSpeed(e.speedFactor * sc.options.get('assist-puzzle-speed'), true)
+    //                 }
+    //             }
+    //         }
+    //         return this.parent!(e, ...rest)!
+    //     },
+    // })
 }
