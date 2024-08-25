@@ -322,17 +322,23 @@ export class SelectionManager<SEL extends Selection> {
         )
     }
 
+    private static converRawSelToSel<T extends Selection>(s: T): T {
+        s.sizeRect = Rect.new(MapRect, s.sizeRect)
+        s.bb = s.bb.map(r => Rect.new(MapRect, r))
+        return s
+    }
+
+    static copySelection<T extends Selection>(s: T): T {
+        return this.converRawSelToSel(ig.copy(s))
+    }
+
     async load(index: number) {
         try {
             let path: string = this.jsonFiles[index]
             const obj: Record<string, SelectionMapEntry<SEL>> = await FsUtil.readFileJson(path)
             for (const mapName in obj) {
                 const entry: SelectionMapEntry<SEL> = obj[mapName]
-                entry.sels = entry.sels.map(s => {
-                    s.sizeRect = Rect.new(MapRect, s.sizeRect)
-                    s.bb = s.bb.map(r => Rect.new(MapRect, r))
-                    return s
-                })
+                entry.sels = entry.sels.map(SelectionManager.converRawSelToSel)
                 obj[mapName] = new SelectionMapEntry(entry.sels, index)
             }
             if (this.selMap) {
