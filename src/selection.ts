@@ -335,7 +335,9 @@ export class SelectionManager<SEL extends Selection> {
     async load(index: number) {
         try {
             let path: string = this.jsonFiles[index]
-            const obj: Record<string, SelectionMapEntry<SEL>> = await FsUtil.readFileJson(path)
+            const obj: Record<string, SelectionMapEntry<SEL>> = path.startsWith('assets/mods')
+                ? await FsUtil.readFileJson(path)
+                : JSON.parse(await FsUtil.readFileExternal(path))
             for (const mapName in obj) {
                 const entry: SelectionMapEntry<SEL> = obj[mapName]
                 entry.sels = entry.sels.map(SelectionManager.converRawSelToSel)
