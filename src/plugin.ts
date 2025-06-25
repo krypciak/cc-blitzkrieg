@@ -8,7 +8,7 @@ import { BattleSelectionManager } from './battle-selection'
 import { puzzleAssistSpeedInitPrestart } from './puzzle-assist-speed'
 import { Util } from './util'
 
-import type * as _ from 'nax-ccuilib/src/headers/nax/quick-menu-public-api.d.ts'
+import type {} from 'nax-ccuilib/src/ui/quick-menu/quick-menu-extension'
 
 import * as prettier from 'prettier/standalone'
 import prettierPluginBabel from 'prettier/plugins/babel'
