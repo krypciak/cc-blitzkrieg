@@ -1,5 +1,7 @@
 # cc-blitzkrieg
 
+[![CCModManager badge](https://raw.githubusercontent.com/CCDirectLink/CCModManager/refs/heads/master/icon/badge.png)](https://github.com/CCDirectLink/CCModManager)
+
 epic crosscode mod
 
 1. Solve and skips puzzles with one button
