@@ -1,5 +1,7 @@
 import { Mod } from 'ultimate-crosscode-typedefs/modloader/mod'
 
+import {} from 'cc-vim/src/types'
+
 export type Mod1 = Writable<Mod> & {
     isCCModPacked: boolean
     findAllAssets?(): void /* only there for ccl2, used to set isCCL3 */

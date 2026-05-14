@@ -18,7 +18,12 @@ export enum PuzzleCompletionType {
 export interface PuzzleSelectionStep {
     log: (
         | [/* frame */ number, /* var path */ string, /* value */ any]
-        | [/* frame */ number, /* entity Vec2 */ Vec2, /* entity type */ RecordedPuzzleElementsEntities, /* action */ string]
+        | [
+              /* frame */ number,
+              /* entity Vec2 */ Vec2,
+              /* entity type */ RecordedPuzzleElementsEntities,
+              /* action */ string,
+          ]
     )[]
     pos: Vec3 & { level: number }
     shootAngle?: number /* in degrees */
@@ -71,7 +76,8 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
         ig.Game.inject({
             spawnEntity(entity, x, y, z, settings, showAppearEffects) {
                 const ret = this.parent(entity, x, y, z, settings, showAppearEffects)
-                if (settings?.oldPos) {
+                if (settings && typeof settings == 'object' && 'oldPos' in settings) {
+                    // @ts-expect-error
                     ret.oldPos = settings.oldPos
                 }
                 return ret
@@ -240,7 +246,15 @@ export class PuzzleSelectionManager extends SelectionManager<PuzzleSelection> {
                     const e: ig.Entity = PuzzleSelectionManager.getEntityByPos(pos)
                     if (isBounceBlock(e, type)) {
                         if (act == 'on') {
-                            sc.combat.showHitEffect(e, e.coll.pos, sc.ATTACK_TYPE.HEAVY, sc.ELEMENT.NEUTRAL, false, false, true)
+                            sc.combat.showHitEffect(
+                                e,
+                                e.coll.pos,
+                                sc.ATTACK_TYPE.HEAVY,
+                                sc.ELEMENT.NEUTRAL,
+                                sc.SHIELD_RESULT.NONE,
+                                false,
+                                true
+                            )
                             e.effects.spawnOnTarget('bounceHit', e)
                             e.setCurrentAnim('on')
                         }

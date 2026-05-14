@@ -23,9 +23,16 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
         })
 
         ig.ENTITY.BounceBlock.inject({
-            ballHit(e: ig.Entity, ...args: unknown[]): boolean {
+            ballHit(e, ...args): boolean {
                 const pos: Vec2 = args[0] as Vec2
-                if (self.recording && e.isBall && !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e) && pos && !Vec2.isZero(pos) && !this.blockState) {
+                if (
+                    self.recording &&
+                    e.isBall &&
+                    !sc.bounceSwitchGroups.isGroupBallConflict(this.group, e as unknown as ig.ENTITY.Ball) &&
+                    pos &&
+                    !Vec2.isZero(pos) &&
+                    !this.blockState
+                ) {
                     self.pushAction('on', this.coll.pos, 'BounceBlock')
                 }
                 return this.parent!(e, ...args)!
@@ -92,7 +99,9 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
             blitzkrieg.rhudmsg('blitzkrieg', 'Next step', 1)
             const step = this.currentStep()
             step.element = sc.model.player.currentElementMode
-            step.pos = Object.assign(Vec3.create(ig.game.playerEntity.coll.pos), { level: Util.getLevelFromZ(ig.game.playerEntity.coll.pos.z) })
+            step.pos = Object.assign(Vec3.create(ig.game.playerEntity.coll.pos), {
+                level: Util.getLevelFromZ(ig.game.playerEntity.coll.pos.z),
+            })
             step.shootAngle = ig.game.playerEntity.aimDegrees
             step.endFrame = this.getCurrentTime()
         }
@@ -107,29 +116,36 @@ export class PuzzleChangeRecorder extends ChangeRecorder<PuzzleSelection, Puzzle
         const stepMultishotMergeDist: number = 200 /* in ms */
         const stepMultishotMergeAngleDist: number = 3
 
-        const mergedSteps: PuzzleSelectionStep[] = steps.reduce((acc: PuzzleSelectionStep[], curr: PuzzleSelectionStep) => {
-            const last: PuzzleSelectionStep = acc.last()
-            let fail: boolean = true
-            if (last && last.shootAngle && curr.shootAngle) {
-                const diff = curr.endFrame - (last.lastShotFrame ?? last.endFrame)
+        const mergedSteps: PuzzleSelectionStep[] = steps.reduce(
+            (acc: PuzzleSelectionStep[], curr: PuzzleSelectionStep) => {
+                const last: PuzzleSelectionStep = acc.last()
+                let fail: boolean = true
+                if (last && last.shootAngle && curr.shootAngle) {
+                    const diff = curr.endFrame - (last.lastShotFrame ?? last.endFrame)
 
-                const angleDiff = Math.abs(last.shootAngle - curr.shootAngle)
-                const angleDist: number = Math.min(angleDiff, 360 - angleDiff)
+                    const angleDiff = Math.abs(last.shootAngle - curr.shootAngle)
+                    const angleDist: number = Math.min(angleDiff, 360 - angleDiff)
 
-                // console.log(curr, 'frameDiff:', diff, 'angleDiff:', angleDiff)
-                if (diff <= stepMultishotMergeDist && angleDist <= stepMultishotMergeAngleDist && curr.element == last.element) {
-                    last.shotCount ??= 0
-                    last.shotCount++
-                    last.lastShotFrame = curr.endFrame
-                    last.log.push(...curr.log)
-                    fail = false
+                    // console.log(curr, 'frameDiff:', diff, 'angleDiff:', angleDiff)
+                    if (
+                        diff <= stepMultishotMergeDist &&
+                        angleDist <= stepMultishotMergeAngleDist &&
+                        curr.element == last.element
+                    ) {
+                        last.shotCount ??= 0
+                        last.shotCount++
+                        last.lastShotFrame = curr.endFrame
+                        last.log.push(...curr.log)
+                        fail = false
+                    }
                 }
-            }
-            if (fail) {
-                acc.push(curr)
-            }
-            return acc
-        }, [])
+                if (fail) {
+                    acc.push(curr)
+                }
+                return acc
+            },
+            []
+        )
 
         this.startingSel.data.recordLog = { steps: mergedSteps }
     }
