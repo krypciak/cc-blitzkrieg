@@ -1,4 +1,4 @@
-import { Selection, SelectionManager } from './selection'
+import { type Selection, SelectionManager } from './selection'
 import { Util } from './util'
 
 export interface BattleSelection extends Selection {

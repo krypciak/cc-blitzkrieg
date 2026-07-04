@@ -1,6 +1,6 @@
-import { Selection, SelectionManager } from './selection'
+import { type Selection, SelectionManager } from './selection'
 import { Util } from './util'
-import { PuzzleChangeRecorder as PuzzleRecorder, RecordedPuzzleElementsEntities } from './puzzle-recorder'
+import { PuzzleChangeRecorder as PuzzleRecorder, type RecordedPuzzleElementsEntities } from './puzzle-recorder'
 import { assertBool } from 'cc-map-util/src/util'
 
 export enum PuzzleRoomType {

@@ -13,7 +13,7 @@ export class FsUtil {
         })
     }
 
-    static async mkdirs(path: string): Promise<void> {
+    static async mkdirs(path: string) {
         return fs.promises.mkdir(path, { recursive: true })
     }
 
@@ -36,7 +36,7 @@ export class FsUtil {
         await Promise.all(promises)
     }
 
-    static async mkdirsClear(path: string): Promise<void> {
+    static async mkdirsClear(path: string) {
         return (await FsUtil.exists(path)) ? FsUtil.clearDir(path) : FsUtil.mkdirs(path)
     }
 

@@ -1,10 +1,10 @@
 import { assert } from 'cc-map-util/src/util'
-import { Selection, SelectionManager } from './selection'
-import { EntityRecArgs, EntityRecArgsIn, MapCopyOptions, copyMapRectsToMap } from 'cc-map-util/src/map-copy'
+import { type Selection, SelectionManager } from './selection'
+import { type EntityRecArgs, type EntityRecArgsIn, type MapCopyOptions, copyMapRectsToMap } from 'cc-map-util/src/map-copy'
 import { FsUtil } from './fsutil'
 import { MapPoint } from 'cc-map-util/src/pos'
-import { PuzzleSelection } from './puzzle-selection'
-import { BattleSelection } from './battle-selection'
+import type { PuzzleSelection } from './puzzle-selection'
+import type { BattleSelection } from './battle-selection'
 
 export class BlitzkriegMapUtil {
     copySelMapAreaTo(

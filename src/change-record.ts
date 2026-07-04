@@ -1,5 +1,5 @@
 import { assert } from 'cc-map-util/src/util'
-import { Selection, SelectionManager } from './selection'
+import { type Selection, SelectionManager } from './selection'
 
 export interface IChangeRecorder {
     startRecording(startingSel: Selection): void

@@ -1,9 +1,9 @@
-import { EntityRect, MapRect, Rect, bareRect, isVecInRect, isVecInRectArr, reduceRectArr } from 'cc-map-util/src/rect'
+import { EntityRect, MapRect, Rect, type bareRect, isVecInRect, isVecInRectArr, reduceRectArr } from 'cc-map-util/src/rect'
 import { EntityPoint, MapPoint, Point } from 'cc-map-util/src/pos'
 import { Stack, assert } from 'cc-map-util/src/util'
 import { FsUtil } from './fsutil'
 import { Util } from './util'
-import { IChangeRecorder } from './change-record'
+import type { IChangeRecorder } from './change-record'
 
 const tilesize: number = 16
 const defaultDrawBoxes: boolean = false

@@ -1,6 +1,6 @@
 import { Util } from './util'
 import { ChangeRecorder } from './change-record'
-import { PuzzleSelection, PuzzleSelectionManager, PuzzleSelectionStep } from './puzzle-selection'
+import { type PuzzleSelection, PuzzleSelectionManager, type PuzzleSelectionStep } from './puzzle-selection'
 
 export type RecordedPuzzleElementsEntities = 'BounceBlock' | 'BounceSwitch'
 

@@ -1,22 +1,26 @@
-
 function adjustPuzzleAssistSlider() {
     const from: number = 0.1
     const to: number = 3
     const step: number = 0.1
     const prec: number = 10
 
+    // @ts-expect-error
     sc.ASSIST_PUZZLE_SPEED = {}
     for (let speed = from, i = 0; speed < 1; speed += step, i++) {
         speed = Math.round(speed * prec) / prec
+        // @ts-expect-error
         sc.ASSIST_PUZZLE_SPEED[`LOW${i}`] = speed
     }
+    // @ts-expect-error
     sc.ASSIST_PUZZLE_SPEED['NORM'] = 1
     for (let speed = 1 + step, i = 0; speed <= to; speed += step, i++) {
         speed = Math.round(speed * prec) / prec
+        // @ts-expect-error
         sc.ASSIST_PUZZLE_SPEED[`HIGH${i}`] = speed
     }
     sc.OPTIONS_DEFINITION['assist-puzzle-speed'] = {
         type: 'OBJECT_SLIDER',
+        // @ts-expect-error
         data: sc.ASSIST_PUZZLE_SPEED,
         init: sc.ASSIST_PUZZLE_SPEED.NORM,
         cat: sc.OPTION_CATEGORY.ASSISTS,
